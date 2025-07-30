@@ -9,13 +9,10 @@ class Dudi extends Model
     protected $table = 'dudi';
 
     protected $fillable = [
-        'nama',
-        'alamat',
-        'nama_pimpinan',
+        'nomor_kepegawaian',
+        'nama_dudi',
+        'alamat_dudi',
+        'no_telp_dudi',
+        'nama_pimpinan_dudi',
     ];
-
-    public function users()
-    {
-        return $this->hasMany(User::class);
-    }
 }

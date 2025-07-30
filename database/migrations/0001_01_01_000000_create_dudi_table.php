@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('nama_dudi')->nullable();
             $table->string('alamat_dudi')->nullable();
             $table->string('no_telp_dudi')->nullable();
+            $table->string('nomor_kepegawaian')->nullable();
             $table->string('nama_pimpinan_dudi')->nullable();
             $table->timestamps();
         });

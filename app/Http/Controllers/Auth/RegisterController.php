@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Kelas;
 use App\Models\Dudi;
+use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -29,7 +31,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/home/dashboard';
 
     /**
      * Create a new controller instance.
@@ -41,6 +43,26 @@ class RegisterController extends Controller
         $this->middleware('guest');
     }
 
+    public function showRegistrationForm()
+    {
+        $kelas = Kelas::all();
+        return view('auth.register', compact('kelas'));
+    }
+
+    public function autoCompleteDudi(Request $request)
+    {
+        $term = $request->get('term');
+        $dudi = Dudi::where('nama_dudi', 'like', '%' . $term . '%')->get();
+        $results = $dudi->map(function ($item) {
+            return [
+                'id' => $item->id,
+                'label' => $item->nama_dudi,
+                'alamat' => $item->alamat_dudi,
+                'pimpinan' => $item->nama_pimpinan_dudi,
+            ];
+        });
+        return response()->json($results);
+    }
     /**
      * Get a validator for an incoming registration request.
      *
@@ -50,17 +72,14 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'kelas_id' => ['nullable', 'exists:kelas,id'],
-            'dudi_id' => ['nullable', 'exists:dudi,id'],
+            'kelas_id' => ['required', 'exists:kelas,id'],
+            'dudi_id' => ['required', 'exists:dudi,id'],
             'tempat_lahir' => ['nullable', 'string', 'max:255'],
-            'tanggal_lahir' => ['nullable', 'date'],
+            'tanggal_lahir' => ['required', 'date'],
             'nisn' => ['required', 'string', 'max:255'],
             'nis' => ['required', 'string', 'max:255'],
             'nama' => ['required', 'string', 'max:255'],
             'jenis_kelamin' => ['required', 'in:1,2'],
-            'nama_dudi' => ['required', 'string', 'max:255'],
-            'alamat_dudi' => ['required', 'string', 'max:255'],
-            'nama_pimpinan_dudi' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
@@ -75,9 +94,9 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         return User::create([
-            'role_id' => 1,
-            'kelas_id' => $data['kelas_id'] ?? null,
-            'dudi_id' => $data['dudi_id'] ?? null,
+            'role_id' => 3,
+            'kelas_id' => $data['kelas_id'],
+            'dudi_id' => $data['dudi_id'],
             'nis' => $data['nis'],
             'nisn' => $data['nisn'],
             'jenis_kelamin' => $data['jenis_kelamin'],
