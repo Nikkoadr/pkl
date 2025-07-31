@@ -14,10 +14,6 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->foreignId('role_id')->constrained('roles')->onDelete('cascade');
-            $table->foreignId('kelas_id')->nullable()->constrained('kelas')->onDelete('set null');
-            $table->foreignId('dudi_id')->nullable()->constrained('dudi')->onDelete('set null');
-            $table->string('nis')->nullable();
-            $table->string('nisn')->nullable();
             $table->string('nama')->nullable();
             $table->string('jenis_kelamin')->nullable();
             $table->string('tempat_lahir')->nullable();

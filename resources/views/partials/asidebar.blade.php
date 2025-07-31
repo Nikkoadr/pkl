@@ -39,15 +39,33 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="/home/users" class="nav-link {{ request()->is('home/users') ? 'active' : '' }}">
+                        <i class="nav-icon fa-solid fa-users"></i>
+                        <p>Users</p>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="/home/guru" class="nav-link {{ request()->is('home/guru') ? 'active' : '' }}">
-                        <i class="nav-icon fa-solid fa-chalkboard-user"></i>
+                        <i class="nav-icon fa-solid fa-chalkboard-teacher"></i>
                         <p>Guru</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/home/guru_pembimbing" class="nav-link {{ request()->is('home/guru_pembimbing') ? 'active' : '' }}">
+                        <i class="nav-icon fa-solid fa-user-tie"></i>
+                        <p>Guru Pembimbing</p>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="/home/peserta" class="nav-link {{ request()->is('home/peserta') ? 'active' : '' }}">
                         <i class="nav-icon fa-solid fa-children"></i>
                         <p>Peserta</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/home/tempat_pkl" class="nav-link {{ request()->is('home/tempat_pkl') ? 'active' : '' }}">
+                        <i class="nav-icon fa-solid fa-map-location-dot"></i>
+                        <p>Tempat PKL</p>
                     </a>
                 </li>
                 <li class="nav-item">

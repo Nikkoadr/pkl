@@ -20,5 +20,29 @@ class User_seed extends Seeder
             'email' => 'pkl@smkmuhkandanghaur.sch.id',
             'password' => Hash::make('Secret123'),
         ]);
+        User::create([
+            'role_id' => 2,
+            'nama' => 'Kaprodi',
+            'email' => 'kaprodi@smkmuhkandanghaur.sch.id',
+            'password' => Hash::make('Secret123'),
+        ]);
+        User::create([
+            'role_id' => 3,
+            'nama' => 'Guru Pembimbing',
+            'email' => 'guru@smkmuhkandanghaur.sch.id',
+            'password' => Hash::make('Secret123'),
+        ]);
+        User::create([
+            'role_id' => 4,
+            'nama' => 'Peserta TKJ',
+            'email' => 'peserta_tkj@smkmuhkandanghaur.sch.id',
+            'password' => Hash::make('Secret123'),
+        ]);
+        User::create([
+            'role_id' => 4,
+            'nama' => 'Peserta TKR',
+            'email' => 'peserta_tkr@smkmuhkandanghaur.sch.id',
+            'password' => Hash::make('Secret123'),
+        ]);
     }
 }
