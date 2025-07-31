@@ -35,7 +35,7 @@ Route::resource('/home/guru', GuruController::class);
 Route::resource('/home/guru_pembimbing', Guru_pembimbingController::class);
 Route::resource('/home/tempat_pkl', Tempat_pklController::class);
 
-Route::get('/home/peserta', [PersertaController::class, 'index'])->name('home.peserta');
+Route::resource('/home/peserta', PersertaController::class);
 Route::get('/home/surat', [SuratController::class, 'index'])->name('home.surat');
 Route::get('/home/esertifikat', [EsertifikatController::class, 'index'])->name('home.esertifikat');
 Route::get('/home/pengaturan', [PengaturanController::class, 'index'])->name('home.pengaturan');

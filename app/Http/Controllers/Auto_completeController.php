@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Dudi;
 use App\Models\Guru;
 use App\Models\User;
+use App\Models\Peserta;
 
 class Auto_completeController extends Controller
 {
@@ -28,16 +29,21 @@ class Auto_completeController extends Controller
     {
         $term = $request->get('term');
 
-        $guru = Guru::with('user')
-            ->whereHas('user', function ($query) use ($term) {
-                $query->where('nama', 'like', '%' . $term . '%');
-            })
+        // Ambil user_id yang sudah jadi guru dan peserta
+        $excludeIds = array_merge(
+            Guru::pluck('user_id')->toArray(),
+            Peserta::pluck('user_id')->toArray()
+        );
+
+        // Ambil user yang belum terdaftar di guru dan peserta
+        $users = User::whereNotIn('id', $excludeIds)
+            ->where('nama', 'like', '%' . $term . '%')
             ->get();
 
-        $results = $guru->map(function ($item) {
+        $results = $users->map(function ($user) {
             return [
-                'id' => $item->id, // ID guru
-                'label' => $item->user->nama, // Nama user dari relasi
+                'id' => $user->id,
+                'label' => $user->nama,
             ];
         });
 
