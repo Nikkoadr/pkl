@@ -1,0 +1,104 @@
+body {
+  font-family: "Times New Roman", serif;
+  margin: 0;
+  padding: 0;
+  background: #fff;
+  color: #000;
+}
+
+.page {
+  width: 210mm;
+  min-height: 297mm;
+  padding: 30px 45px;
+  margin: auto;
+  background: white;
+  box-sizing: border-box;
+  page-break-after: always;
+}
+
+.kop table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.kop td {
+  padding: 2px;
+}
+
+.kop img {
+  height: 85px;
+}
+
+.line {
+  border-top: 2.5px solid black;
+  margin: 8px 0 20px;
+}
+
+.meta {
+  margin-bottom: 20px;
+  font-size: 16px;
+}
+
+.meta table td {
+  vertical-align: top;
+  padding: 2px 5px;
+}
+
+.indent {
+  text-indent: 50px;
+  line-height: 1.7;
+  margin-bottom: 15px;
+}
+
+.signature-section {
+  margin-top: 40px;
+  display: flex;
+  justify-content: space-between;
+  text-align: center;
+}
+
+.signature {
+  width: 30%;
+}
+
+.signature.center {
+  width: 35%;
+}
+
+.form-title {
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: bold;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+.form-subtitle {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 15px;
+}
+
+.form-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+  font-size: 16px;
+}
+
+.form-table td {
+  padding: 6px;
+  vertical-align: top;
+}
+a {
+  color: black;
+  text-decoration: none;
+}
+
+@media print {
+  .page {
+    margin: 0;
+    box-shadow: none;
+  }
+}
