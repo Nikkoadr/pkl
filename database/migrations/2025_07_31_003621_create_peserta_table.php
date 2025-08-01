@@ -13,8 +13,9 @@ return new class extends Migration
     {
         Schema::create('peserta', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users');
-            $table->foreignId('kelas_id')->nullable()->constrained('kelas')->onDelete('set null');
+            $table->foreignId('tahun_ajaran_id')->constrained('tahun_ajaran')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('kelas_id')->nullable()->constrained('kelas')->onDelete('cascade');
             $table->string('nis')->nullable();
             $table->string('nisn')->nullable();
             $table->timestamps();

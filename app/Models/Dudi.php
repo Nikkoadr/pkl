@@ -15,4 +15,9 @@ class Dudi extends Model
         'no_telp_dudi',
         'nama_pimpinan_dudi',
     ];
+
+    public function tempatPkl()
+    {
+        return $this->hasMany(Tempat_pkl::class);
+    }
 }

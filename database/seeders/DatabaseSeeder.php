@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Kelas;
+use App\Models\Pengaturan;
 use App\Models\Role;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -18,11 +19,13 @@ class DatabaseSeeder extends Seeder
         // \App\Models\User::factory(10)->create();
 
         $this->call([
+            Tahun_ajaran_seed::class,
             Role_seed::class,
             User_seed::class,
             Kompetensi_keahlian_seed::class,
             Kelas_seed::class,
             Dudi_seed::class,
+            Pengaturan_seed::class,
         ]);
     }
 }

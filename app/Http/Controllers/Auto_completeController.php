@@ -29,21 +29,16 @@ class Auto_completeController extends Controller
     {
         $term = $request->get('term');
 
-        // Ambil user_id yang sudah jadi guru dan peserta
-        $excludeIds = array_merge(
-            Guru::pluck('user_id')->toArray(),
-            Peserta::pluck('user_id')->toArray()
-        );
-
-        // Ambil user yang belum terdaftar di guru dan peserta
-        $users = User::whereNotIn('id', $excludeIds)
-            ->where('nama', 'like', '%' . $term . '%')
+        $guru = Guru::with('user')
+            ->whereHas('user', function ($query) use ($term) {
+                $query->where('nama', 'like', '%' . $term . '%');
+            })
             ->get();
 
-        $results = $users->map(function ($user) {
+        $results = $guru->map(function ($item) {
             return [
-                'id' => $user->id,
-                'label' => $user->nama,
+                'id' => $item->id,
+                'label' => $item->user->nama,
             ];
         });
 
@@ -53,12 +48,20 @@ class Auto_completeController extends Controller
     public function autoCompleteUser(Request $request)
     {
         $term = $request->get('term');
-        $users = User::where('nama', 'like', '%' . $term . '%')->get();
 
-        $results = $users->map(function ($item) {
+        $excludeIds = array_merge(
+            Guru::pluck('user_id')->toArray(),
+            Peserta::pluck('user_id')->toArray()
+        );
+
+        $users = User::whereNotIn('id', $excludeIds)
+            ->where('nama', 'like', '%' . $term . '%')
+            ->get();
+
+        $results = $users->map(function ($user) {
             return [
-                'id' => $item->id,
-                'label' => $item->nama,
+                'id' => $user->id,
+                'label' => $user->nama,
             ];
         });
 

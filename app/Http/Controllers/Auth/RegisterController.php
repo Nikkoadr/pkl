@@ -5,10 +5,9 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Kelas;
-use App\Models\Dudi;
 use App\Models\Peserta;
 use App\Models\Tempat_pkl;
-use Illuminate\Http\Request;
+use App\Models\tahun_ajaran;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -48,22 +47,8 @@ class RegisterController extends Controller
     public function showRegistrationForm()
     {
         $kelas = Kelas::all();
-        return view('auth.register', compact('kelas'));
-    }
-
-    public function autoCompleteDudi(Request $request)
-    {
-        $term = $request->get('term');
-        $dudi = Dudi::where('nama_dudi', 'like', '%' . $term . '%')->get();
-        $results = $dudi->map(function ($item) {
-            return [
-                'id' => $item->id,
-                'label' => $item->nama_dudi,
-                'alamat' => $item->alamat_dudi,
-                'pimpinan' => $item->nama_pimpinan_dudi,
-            ];
-        });
-        return response()->json($results);
+        $tahun_ajaran = Tahun_ajaran::orderBy('id', 'desc')->first();
+        return view('auth.register', compact('kelas', 'tahun_ajaran'));
     }
     /**
      * Get a validator for an incoming registration request.
@@ -74,6 +59,7 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
+            'tahun_ajaran_id' => ['required', 'exists:tahun_ajaran,id'],
             'kelas_id' => ['required', 'exists:kelas,id'],
             'dudi_id' => ['required', 'exists:dudi,id'],
             'tempat_lahir' => ['nullable', 'string', 'max:255'],
@@ -110,6 +96,7 @@ class RegisterController extends Controller
             'nis' => $data['nis'],
             'nisn' => $data['nisn'],
             'kelas_id' => $data['kelas_id'],
+            'tahun_ajaran_id' => $data['tahun_ajaran_id'],
         ]);
 
         Tempat_pkl::create([

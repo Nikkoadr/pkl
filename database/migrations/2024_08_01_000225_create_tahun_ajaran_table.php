@@ -11,10 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pembimbing_pkl', function (Blueprint $table) {
+        Schema::create('tahun_ajaran', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('kelas_id')->nullable()->constrained('kelas')->onDelete('cascade');
+            $table->string('nama_tahun_ajaran')->unique();
             $table->timestamps();
         });
     }
@@ -24,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('pembimbing_pkl');
+        Schema::dropIfExists('tahun_ajaran');
     }
 };

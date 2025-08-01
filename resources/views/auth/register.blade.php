@@ -24,6 +24,21 @@
                     @csrf
                     <div class="row">
                         <div class="col-md-6">
+                            <!-- Tahun Ajaran -->
+                            <div class="mb-3">
+                                <select name="tahun_ajaran_id" class="form-control @error('tahun_ajaran_id') is-invalid @enderror" required>
+                                    @if ($tahun_ajaran)
+                                        <option value="{{ $tahun_ajaran->id }}" selected>
+                                            {{ $tahun_ajaran->nama_tahun_ajaran }}
+                                        </option>
+                                    @else
+                                        <option disabled>Belum ada tahun ajaran</option>
+                                    @endif
+                                </select>
+                                @error('tahun_ajaran_id')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
                             <!-- NISN -->
                             <div class="mb-3">
                                 <input type="text" name="nisn" class="form-control @error('nisn') is-invalid @enderror"
@@ -55,6 +70,9 @@
                                     value="{{ old('tanggal_lahir') }}" placeholder="Tanggal Lahir" required>
                                 @error('tanggal_lahir')<div class="invalid-feedback">{{ $message }}</div>@enderror
                             </div>
+                        </div>
+
+                        <div class="col-md-6">
                             <!-- Kelas -->
                             <div class="mb-3">
                                 <select name="kelas_id" class="form-control @error('kelas_id') is-invalid @enderror" required>
@@ -67,9 +85,6 @@
                                 </select>
                                 @error('kelas_id')<div class="invalid-feedback">{{ $message }}</div>@enderror
                             </div>
-                        </div>
-
-                        <div class="col-md-6">
                             <!-- Jenis Kelamin -->
                             <div class="mb-3">
                                 <select name="jenis_kelamin" class="form-control @error('jenis_kelamin') is-invalid @enderror" required>
@@ -144,7 +159,6 @@
     <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
     <script>
         $(function () {
-            // Autocomplete
             $("#nama_dudi").autocomplete({
                 source: '/autocomplete/dudi',
                 minLength: 2,
@@ -157,7 +171,6 @@
                 }
             });
 
-            // Validasi sebelum submit
             $('form').on('submit', function(e) {
                 if (!$('#dudi_id').val()) {
                     e.preventDefault();

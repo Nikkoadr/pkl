@@ -30,6 +30,18 @@
                             </a>
                         </div>
                     </div>
+                    <form method="GET" class="mt-3">
+                        <div class="form-group">
+                            <label for="tahun_ajaran_id">Filter Tahun Ajaran:</label>
+                            <select name="tahun_ajaran_id" id="tahun_ajaran_id" class="form-control w-25" onchange="this.form.submit()">
+                                @foreach($semua_tahun_ajaran as $tahun)
+                                    <option value="{{ $tahun->id }}" {{ request('tahun_ajaran_id', $semua_tahun_ajaran->first()->id) == $tahun->id ? 'selected' : '' }}>
+                                        {{ $tahun->nama_tahun_ajaran }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </form>
                 </div>
 
                 <div class="card-body">
@@ -37,10 +49,11 @@
                         <thead>
                             <tr>
                                 <th>No</th>
+                                <th>Tahun Ajaran</th>
+                                <th>NISN</th>
+                                <th>NIS</th>
                                 <th>Nama</th>
                                 <th>Kelas</th>
-                                <th>NIS</th>
-                                <th>NISN</th>
                                 <th class="text-center">Aksi</th>
                             </tr>
                         </thead>
@@ -48,10 +61,11 @@
                             @foreach($peserta as $item)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
+                                <td>{{ $item->tahun_ajaran->nama_tahun_ajaran ?? '-' }}</td>
+                                <td>{{ $item->nisn ?? '-' }}</td>
+                                <td>{{ $item->nis ?? '-' }}</td>
                                 <td>{{ $item->user->nama ?? '-' }}</td>
                                 <td>{{ $item->kelas->nama_kelas ?? '-' }}</td>
-                                <td>{{ $item->nis ?? '-' }}</td>
-                                <td>{{ $item->nisn ?? '-' }}</td>
                                 <td class="text-center">
                                     <a href="{{ route('peserta.edit', $item->id) }}" class="btn btn-primary btn-sm">
                                         <i class="fas fa-edit"></i>
@@ -73,7 +87,6 @@
         </div>
     </section>
 </div>
-
 @endsection
 
 @section('scripts')
@@ -102,7 +115,6 @@
 
     $(document).on('click', '.btn-konfirmasi-hapus', function (e) {
         e.preventDefault();
-
         let form = $(this).closest("form");
 
         Swal.fire({

@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Tempat_pkl;
 
 class Tempat_pklController extends Controller
 {
+
     /**
      * Create a new controller instance.
      *
@@ -23,6 +25,7 @@ class Tempat_pklController extends Controller
      */
     public function index()
     {
-        return view('home.tempat_pkl.index');
+        $tempat_pkl = Tempat_pkl::with(['dudi', 'peserta.user'])->get();
+        return view('home.tempat_pkl.index', compact('tempat_pkl'));
     }
 }

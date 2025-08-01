@@ -19,4 +19,12 @@ class Peserta extends Model
     {
         return $this->belongsTo(Kelas::class);
     }
+    public function tahun_ajaran()
+    {
+        return $this->belongsTo(Tahun_ajaran::class, 'tahun_ajaran_id');
+    }
+    public function tempat_pkl()
+    {
+        return $this->hasOne(Tempat_pkl::class);
+    }
 }
