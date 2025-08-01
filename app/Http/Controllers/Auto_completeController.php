@@ -45,6 +45,26 @@ class Auto_completeController extends Controller
         return response()->json($results);
     }
 
+    public function autoCompletePeserta(Request $request)
+    {
+        $term = $request->get('term');
+
+        $peserta = Peserta::with('user')
+            ->whereHas('user', function ($query) use ($term) {
+                $query->where('nama', 'like', '%' . $term . '%');
+            })
+            ->get();
+
+        $results = $peserta->map(function ($item) {
+            return [
+                'id' => $item->id,
+                'label' => $item->user->nama,
+            ];
+        });
+
+        return response()->json($results);
+    }
+
     public function autoCompleteUser(Request $request)
     {
         $term = $request->get('term');

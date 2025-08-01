@@ -49,7 +49,32 @@ class SuratController extends Controller
 
     public function cetakPengantar($dudi_id)
     {
-        $dudi = Dudi::with('tempatPkl.peserta.user')->findOrFail($dudi_id);
-        return view('home.surat.cetak_pengantar', compact('dudi'));
+        $peserta = Peserta::with(['kelas.kompetensi', 'user'])
+            ->whereHas('tempat_pkl', fn($q) => $q->where('dudi_id', $dudi_id))
+            ->get();
+        $firstPeserta = $peserta->first();
+
+        // Ambil kompetensi pertama sebagai default tampilan halaman 1
+        $kompetensi = $firstPeserta?->kelas?->kompetensi?->nama_kompetensi ?? '—';
+
+        // Jumlah siswa
+        $jumlah_siswa = $peserta->count();
+
+        // Tanggal PKL
+        $pengaturan = Pengaturan::latest()->first();
+        $tanggal_mulai = \Carbon\Carbon::parse($pengaturan->tanggal_mulai_pkl)->translatedFormat('j F Y');
+        $tanggal_selesai = \Carbon\Carbon::parse($pengaturan->tanggal_selesai_pkl)->translatedFormat('j F Y');
+
+        // Data DU/DI
+        $dudi = Dudi::findOrFail($dudi_id);
+
+        return view('partials.docx.pengantar', compact(
+            'peserta',
+            'kompetensi',
+            'jumlah_siswa',
+            'tanggal_mulai',
+            'tanggal_selesai',
+            'dudi'
+        ));
     }
 }

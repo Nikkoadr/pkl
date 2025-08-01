@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Dudi;
+use App\Imports\DudiImport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class DudiController extends Controller
 {
@@ -42,6 +44,17 @@ class DudiController extends Controller
             $request->all()
         );
         return redirect()->route('dudi.index')->with('success', 'DUDI berhasil ditambahkan');
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls,csv'
+        ]);
+
+        Excel::import(new DudiImport, $request->file('file'));
+
+        return redirect()->back()->with('success', 'Import berhasil!');
     }
 
     public function edit($id)

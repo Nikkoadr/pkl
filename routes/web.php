@@ -24,12 +24,14 @@ Auth::routes();
 Route::get('/autocomplete/dudi', [Auto_completeController::class, 'autoCompleteDudi']);
 Route::get('/autocomplete/users', [Auto_completeController::class, 'autoCompleteUser']);
 Route::get('/autocomplete/guru', [Auto_completeController::class, 'autoCompleteGuru']);
+Route::get('/autocomplete/peserta', [Auto_completeController::class, 'autoCompletePeserta']);
 
 
 Route::get('/home/dashboard', [HomeController::class, 'index'])->name('home.dashboard');
 Route::resource('/home/tahun_ajaran', Tahun_ajaranController::class);
 
 Route::resource('/home/dudi', DudiController::class);
+Route::post('/home/import_dudi', [DudiController::class, 'import'])->name('dudi.import');
 Route::resource('/home/users', UserController::class);
 Route::put('/home/users/{id}/reset-password', [UserController::class, 'resetPassword'])->name('users.resetPassword');
 Route::resource('/home/kelas', KelasController::class);

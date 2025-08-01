@@ -25,6 +25,9 @@
                             <h3 class="card-title mb-0">Daftar DUDI</h3>
                         </div>
                         <div class="col-md-6 text-right">
+                            <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalImport">
+                                <i class="fas fa-file-import"></i> Import Excel
+                            </button>
                             <button class="btn btn-success btn-sm" data-toggle="modal" data-target="#modalTambah">
                                 <i class="fas fa-plus"></i> Tambah DUDI
                             </button>
@@ -111,6 +114,39 @@
         </form>
     </div>
 </div>
+
+<!-- Modal Import -->
+<div class="modal fade" id="modalImport" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <form action="{{ route('dudi.import') }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Import Data DUDI</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="import_dudi">File input</label>
+                        <div class="input-group">
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="import_dudi" name="file" required accept=".xlsx, .xls, .csv">
+                            <label class="custom-file-label" for="import_dudi">Choose file</label>
+                        </div>
+                        <div class="input-group-append">
+                            <span class="input-group-text">Upload</span>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Import</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
 @endsection
 
 @section('scripts')
@@ -136,8 +172,33 @@
             buttons: ["copy", "csv", "excel", "pdf", "print", "colvis"]
         }).buttons().container().appendTo('#tabelDUDI_wrapper .col-md-6:eq(0)');
     });
-</script>
 
+    // Konfirmasi Hapus
+    $(document).on('click', '.btn-konfirmasi-hapus', function (e) {
+        e.preventDefault();
+        let form = $(this).closest("form");
+        Swal.fire({
+            title: 'Apakah Anda yakin?',
+            text: "Data DUDI akan dihapus secara permanen!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Ya, hapus!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                form.submit();
+            }
+        });
+    });
+</script>
+<script src="{{ asset('assets/plugins/bs-custom-file-input/bs-custom-file-input.min.js') }}"></script>
+<script>
+$(function () {
+    bsCustomFileInput.init();
+});
+</script>
 @if (session('success'))
 <script>
     Swal.fire({
@@ -165,28 +226,4 @@
     });
 </script>
 @endif
-
-<script>
-    // Konfirmasi Hapus
-    $(document).on('click', '.btn-konfirmasi-hapus', function (e) {
-        e.preventDefault();
-
-        let form = $(this).closest("form");
-
-        Swal.fire({
-            title: 'Apakah Anda yakin?',
-            text: "Data DUDI akan dihapus secara permanen!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#d33',
-            cancelButtonColor: '#6c757d',
-            confirmButtonText: 'Ya, hapus!',
-            cancelButtonText: 'Batal'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                form.submit();
-            }
-        });
-    });
-</script>
 @endsection
