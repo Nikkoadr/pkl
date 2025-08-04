@@ -27,6 +27,7 @@ class DudiController extends Controller
 
     public function index()
     {
+        $this->authorize('admin');
         $dudi = Dudi::all();
         return view('home.dudi.index', compact('dudi'));
     }

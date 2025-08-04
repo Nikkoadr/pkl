@@ -26,6 +26,7 @@ class Tahun_ajaranController extends Controller
      */
     public function index()
     {
+        $this->authorize('admin');
         return view('home.tahun_ajaran.index');
     }
 

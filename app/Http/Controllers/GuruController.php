@@ -25,6 +25,7 @@ class GuruController extends Controller
      */
     public function index()
     {
+        $this->authorize('admin');
         $guru = Guru::with('user')->get();
         return view('home.guru.index', compact('guru'));
     }

@@ -15,7 +15,7 @@
   <table>
     <tr>
       <td>Nomor</td>
-      <td>: 631.001/III.4.AU/J/2025</td>
+      <td>: 631.{{ str_pad($dudi->id, 3, '0', STR_PAD_LEFT) }}/III.4.AU/J/{{ date('Y') }}</td>
     </tr>
     <tr>
       <td>Lamp</td>
@@ -81,7 +81,7 @@
         <table>
           <tr>
             <td>Nomor</td>
-            <td>: 631.001/III.4.AU/J/2025</td>
+            <td>: 631.{{ str_pad($dudi->id, 3, '0', STR_PAD_LEFT) }}/III.4.AU/J/{{ date('Y') }}</td>
           </tr>
           <tr>
             <td>Lampiran Ke</td>

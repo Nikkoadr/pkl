@@ -26,6 +26,7 @@ class UserController extends Controller
      */
     public function index()
     {
+        $this->authorize('admin');
         $users = User::with('role')->get();
         $roles = Role::all();
         return view('home.users.index', compact('users', 'roles'));

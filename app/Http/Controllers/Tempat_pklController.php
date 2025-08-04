@@ -25,6 +25,7 @@ class Tempat_pklController extends Controller
      */
     public function index()
     {
+        $this->authorize('admin');
         $tempat_pkl = Tempat_pkl::with(['dudi', 'peserta.user'])->get();
         return view('home.tempat_pkl.index', compact('tempat_pkl'));
     }

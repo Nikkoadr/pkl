@@ -26,6 +26,7 @@ class Guru_pembimbingController extends Controller
      */
     public function index()
     {
+        $this->authorize('admin');
         $pembimbing = Guru_pembimbing::with('guru.user', 'dudi')->get();
         $guru = Guru::with('user')->get();
         $dudi = Dudi::all();

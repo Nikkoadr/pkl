@@ -29,7 +29,8 @@
                 <p>Dashboard</p>
             </a>
         </li>
-
+        
+@can('admin')
         <!-- Master Data -->
         <li class="nav-item {{ request()->is('home/tahun_ajaran','home/dudi','home/users','home/kelas') ? 'menu-open' : '' }}">
             <a href="#" class="nav-link {{ request()->is('home/tahun_ajaran','home/dudi','home/users','home/kelas') ? 'active' : '' }}">
@@ -124,6 +125,7 @@
                 </li>
             </ul>
         </li>
+@endcan
 
         <!-- Jurnal dan Nilai -->
         <li class="nav-item {{ request()->is('home/ejurnal','home/nilai_jurnal','home/nilai_sidang') ? 'menu-open' : '' }}">
@@ -155,7 +157,7 @@
                 </li>
             </ul>
         </li>
-
+@can('admin')
         <!-- Sertifikat -->
         <li class="nav-item">
             <a href="/home/esertifikat" class="nav-link {{ request()->is('home/esertifikat') ? 'active' : '' }}">
@@ -171,6 +173,7 @@
                 <p>Pengaturan</p>
             </a>
         </li>
+@endcan
     </ul>
 </nav>
 

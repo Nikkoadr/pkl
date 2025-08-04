@@ -31,6 +31,7 @@ class PersertaController extends Controller
 
     public function index(Request $request)
     {
+        $this->authorize('admin');
         $semua_tahun_ajaran = Tahun_ajaran::orderBy('id', 'desc')->get();
         $tahun_terbaru = $semua_tahun_ajaran->first();
 

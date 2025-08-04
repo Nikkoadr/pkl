@@ -27,6 +27,7 @@ class SuratController extends Controller
      */
     public function index()
     {
+        $this->authorize('admin');
         $dudiList = Dudi::has('tempatPkl')->withCount('tempatPkl')->get();
         return view('home.surat.index', compact('dudiList'));
     }
@@ -147,7 +148,6 @@ class SuratController extends Controller
                 'jumlah_siswa' => $jumlah_siswa,
             ];
         }
-
         return view('partials.docx.cetak_masal_surat_pengantar', compact('data', 'tanggal_mulai', 'tanggal_selesai'));
     }
 }
