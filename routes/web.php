@@ -44,6 +44,8 @@ Route::resource('/home/peserta', PersertaController::class);
 Route::get('/home/surat', [SuratController::class, 'index'])->name('home.surat');
 Route::get('/home/permohonan/{id}', [SuratController::class, 'cetakPermohonan'])->name('surat.permohonan');
 Route::get('/home/pengantar/{id}', [SuratController::class, 'cetakPengantar'])->name('surat.pengantar');
+Route::get('/home/permohonan-massal', [SuratController::class, 'cetakPermohonanMassal'])->name('surat.permohonan.massal');
+Route::get('/home/pengantar-massal', [SuratController::class, 'cetakPengantarMassal'])->name('surat.pengantar.massal');
 
 Route::get('/home/esertifikat', [EsertifikatController::class, 'index'])->name('home.esertifikat');
 Route::get('/home/pengaturan', [PengaturanController::class, 'index'])->name('home.pengaturan');

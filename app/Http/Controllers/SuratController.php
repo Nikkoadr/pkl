@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Dudi;
 use App\Models\Peserta;
 use App\Models\Pengaturan;
+use Carbon\Carbon;
 
 class SuratController extends Controller
 {
@@ -46,7 +47,6 @@ class SuratController extends Controller
         return view('partials.docx.permohonan', compact('peserta', 'kompetensi', 'tanggal_mulai', 'tanggal_selesai', 'dudi'));
     }
 
-
     public function cetakPengantar($dudi_id)
     {
         $peserta = Peserta::with(['kelas.kompetensi', 'user'])
@@ -54,18 +54,14 @@ class SuratController extends Controller
             ->get();
         $firstPeserta = $peserta->first();
 
-        // Ambil kompetensi pertama sebagai default tampilan halaman 1
         $kompetensi = $firstPeserta?->kelas?->kompetensi?->nama_kompetensi ?? '—';
 
-        // Jumlah siswa
         $jumlah_siswa = $peserta->count();
 
-        // Tanggal PKL
         $pengaturan = Pengaturan::latest()->first();
-        $tanggal_mulai = \Carbon\Carbon::parse($pengaturan->tanggal_mulai_pkl)->translatedFormat('j F Y');
-        $tanggal_selesai = \Carbon\Carbon::parse($pengaturan->tanggal_selesai_pkl)->translatedFormat('j F Y');
+        $tanggal_mulai = Carbon::parse($pengaturan->tanggal_mulai_pkl)->translatedFormat('j F Y');
+        $tanggal_selesai = Carbon::parse($pengaturan->tanggal_selesai_pkl)->translatedFormat('j F Y');
 
-        // Data DU/DI
         $dudi = Dudi::findOrFail($dudi_id);
 
         return view('partials.docx.pengantar', compact(
@@ -76,5 +72,82 @@ class SuratController extends Controller
             'tanggal_selesai',
             'dudi'
         ));
+    }
+
+    public function cetakPermohonanMassal(Request $request)
+    {
+        $ids = explode(',', $request->input('ids'));
+
+        $data = [];
+
+        $pengaturan = Pengaturan::latest()->first();
+        $tanggal_mulai = \Carbon\Carbon::parse($pengaturan->tanggal_mulai_pkl)->translatedFormat('j F Y');
+        $tanggal_selesai = \Carbon\Carbon::parse($pengaturan->tanggal_selesai_pkl)->translatedFormat('j F Y');
+
+        foreach ($ids as $id) {
+            $dudi = Dudi::find($id);
+
+            if (!$dudi) {
+                continue;
+            }
+
+            $peserta = Peserta::with('kelas.kompetensi')
+                ->whereHas('tempat_pkl', fn($q) => $q->where('dudi_id', $id))
+                ->get();
+
+            if ($peserta->isEmpty()) {
+                continue;
+            }
+
+            $firstPeserta = $peserta->first();
+            $kompetensi = $firstPeserta?->kelas?->kompetensi?->nama_kompetensi ?? '—';
+
+            $data[] = [
+                'dudi' => $dudi,
+                'peserta' => $peserta,
+                'kompetensi' => $kompetensi,
+            ];
+        }
+
+        return view('partials.docx.cetak_masal_surat_permohonan', compact('data', 'tanggal_mulai', 'tanggal_selesai'));
+    }
+
+    public function cetakPengantarMassal(Request $request)
+    {
+        $ids = explode(',', $request->input('ids'));
+        $data = [];
+
+        $pengaturan = Pengaturan::latest()->first();
+        $tanggal_mulai = \Carbon\Carbon::parse($pengaturan->tanggal_mulai_pkl)->translatedFormat('j F Y');
+        $tanggal_selesai = \Carbon\Carbon::parse($pengaturan->tanggal_selesai_pkl)->translatedFormat('j F Y');
+
+        foreach ($ids as $id) {
+            $dudi = Dudi::find($id);
+
+            if (!$dudi) {
+                continue;
+            }
+
+            $peserta = Peserta::with(['kelas.kompetensi', 'user'])
+                ->whereHas('tempat_pkl', fn($q) => $q->where('dudi_id', $id))
+                ->get();
+
+            if ($peserta->isEmpty()) {
+                continue;
+            }
+
+            $firstPeserta = $peserta->first();
+            $kompetensi = $firstPeserta?->kelas?->kompetensi?->nama_kompetensi ?? '—';
+            $jumlah_siswa = $peserta->count();
+
+            $data[] = [
+                'dudi' => $dudi,
+                'peserta' => $peserta,
+                'kompetensi' => $kompetensi,
+                'jumlah_siswa' => $jumlah_siswa,
+            ];
+        }
+
+        return view('partials.docx.cetak_masal_surat_pengantar', compact('data', 'tanggal_mulai', 'tanggal_selesai'));
     }
 }
