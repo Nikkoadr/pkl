@@ -1,42 +1,46 @@
 <!DOCTYPE html>
 <html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manajemen PKL | Praktik Kerja Lapangan</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Manajemen PKL | Praktik Kerja Lapangan</title>
 
-    <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-        }
+        <!-- Meta SEO -->
+        <meta name="description" content="Sistem Manajemen PKL SMK Muhammadiyah Kandanghaur untuk mempermudah pengelolaan Praktik Kerja Lapangan secara digital dan terintegrasi.">
 
-        .hero-section {
-            background: url('https://www.smkmuhkandanghaur.sch.id/assets/website/img/carousel-1.jpg') no-repeat center center;
-            background-size: cover;
+        <!-- Favicon -->
+        <link rel="icon" href="https://www.smkmuhkandanghaur.sch.id/assets/favicon.ico" type="image/x-icon">
+
+        <!-- Bootstrap CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+        <style>
+        .carousel-item {
             height: 100vh;
+            background-size: cover;
+            background-position: center;
             position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            text-align: center;
         }
 
-        .hero-overlay {
+        .carousel-overlay {
             position: absolute;
             top: 0;
             left: 0;
-            width: 100%;
             height: 100%;
+            width: 100%;
             background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(2px);
+            z-index: 1;
         }
 
         .hero-content {
-            position: relative;
-            z-index: 1;
-            max-width: 800px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: white;
+            z-index: 2;
         }
 
         .hero-content h1 {
@@ -44,39 +48,68 @@
             font-weight: 700;
         }
 
+        .hero-content p {
+            font-size: 1.25rem;
+            margin-top: 10px;
+        }
+
         .btn-lg {
             padding: 0.75rem 1.5rem;
             font-size: 1.1rem;
         }
+        </style>
+    </head>
+    <body>
 
-        .nav-link {
-            font-weight: 500;
-        }
-    </style>
-</head>
-<body>
+<div id="heroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="2000">
+    <div class="carousel-inner">
 
-    <!-- Hero Section -->
-    <section class="hero-section">
-        <div class="hero-overlay"></div>
-        <div class="container hero-content">
-            <h1 class="display-4 fw-bold">Selamat Datang di Sistem Manajemen PKL</h1>
-            <p class="lead mt-3">Platform digital untuk mengelola kegiatan Praktik Kerja Lapangan secara efisien dan terintegrasi.</p>
+        <!-- Slide 1 -->
+        <div class="carousel-item active" style="background-image: url('https://www.smkmuhkandanghaur.sch.id/assets/website/img/carousel-1.jpg');">
+        <div class="carousel-overlay"></div>
+        <div class="hero-content container">
+            <h1>Selamat Datang di Sistem Manajemen PKL</h1>
+            <p>Kelola kegiatan PKL secara mudah, efisien, dan terintegrasi.</p>
             <div class="mt-4">
-                @if (Route::has('login'))
-                    @auth
-                        <a href="{{ url('/home/dashboard') }}" class="btn btn-primary btn-lg me-2">Dashboard</a>
-                    @else
-                        <a href="{{ route('login') }}" class="btn btn-outline-light btn-lg me-2">Masuk</a>
-                        @if (Route::has('register'))
-                            <a href="{{ route('register') }}" class="btn btn-success btn-lg">Daftar Sekarang</a>
-                        @endif
-                    @endauth
+            @if (Route::has('login'))
+                @auth
+                <a href="{{ url('/home/dashboard') }}" class="btn btn-primary btn-lg me-2">Dashboard</a>
+                @else
+                <a href="{{ route('login') }}" class="btn btn-outline-light btn-lg me-2">Masuk</a>
+                @if (Route::has('register'))
+                    <a href="{{ route('register') }}" class="btn btn-success btn-lg">Daftar Sekarang</a>
                 @endif
+                @endauth
+            @endif
             </div>
         </div>
-    </section>
+        </div>
+
+        <!-- Slide 2 -->
+        <div class="carousel-item" style="background-image: url('https://www.smkmuhkandanghaur.sch.id/assets/website/img/carousel-2.jpg');">
+        <div class="carousel-overlay"></div>
+        <div class="hero-content container">
+            <h1>Selamat Datang di Sistem Manajemen PKL</h1>
+            <p>Kelola kegiatan PKL secara mudah, efisien, dan terintegrasi.</p>
+            <div class="mt-4">
+            @if (Route::has('login'))
+                @auth
+                <a href="{{ url('/home/dashboard') }}" class="btn btn-primary btn-lg me-2">Dashboard</a>
+                @else
+                <a href="{{ route('login') }}" class="btn btn-outline-light btn-lg me-2">Masuk</a>
+                @if (Route::has('register'))
+                    <a href="{{ route('register') }}" class="btn btn-success btn-lg">Daftar Sekarang</a>
+                @endif
+                @endauth
+            @endif
+            </div>
+        </div>
+        </div>
+
+    </div>
+</div>
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
+    </body>
 </html>
