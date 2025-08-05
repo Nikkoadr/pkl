@@ -28,6 +28,9 @@
                             <button class="btn btn-success btn-sm" data-toggle="modal" data-target="#modalTambah">
                                 <i class="fas fa-plus"></i> Tambah User
                             </button>
+                            <button id="btnDeleteSelected" class="btn btn-danger btn-sm">
+                                <i class="fas fa-trash"></i> Hapus Terpilih
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -36,6 +39,7 @@
                     <table id="tabelUser" class="table table-bordered table-striped">
                         <thead>
                             <tr>
+                                <th><input type="checkbox" id="checkAll"></th>
                                 <th>No</th>
                                 <th>Nama</th>
                                 <th>Role</th>
@@ -47,7 +51,8 @@
                         </thead>
                         <tbody>
                             @foreach($users as $user)
-                            <tr>
+                            <tr id="row-{{ $user->id }}">
+                                <td><input type="checkbox" class="check-item" value="{{ $user->id }}"></td>
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $user->nama }}</td>
                                 <td>{{ $user->role->nama_role ?? '-' }}</td>
@@ -79,6 +84,11 @@
                                 </td>
                             </tr>
                             @endforeach
+                            @if ($users->count() === 0)
+                                <tr>
+                                    <td colspan="8" class="text-center">Tidak ada data.</td>
+                                </tr>
+                            @endif
                         </tbody>
                     </table>
                 </div> <!-- /.card-body -->
@@ -237,5 +247,60 @@
             }
         });
     });
+</script>
+<script>
+    $('#checkAll').on('click', function () {
+    $('.check-item').prop('checked', this.checked);
+});
+
+        $('#btnDeleteSelected').on('click', function () {
+            let selectedIds = $('.check-item:checked').map(function () {
+                return $(this).val();
+            }).get();
+
+            if (selectedIds.length === 0) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Tidak ada data terpilih',
+                    text: 'Silakan pilih data yang ingin dihapus.'
+                });
+                return;
+            }
+
+            Swal.fire({
+                title: 'Yakin ingin menghapus?',
+                text: "Data yang dipilih akan dihapus secara permanen!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Ya, hapus!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: "{{ route('users.deleteMultiple') }}",
+                        method: 'POST',
+                        data: {
+                            _token: '{{ csrf_token() }}',
+                            ids: selectedIds
+                        },
+                        success: function (response) {
+                            if (response.status) {
+                                selectedIds.forEach(id => {
+                                    $('#row-' + id).remove();
+                                });
+                                Swal.fire('Berhasil!', response.message, 'success');
+                            } else {
+                                Swal.fire('Gagal', response.message, 'error');
+                            }
+                        },
+                        error: function () {
+                            Swal.fire('Gagal', 'Terjadi kesalahan saat menghapus data.', 'error');
+                        }
+                    });
+                }
+            });
+        });
 </script>
 @endsection

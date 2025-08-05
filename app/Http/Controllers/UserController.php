@@ -95,4 +95,16 @@ class UserController extends Controller
         $user->delete();
         return redirect()->route('users.index')->with('success', 'Data user berhasil dihapus.');
     }
+
+    public function deleteMultiple(Request $request)
+    {
+        $ids = $request->input('ids', []);
+
+        if (count($ids) > 0) {
+            User::whereIn('id', $ids)->delete();
+            return response()->json(['status' => true, 'message' => 'User terpilih berhasil dihapus!']);
+        }
+
+        return response()->json(['status' => false, 'message' => 'Tidak ada user yang dipilih untuk dihapus.']);
+    }
 }

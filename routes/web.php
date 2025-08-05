@@ -33,6 +33,8 @@ Route::resource('/home/tahun_ajaran', Tahun_ajaranController::class);
 Route::resource('/home/dudi', DudiController::class);
 Route::post('/home/import_dudi', [DudiController::class, 'import'])->name('dudi.import');
 Route::resource('/home/users', UserController::class);
+Route::post('/home/users/delete-multiple', [UserController::class, 'deleteMultiple'])->name('users.deleteMultiple');
+
 Route::put('/home/users/{id}/reset-password', [UserController::class, 'resetPassword'])->name('users.resetPassword');
 Route::resource('/home/kelas', KelasController::class);
 Route::resource('/home/guru', GuruController::class);
