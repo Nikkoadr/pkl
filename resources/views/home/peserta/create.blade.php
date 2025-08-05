@@ -25,7 +25,6 @@
                                 <div class="form-group">
                                     <label>Tahun Ajaran</label>
                                     <select name="tahun_ajaran_id" class="form-control @error('tahun_ajaran_id') is-invalid @enderror" required>
-                                        <option value="">-- Pilih Tahun Ajaran --</option>
                                         @foreach ($tahun_ajaran as $ta)
                                             <option value="{{ $ta->id }}" {{ old('tahun_ajaran_id') == $ta->id ? 'selected' : '' }}>{{ $ta->nama_tahun_ajaran }}</option>
                                         @endforeach

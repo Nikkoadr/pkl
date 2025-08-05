@@ -47,7 +47,7 @@ class PersertaController extends Controller
 
     public function create()
     {
-        $tahun_ajaran = Tahun_ajaran::all();
+        $tahun_ajaran = Tahun_ajaran::orderBy('id', 'desc')->get();
         $users = User::whereDoesntHave('peserta')->where('role_id', 3)->get();
         $kelas = Kelas::all();
         return view('home.peserta.create', compact('users', 'kelas', 'tahun_ajaran'));
