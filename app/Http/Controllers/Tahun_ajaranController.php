@@ -26,8 +26,7 @@ class Tahun_ajaranController extends Controller
      */
     public function index()
     {
-        $this->authorize('admin');
-        return view('home.tahun_ajaran.index');
+        return redirect()->route('home.dashboard')->with('error', 'Halaman TA tidak tersedia.');
     }
 
     /**

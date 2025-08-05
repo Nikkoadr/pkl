@@ -1,5 +1,8 @@
 @extends('layouts.master')
 @section('title', 'Dashboard')
+@section('link')
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+@endsection
 @section('content')
 <!-- Content Wrapper -->
 <div class="content-wrapper">
@@ -37,3 +40,45 @@
     </section>
 </div>
 @endsection
+@section('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    @if (session('success'))
+        Swal.fire({
+            toast: true,
+            position: 'top-end',
+            icon: 'success',
+            title: '{{ session('success') }}',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true
+        });
+    @endif
+
+    @if (session('error'))
+        Swal.fire({
+            toast: true,
+            position: 'top-end',
+            icon: 'error',
+            title: '{{ session('error') }}',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true
+        });
+    @endif
+
+    @if ($errors->any())
+        Swal.fire({
+            toast: true,
+            position: 'top-end',
+            icon: 'error',
+            title: 'Terdapat {{ $errors->count() }} kesalahan validasi.',
+            html: `{!! implode('<br>', $errors->all()) !!}`,
+            showConfirmButton: true,
+            confirmButtonText: 'Tutup',
+            timerProgressBar: true
+        });
+    @endif
+</script>
+@endsection
+

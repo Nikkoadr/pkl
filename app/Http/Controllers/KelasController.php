@@ -26,7 +26,7 @@ class KelasController extends Controller
      */
     public function index()
     {
-        //
+        return redirect()->route('home.dashboard')->with('error', 'Halaman Kelas tidak tersedia.');
     }
 
     /**

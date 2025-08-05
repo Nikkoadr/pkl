@@ -127,26 +127,26 @@
         </li>
 @endcan
 
-        <!-- Jurnal dan Nilai -->
-        <li class="nav-item {{ request()->is('home/ejurnal','home/nilai_jurnal','home/nilai_sidang') ? 'menu-open' : '' }}">
-            <a href="#" class="nav-link {{ request()->is('home/ejurnal','home/nilai_jurnal','home/nilai_sidang') ? 'active' : '' }}">
+        <!-- Logbook dan Nilai -->
+        <li class="nav-item {{ request()->is('home/logbook','home/nilai_pkl','home/nilai_sidang') ? 'menu-open' : '' }}">
+            <a href="#" class="nav-link {{ request()->is('home/logbook','home/nilai_pkl','home/nilai_sidang') ? 'active' : '' }}">
                 <i class="nav-icon fa-solid fa-book"></i>
                 <p>
-                    Jurnal & Nilai
+                    Logbook & Nilai
                     <i class="right fas fa-angle-left"></i>
                 </p>
             </a>
             <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <a href="/home/ejurnal" class="nav-link {{ request()->is('home/ejurnal') ? 'active' : '' }}">
+                    <a href="/home/logbook" class="nav-link {{ request()->is('home/logbook') ? 'active' : '' }}">
                         <i class="far fa-circle nav-icon"></i>
-                        <p>E-Jurnal</p>
+                        <p>Logbook</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="/home/nilai_jurnal" class="nav-link {{ request()->is('home/nilai_jurnal') ? 'active' : '' }}">
+                    <a href="/home/nilai_pkl" class="nav-link {{ request()->is('home/nilai_pkl') ? 'active' : '' }}">
                         <i class="far fa-circle nav-icon"></i>
-                        <p>Nilai Jurnal</p>
+                        <p>Nilai PKL</p>
                     </a>
                 </li>
                 <li class="nav-item">

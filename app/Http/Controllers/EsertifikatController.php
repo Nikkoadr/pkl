@@ -24,6 +24,6 @@ class EsertifikatController extends Controller
     public function index()
     {
         $this->authorize('admin');
-        return view('home.esertifikat.index');
+        return redirect()->route('home.dashboard')->with('error', 'Halaman E-Sertifikat tidak tersedia.');
     }
 }
