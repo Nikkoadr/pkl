@@ -7,7 +7,7 @@ use App\Models\User;
 use App\Models\Kelas;
 use App\Models\Peserta;
 use App\Models\Tempat_pkl;
-use App\Models\tahun_ajaran;
+use App\Models\Tahun_ajaran;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
