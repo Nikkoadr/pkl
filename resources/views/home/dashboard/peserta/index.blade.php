@@ -26,14 +26,17 @@
     <!-- Main Content -->
     <section class="content">
         <div class="container-fluid">
-
-            <!-- Welcome Box -->
-            <div class="card card-primary">
+            <div class="card card-info">
                 <div class="card-header">
-                    <h3 class="card-title">Selamat Datang, {{ Auth::user()->nama }}</h3>
+                    <h3 class="card-title">Informasi DUDI Anda</h3>
                 </div>
                 <div class="card-body">
-                    <p>Semoga Hari Anda Menyenangkan!</p>
+                    @if($namaDudi)
+                        <p>Anda saat ini ditempatkan di DUDI:</p>
+                        <h4><i class="fas fa-building"></i> {{ $namaDudi }}</h4>
+                    @else
+                        <p>Anda belum ditempatkan di DUDI manapun.</p>
+                    @endif
                 </div>
             </div>
         </div>

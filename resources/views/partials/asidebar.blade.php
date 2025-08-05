@@ -128,7 +128,7 @@
 @endcan
 
         <!-- Logbook dan Nilai -->
-        <li class="nav-item {{ request()->is('home/logbook','home/nilai_pkl','home/nilai_sidang') ? 'menu-open' : '' }}">
+        {{-- <li class="nav-item {{ request()->is('home/logbook','home/nilai_pkl','home/nilai_sidang') ? 'menu-open' : '' }}">
             <a href="#" class="nav-link {{ request()->is('home/logbook','home/nilai_pkl','home/nilai_sidang') ? 'active' : '' }}">
                 <i class="nav-icon fa-solid fa-book"></i>
                 <p>
@@ -156,7 +156,7 @@
                     </a>
                 </li>
             </ul>
-        </li>
+        </li> --}}
 @can('admin')
         <!-- Sertifikat -->
         <li class="nav-item">

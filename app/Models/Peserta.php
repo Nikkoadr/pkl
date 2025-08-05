@@ -27,4 +27,9 @@ class Peserta extends Model
     {
         return $this->hasOne(Tempat_pkl::class);
     }
+    public function dudi()
+    {
+        return $this->belongsTo(Dudi::class);
+    }
+
 }
