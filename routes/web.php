@@ -21,33 +21,56 @@ Route::get('/', function () {
 });
 
 Auth::routes();
-Route::get('/autocomplete/dudi', [Auto_completeController::class, 'autoCompleteDudi']);
-Route::get('/autocomplete/users', [Auto_completeController::class, 'autoCompleteUser']);
-Route::get('/autocomplete/guru', [Auto_completeController::class, 'autoCompleteGuru']);
-Route::get('/autocomplete/peserta', [Auto_completeController::class, 'autoCompletePeserta']);
+// ==============================
+// 🔎 Autocomplete
+// ==============================
+Route::prefix('autocomplete')->group(function () {
+    Route::get('/dudi', [Auto_completeController::class, 'autoCompleteDudi']);
+    Route::get('/users', [Auto_completeController::class, 'autoCompleteUser']);
+    Route::get('/guru', [Auto_completeController::class, 'autoCompleteGuru']);
+    Route::get('/peserta', [Auto_completeController::class, 'autoCompletePeserta']);
+});
 
-
+// ==============================
+// 🏠 Dashboard & Umum
+// ==============================
 Route::get('/home/dashboard', [HomeController::class, 'index'])->name('home.dashboard');
+
+// ==============================
+// 📚 Master Data
+// ==============================
 Route::resource('/home/tahun_ajaran', Tahun_ajaranController::class);
-
-Route::resource('/home/dudi', DudiController::class);
-Route::post('/home/import_dudi', [DudiController::class, 'import'])->name('dudi.import');
-Route::resource('/home/users', UserController::class);
-Route::post('/home/users/delete-multiple', [UserController::class, 'deleteMultiple'])->name('users.deleteMultiple');
-
-Route::put('/home/users/{id}/reset-password', [UserController::class, 'resetPassword'])->name('users.resetPassword');
 Route::resource('/home/kelas', KelasController::class);
+Route::resource('/home/users', UserController::class);
+Route::resource('/home/dudi', DudiController::class);
 Route::resource('/home/guru', GuruController::class);
-
+Route::resource('/home/peserta', PersertaController::class);
 Route::resource('/home/guru_pembimbing', Guru_pembimbingController::class);
 Route::resource('/home/tempat_pkl', Tempat_pklController::class);
 
-Route::resource('/home/peserta', PersertaController::class);
+// ==============================
+// 📤 Import Data
+// ==============================
+Route::post('/home/import_dudi', [DudiController::class, 'import'])->name('dudi.import');
+Route::post('/home/import_guru', [GuruController::class, 'import'])->name('guru.import');
+
+// ==============================
+// 🔐 User Management
+// ==============================
+Route::post('/home/users/delete-multiple', [UserController::class, 'deleteMultiple'])->name('users.deleteMultiple');
+Route::put('/home/users/{id}/reset-password', [UserController::class, 'resetPassword'])->name('users.resetPassword');
+
+// ==============================
+// 📄 Surat / Dokumen
+// ==============================
 Route::get('/home/surat', [SuratController::class, 'index'])->name('home.surat');
 Route::get('/home/permohonan/{id}', [SuratController::class, 'cetakPermohonan'])->name('surat.permohonan');
 Route::get('/home/pengantar/{id}', [SuratController::class, 'cetakPengantar'])->name('surat.pengantar');
 Route::get('/home/permohonan-massal', [SuratController::class, 'cetakPermohonanMassal'])->name('surat.permohonan.massal');
 Route::get('/home/pengantar-massal', [SuratController::class, 'cetakPengantarMassal'])->name('surat.pengantar.massal');
 
+// ==============================
+// 🛠️ Pengaturan
+// ==============================
 Route::get('/home/esertifikat', [EsertifikatController::class, 'index'])->name('home.esertifikat');
 Route::get('/home/pengaturan', [PengaturanController::class, 'index'])->name('home.pengaturan');

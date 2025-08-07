@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('role_id')->constrained('roles')->onDelete('cascade');
             $table->string('nama')->nullable();
-            $table->string('jenis_kelamin')->nullable();
+            $table->enum('jenis_kelamin', ['Laki-laki', 'Perempuan'])->nullable();
             $table->string('tempat_lahir')->nullable();
             $table->date('tanggal_lahir')->nullable();
             $table->string('email')->unique();

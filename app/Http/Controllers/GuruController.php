@@ -6,6 +6,8 @@ use App\Models\Guru;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use App\Imports\GuruImport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class GuruController extends Controller
 {
@@ -49,9 +51,8 @@ class GuruController extends Controller
             'tanggal_lahir' => 'nullable|date',
         ]);
 
-        // Simpan ke tabel users
         $user = User::create([
-            'role_id' => 2, // misalnya 2 = role guru
+            'role_id' => 2,
             'nama' => $request->nama,
             'email' => $request->email,
             'password' => Hash::make($request->password),
@@ -60,13 +61,23 @@ class GuruController extends Controller
             'tanggal_lahir' => $request->tanggal_lahir,
         ]);
 
-        // Simpan ke tabel guru
         Guru::create([
             'user_id' => $user->id,
             'keterangan' => $request->keterangan,
         ]);
 
         return redirect()->route('guru.index')->with('success', 'Guru berhasil ditambahkan!');
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls,csv'
+        ]);
+
+        Excel::import(new GuruImport, $request->file('file'));
+
+        return redirect()->back()->with('success', 'Import Guru Berhasil!');
     }
 
     public function edit($id)

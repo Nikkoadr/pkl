@@ -20,12 +20,13 @@
         <div class="container-fluid">
             <div class="card">
                 <div class="card-header">
-                    <div class="row w-100">
-                        <div class="col-md-6 d-flex align-items-center">
-                            <h3 class="card-title mb-0">Daftar Guru</h3>
-                        </div>
-                        <div class="col-md-6 text-right">
-                            <a href="{{ route('guru.create') }}" class="btn btn-primary">
+                    <div class="d-flex justify-content-between align-items-center w-100">
+                        <h3 class="card-title mb-0">Daftar Guru</h3>
+                        <div>
+                            <button class="btn btn-sm btn-success mr-2" data-toggle="modal" data-target="#modalImport">
+                                <i class="fas fa-file-import"></i> Import Excel
+                            </button>
+                            <a href="{{ route('guru.create') }}" class="btn btn-sm btn-primary">
                                 <i class="fas fa-plus"></i> Tambah Guru
                             </a>
                         </div>
@@ -75,6 +76,35 @@
         </div>
     </section>
 </div>
+<!-- Modal Import -->
+<div class="modal fade" id="modalImport" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <form action="{{ route('guru.import') }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Import Data User</h5>
+                    <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="import_user">File input</label>
+                        <div class="input-group">
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="import_user" name="file" required accept=".xlsx, .xls, .csv">
+                            <label class="custom-file-label" for="import_user">Choose file</label>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Import</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
 @endsection
 
 @section('scripts')
@@ -84,6 +114,7 @@
 <script src="{{ asset('assets/plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
 <script src="{{ asset('assets/plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="{{ asset('assets/plugins/bs-custom-file-input/bs-custom-file-input.min.js') }}"></script>
 
 <script>
     $(function () {
@@ -139,5 +170,10 @@
         timerProgressBar: true
     });
     @endif
+</script>
+<script>
+$(function () {
+    bsCustomFileInput.init();
+});
 </script>
 @endsection

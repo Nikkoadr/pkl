@@ -67,7 +67,7 @@ class RegisterController extends Controller
             'nisn' => ['required', 'string', 'max:255'],
             'nis' => ['required', 'string', 'max:255'],
             'nama' => ['required', 'string', 'max:255'],
-            'jenis_kelamin' => ['required', 'in:1,2'],
+            'jenis_kelamin' => ['required', 'in:Laki-laki,Perempuan'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);

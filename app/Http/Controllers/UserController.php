@@ -39,7 +39,7 @@ class UserController extends Controller
             'nama' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:6|confirmed',
-            'jenis_kelamin' => 'required|in:1,2',
+            'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
             'tempat_lahir' => 'nullable|string',
             'tanggal_lahir' => 'nullable|date',
         ]);
@@ -68,6 +68,7 @@ class UserController extends Controller
             'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
             'tempat_lahir' => 'nullable|string',
             'tanggal_lahir' => 'nullable|date',
+            'password' => 'nullable|min:8|confirmed',
         ]);
 
         if ($request->filled('password')) {
@@ -78,7 +79,7 @@ class UserController extends Controller
 
         $user->update($validated);
 
-        return redirect()->back()->with('success', 'Data user berhasil diperbarui.');
+        return redirect()->route('users.index')->with('success', 'Data user berhasil diperbarui.');
     }
 
     public function resetPassword($id)

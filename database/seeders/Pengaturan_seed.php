@@ -19,7 +19,7 @@ class Pengaturan_seed extends Seeder
             'kepala_sekolah' => 'Drs. H. Ahmad Fauzi',
             'sekretaris_pkl' => 'H. Jajang Mulyana',
             'logo_sekolah' => 'logo.png',
-            'tanggal_mulai_pkl' => '2025-08-01',
+            'tanggal_mulai_pkl' => '2025-09-01',
             'tanggal_selesai_pkl' => '2025-11-30',
             'nomor_surat_permohonan' => '123/SMK-MUH/PKL/2025',
             'nomor_surat_pengantar' => '456/SMK-MUH/PKL/2025',

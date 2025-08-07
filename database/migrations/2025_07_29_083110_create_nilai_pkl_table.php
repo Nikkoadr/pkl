@@ -13,8 +13,14 @@ return new class extends Migration
     {
         Schema::create('nilai_pkl', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('siswa_id')->constrained('users')->onDelete('cascade');
-            $table->integer('nilai')->nullable();
+            $table->foreignId('peserta_id')->constrained('peserta')->onDelete('cascade');
+            $table->integer('nilai_disiplin_kerja')->nullable();
+            $table->integer('nilai_kemajuan_kerja')->nullable();
+            $table->integer('nilai_kualitas_kerja')->nullable();
+            $table->integer('nilai_inisiatif_kreatifitas')->nullable();
+            $table->integer('nilai_prilaku')->nullable();
+            $table->integer('foto_bukti_nilai_pkl')->nullable();
+            $table->integer('nilai_sidang_pkl')->nullable();
             $table->string('komentar')->nullable();
             $table->timestamps();
         });
