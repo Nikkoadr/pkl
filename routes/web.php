@@ -16,7 +16,7 @@ use App\Http\Controllers\Auto_completeController;
 use App\Http\Controllers\Tahun_ajaranController;
 use App\Http\Controllers\KelasController;
 use App\Http\Controllers\LogbookController;
-use App\Http\Controllers\NilaiController;
+use App\Http\Controllers\Nilai_pklController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -79,4 +79,4 @@ Route::get('/home/esertifikat', [EsertifikatController::class, 'index'])->name('
 // ==============================
 // 📄 Nilai
 // ==============================
-Route::get('/home/nilai', [NilaiController::class, 'index'])->name('nilai.index');
+Route::get('/home/nilai_pkl', [Nilai_pklController::class, 'index'])->name('nilai_pkl.index');

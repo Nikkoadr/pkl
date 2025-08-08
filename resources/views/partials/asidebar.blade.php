@@ -148,12 +148,6 @@
                                     <p>Nilai PKL</p>
                                 </a>
                             </li>
-                            <li class="nav-item">
-                                <a href="/home/nilai_sidang" class="nav-link {{ request()->is('home/nilai_sidang') ? 'active' : '' }}">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Nilai Sidang</p>
-                                </a>
-                            </li>
                         </ul>
                     </li>
             @can('admin')
