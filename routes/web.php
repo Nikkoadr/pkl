@@ -47,6 +47,7 @@ Route::resource('/home/guru', GuruController::class);
 Route::resource('/home/peserta', PersertaController::class);
 Route::resource('/home/guru_pembimbing', Guru_pembimbingController::class);
 Route::resource('/home/tempat_pkl', Tempat_pklController::class);
+Route::resource('/home/pengaturan', PengaturanController::class)->only('index', 'update');
 
 // ==============================
 // 📤 Import Data
@@ -68,9 +69,4 @@ Route::get('/home/permohonan/{id}', [SuratController::class, 'cetakPermohonan'])
 Route::get('/home/pengantar/{id}', [SuratController::class, 'cetakPengantar'])->name('surat.pengantar');
 Route::get('/home/permohonan-massal', [SuratController::class, 'cetakPermohonanMassal'])->name('surat.permohonan.massal');
 Route::get('/home/pengantar-massal', [SuratController::class, 'cetakPengantarMassal'])->name('surat.pengantar.massal');
-
-// ==============================
-// 🛠️ Pengaturan
-// ==============================
 Route::get('/home/esertifikat', [EsertifikatController::class, 'index'])->name('home.esertifikat');
-Route::get('/home/pengaturan', [PengaturanController::class, 'index'])->name('home.pengaturan');

@@ -83,7 +83,7 @@
 
 <!-- Modal Tambah -->
 <div class="modal fade" id="modalTambah">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
         <form action="{{ route('guru_pembimbing.store') }}" method="POST">
             @csrf
             <div class="modal-content">
@@ -92,17 +92,42 @@
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                 </div>
                 <div class="modal-body">
+                    <!-- Nama Guru -->
                     <div class="form-group">
                         <label for="nama_guru">Nama Guru</label>
                         <input type="text" class="form-control" name="nama_guru" id="nama_guru" placeholder="Ketik nama guru...">
                         <input type="hidden" name="guru_id" id="guru_id">
                     </div>
-                    <div class="form-group">
-                        <label for="nama_dudi">Nama DUDI</label>
-                        <input type="text" class="form-control" name="nama_dudi" id="nama_dudi" placeholder="Ketik nama DUDI...">
-                        <input type="hidden" name="dudi_id" id="dudi_id">
+
+                    <!-- Daftar DUDI -->
+                    <label for="dudi_id">Pilih DUDI</label>
+                    <div class="table-responsive" style="max-height: 300px; overflow-y: auto;">
+                        <table class="table table-bordered table-sm">
+                            <thead>
+                                <tr>
+                                    <th style="width: 5%; text-align:center;">
+                                        <input type="checkbox" id="checkAll">
+                                    </th>
+                                    <th>Nama DUDI</th>
+                                    <th>Alamat</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($dudiList as $dudi)
+                                <tr>
+                                    <td class="text-center">
+                                        <input type="checkbox" name="dudi_id[]" value="{{ $dudi->id }}">
+                                    </td>
+                                    <td>{{ $dudi->nama_dudi }}</td>
+                                    <td>{{ $dudi->alamat }}</td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
                     </div>
                 </div>
+
+                <!-- Footer -->
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary">Simpan</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
@@ -111,6 +136,7 @@
         </form>
     </div>
 </div>
+
 
 @endsection
 
@@ -167,14 +193,18 @@ $('#modalTambah').on('shown.bs.modal', function () {
 });
 
 </script>
-
+<script>
+    $('#checkAll').click(function () {
+        $('input[name="dudi_id[]"]').prop('checked', this.checked);
+    });
+</script>
 @if (session('success'))
 <script>
     Swal.fire({
         toast: true,
         position: 'top-end',
         icon: 'success',
-        title: '{{ session('success') }}',
+        title: @json(session('success')),
         showConfirmButton: false,
         timer: 3000,
         timerProgressBar: true
@@ -182,13 +212,13 @@ $('#modalTambah').on('shown.bs.modal', function () {
 </script>
 @endif
 
-@if ($errors->any())
+@if (session('error'))
 <script>
     Swal.fire({
         toast: true,
         position: 'top-end',
         icon: 'error',
-        title: 'Terjadi kesalahan validasi!',
+        title: @json(session('error')),
         showConfirmButton: false,
         timer: 3000,
         timerProgressBar: true

@@ -17,11 +17,10 @@ return new class extends Migration
             $table->string('alamat_sekolah')->nullable();
             $table->string('no_telp_sekolah')->nullable();
             $table->string('kepala_sekolah')->nullable();
+            $table->string('ketua_pkl')->nullable();
             $table->string('sekretaris_pkl')->nullable();
-            $table->string('logo_sekolah')->nullable();
             $table->date('tanggal_mulai_pkl')->nullable();
             $table->date('tanggal_selesai_pkl')->nullable();
-            $table->string('tahun_ajaran')->nullable();
             $table->string('nomor_surat_permohonan')->nullable();
             $table->string('nomor_surat_pengantar')->nullable();
             $table->timestamps();

@@ -14,11 +14,10 @@ class Pengaturan_seed extends Seeder
     {
         Pengaturan::create([
             'nama_sekolah' => 'SMK Muhammadiyah Kandanghaur',
-            'alamat_sekolah' => 'Jl. Raya Kandanghaur No. 123, Kandanghaur, Indramayu',
-            'no_telp_sekolah' => '0234-567890',
-            'kepala_sekolah' => 'Drs. H. Ahmad Fauzi',
-            'sekretaris_pkl' => 'H. Jajang Mulyana',
-            'logo_sekolah' => 'logo.png',
+            'alamat_sekolah' => 'Jl. Raya Karanganyar No.28/A Kandanghaur Indamayu',
+            'no_telp_sekolah' => '081122207770',
+            'kepala_sekolah' => 'H.Afandi, S.Pd.M.Ed',
+            'sekretaris_pkl' => 'Rizky Ramadona, S.T',
             'tanggal_mulai_pkl' => '2025-09-01',
             'tanggal_selesai_pkl' => '2025-11-30',
             'nomor_surat_permohonan' => '123/SMK-MUH/PKL/2025',
