@@ -91,45 +91,70 @@
 {{-- Modal Tambah --}}
 <div class="modal fade" id="modalTambah" tabindex="-1" role="dialog" aria-labelledby="modalTambahLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
-        <form action="{{ route('logbook.store') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('logbook.store') }}" method="POST" enctype="multipart/form-data" id="formTambahLogbook">
             @csrf
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Tambah Logbook</h5>
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h5 class="modal-title" id="modalTambahLabel">Tambah Logbook</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
-                <div class="modal-body row">
-                    <div class="form-group col-md-6">
-                        <label for="tanggal">Tanggal</label>
-                        <input type="date" name="tanggal" class="form-control" required>
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label for="jam">Jam</label>
-                        <input type="time" name="jam" class="form-control" required>
-                    </div>
 
-                    <div class="form-group">
-                        <label for="autocomplete_peserta_pkl">Nama Peserta</label>
-                        <input type="text" id="autocomplete_peserta_pkl" class="form-control" placeholder="Ketik nama peserta...">
-                        <input type="hidden" name="peserta_id" id="peserta_id">
-                        <input type="hidden" name="dudi_id" id="dudi_id">
-                    </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <!-- Tanggal -->
+                        <div class="form-group col-md-6">
+                            <label for="tanggal">Tanggal</label>
+                            <input type="date" name="tanggal" class="form-control @error('tanggal') is-invalid @enderror" required>
+                            @error('tanggal')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
 
-                    <div class="form-group col-md-6">
-                        <label for="foto_bukti">Foto Bukti</label>
-                        <div class="custom-file">
-                        <input type="file" name="foto_bukti" class="custom-file-input" id="foto_bukti">
-                        <label class="custom-file-label" for="foto_bukti">Pilih file</label>
+                        <!-- Jam -->
+                        <div class="form-group col-md-6">
+                            <label for="jam">Jam</label>
+                            <input type="time" name="jam" class="form-control @error('jam') is-invalid @enderror" required>
+                            @error('jam')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <!-- Autocomplete Peserta -->
+                        <div class="form-group col-md-12">
+                            <label for="autocomplete_peserta_pkl">Nama Peserta</label>
+                            <input type="text" id="autocomplete_peserta_pkl" class="form-control" placeholder="Ketik nama peserta...">
+                            <input type="hidden" name="peserta_id" id="peserta_id">
+                            <input type="hidden" name="dudi_id" id="dudi_id">
+                        </div>
+
+                        <!-- Foto Bukti -->
+                        <div class="form-group col-md-12">
+                            <label for="foto_bukti">Foto Bukti</label>
+                            <div class="custom-file">
+                                <input type="file" name="foto_bukti" class="custom-file-input @error('foto_bukti') is-invalid @enderror" id="foto_bukti">
+                                <label class="custom-file-label" for="foto_bukti">Pilih file</label>
+                                @error('foto_bukti')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <!-- Keterangan -->
+                        <div class="form-group col-md-12">
+                            <label for="keterangan">Keterangan</label>
+                            <textarea name="keterangan" class="form-control @error('keterangan') is-invalid @enderror" rows="3"></textarea>
+                            @error('keterangan')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
                     </div>
-
-                    <div class="form-group col-md-12">
-                        <label for="keterangan">Keterangan</label>
-                        <textarea name="keterangan" class="form-control" rows="3"></textarea>
-                    </div>
                 </div>
+
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-success">Simpan</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
                 </div>
             </div>
         </form>
