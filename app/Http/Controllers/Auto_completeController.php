@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Dudi;
 use App\Models\Guru;
+use App\Models\Guru_pembimbing;
 use App\Models\User;
 use App\Models\Peserta;
 
@@ -44,6 +45,27 @@ class Auto_completeController extends Controller
 
         return response()->json($results);
     }
+
+    public function autoCompleteGuruPembimbing(Request $request)
+    {
+        $term = $request->get('term');
+
+        $guruPembimbing = Guru_pembimbing::with('guru.user')
+            ->whereHas('guru.user', function ($query) use ($term) {
+                $query->where('nama', 'like', '%' . $term . '%');
+            })
+            ->get();
+
+        $results = $guruPembimbing->map(function ($item) {
+            return [
+                'id' => $item->id,
+                'label' => $item->guru->user->nama,
+            ];
+        });
+
+        return response()->json($results);
+    }
+
 
     public function autoCompletePeserta(Request $request)
     {

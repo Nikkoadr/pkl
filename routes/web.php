@@ -15,6 +15,8 @@ use App\Http\Controllers\PengaturanController;
 use App\Http\Controllers\Auto_completeController;
 use App\Http\Controllers\Tahun_ajaranController;
 use App\Http\Controllers\KelasController;
+use App\Http\Controllers\LogbookController;
+use App\Http\Controllers\NilaiController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -28,6 +30,7 @@ Route::prefix('autocomplete')->group(function () {
     Route::get('/dudi', [Auto_completeController::class, 'autoCompleteDudi']);
     Route::get('/users', [Auto_completeController::class, 'autoCompleteUser']);
     Route::get('/guru', [Auto_completeController::class, 'autoCompleteGuru']);
+    Route::get('/guru_pembimbing', [Auto_completeController::class, 'autoCompleteGuruPembimbing']);
     Route::get('/peserta', [Auto_completeController::class, 'autoCompletePeserta']);
 });
 
@@ -48,6 +51,7 @@ Route::resource('/home/peserta', PersertaController::class);
 Route::resource('/home/guru_pembimbing', Guru_pembimbingController::class);
 Route::resource('/home/tempat_pkl', Tempat_pklController::class);
 Route::resource('/home/pengaturan', PengaturanController::class)->only('index', 'update');
+Route::resource('/home/logbook', LogbookController::class);
 
 // ==============================
 // 📤 Import Data
@@ -70,3 +74,8 @@ Route::get('/home/pengantar/{id}', [SuratController::class, 'cetakPengantar'])->
 Route::get('/home/permohonan-massal', [SuratController::class, 'cetakPermohonanMassal'])->name('surat.permohonan.massal');
 Route::get('/home/pengantar-massal', [SuratController::class, 'cetakPengantarMassal'])->name('surat.pengantar.massal');
 Route::get('/home/esertifikat', [EsertifikatController::class, 'index'])->name('home.esertifikat');
+
+// ==============================
+// 📄 Nilai
+// ==============================
+Route::get('/home/nilai', [NilaiController::class, 'index'])->name('nilai.index');
