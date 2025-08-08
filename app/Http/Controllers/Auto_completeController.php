@@ -8,6 +8,7 @@ use App\Models\Guru;
 use App\Models\Guru_pembimbing;
 use App\Models\User;
 use App\Models\Peserta;
+use App\Models\Tempat_pkl;
 
 class Auto_completeController extends Controller
 {
@@ -86,6 +87,28 @@ class Auto_completeController extends Controller
 
         return response()->json($results);
     }
+    public function autoCompletePesertaPKL(Request $request)
+    {
+        $term = $request->get('term');
+
+        $pesertaPKL = Tempat_pkl::with(['peserta.user', 'dudi'])
+            ->whereHas('peserta.user', function ($query) use ($term) {
+                $query->where('nama', 'like', '%' . $term . '%');
+            })
+            ->get();
+
+        $results = $pesertaPKL->map(function ($item) {
+            return [
+                'label' => $item->peserta->user->nama ?? '-',
+                'value' => $item->peserta->user->nama ?? '',
+                'peserta_id' => $item->peserta_id,
+                'dudi_id' => $item->dudi_id,
+            ];
+        });
+
+        return response()->json($results);
+    }
+
 
     public function autoCompleteUser(Request $request)
     {

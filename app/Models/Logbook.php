@@ -17,4 +17,8 @@ class Logbook extends Model
     {
         return $this->belongsTo(Dudi::class);
     }
+    public function guru_pembimbing()
+    {
+        return $this->hasOne(Guru_pembimbing::class, 'dudi_id', 'dudi_id');
+    }
 }

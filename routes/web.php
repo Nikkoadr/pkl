@@ -32,6 +32,7 @@ Route::prefix('autocomplete')->group(function () {
     Route::get('/guru', [Auto_completeController::class, 'autoCompleteGuru']);
     Route::get('/guru_pembimbing', [Auto_completeController::class, 'autoCompleteGuruPembimbing']);
     Route::get('/peserta', [Auto_completeController::class, 'autoCompletePeserta']);
+    Route::get('/peserta_pkl', [Auto_completeController::class, 'autoCompletePesertaPKL']);
 });
 
 // ==============================

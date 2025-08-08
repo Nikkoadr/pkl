@@ -54,12 +54,12 @@
 
                             <!-- Nama -->
                             <div class="mb-3">
-                                <input type="text" name="nama" class="form-control @error('nama') is-invalid @enderror"
+                                <input type="text" oninput="this.value = this.value.toUpperCase()" name="nama" class="form-control @error('nama') is-invalid @enderror"
                                         value="{{ old('nama') }}" placeholder="Nama Lengkap" required>
                                 @error('nama')<div class="invalid-feedback">{{ $message }}</div>@enderror
                             </div>
                             <div class="mb-3">
-                                <input type="text" name="tempat_lahir" class="form-control @error('tempat_lahir') is-invalid @enderror"
+                                <input type="text" oninput="this.value = this.value.toUpperCase()" name="tempat_lahir" class="form-control @error('tempat_lahir') is-invalid @enderror"
                                     value="{{ old('tempat_lahir') }}" placeholder="Tempat Lahir">
                                 @error('tempat_lahir')<div class="invalid-feedback">{{ $message }}</div>@enderror
                             </div>

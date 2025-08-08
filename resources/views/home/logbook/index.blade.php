@@ -53,9 +53,9 @@
                             <tr>
                                 <td>{{ $log->tanggal }}</td>
                                 <td>{{ $log->jam }}</td>
-                                <td>{{ $log->peserta->nama ?? '-' }}</td>
+                                <td>{{ $log->peserta->user->nama ?? '-' }}</td>
                                 <td>{{ $log->dudi->nama_dudi ?? '-' }}</td>
-                                <td>{{ $log->guru_pembimbing->user->nama ?? '-' }}</td>
+                                <td>{{ $log->guru_pembimbing->guru->user->nama ?? '-' }}</td>
                                 <td>
                                     @if($log->foto_bukti)
                                     <a href="{{ asset('storage/'.$log->foto_bukti) }}" target="_blank">
@@ -108,15 +108,10 @@
                         <input type="time" name="jam" class="form-control" required>
                     </div>
 
-                    <div class="form-group col-md-6">
-                        <label for="peserta_autocomplete">Peserta</label>
-                        <input type="text" id="peserta_autocomplete" class="form-control" placeholder="Cari peserta..." required>
+                    <div class="form-group">
+                        <label for="autocomplete_peserta_pkl">Nama Peserta</label>
+                        <input type="text" id="autocomplete_peserta_pkl" class="form-control" placeholder="Ketik nama peserta...">
                         <input type="hidden" name="peserta_id" id="peserta_id">
-                    </div>
-
-                    <div class="form-group col-md-6">
-                        <label for="dudi_autocomplete">DUDI</label>
-                        <input type="text" id="dudi_autocomplete" class="form-control" placeholder="Cari DUDI..." required>
                         <input type="hidden" name="dudi_id" id="dudi_id">
                     </div>
 
@@ -162,20 +157,12 @@
         }).buttons().container().appendTo('#tabelLogbook_wrapper .col-md-6:eq(0)');
 
         // Autocomplete Peserta
-        $("#peserta_autocomplete").autocomplete({
-            source: "/autocomplete/peserta",
+        $("#autocomplete_peserta_pkl").autocomplete({
+            source: "/autocomplete/peserta_pkl",
             minLength: 2,
             select: function(event, ui) {
-                $('#peserta_id').val(ui.item.id);
-            }
-        });
-
-        // Autocomplete DUDI
-        $("#dudi_autocomplete").autocomplete({
-            source: "/autocomplete/dudi",
-            minLength: 2,
-            select: function(event, ui) {
-                $('#dudi_id').val(ui.item.id);
+                $('#peserta_id').val(ui.item.peserta_id);
+                $('#dudi_id').val(ui.item.dudi_id);
             }
         });
 
@@ -202,4 +189,31 @@ $(function () {
     bsCustomFileInput.init();
 });
 </script>
+@if (session('success'))
+<script>
+    Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: 'success',
+        title: @json(session('success')),
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true
+    });
+</script>
+@endif
+
+@if (session('error'))
+<script>
+    Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: 'error',
+        title: @json(session('error')),
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true
+    });
+</script>
+@endif
 @endsection

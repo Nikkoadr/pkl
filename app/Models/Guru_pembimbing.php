@@ -18,4 +18,8 @@ class Guru_pembimbing extends Model
     {
         return $this->belongsTo(Dudi::class);
     }
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
