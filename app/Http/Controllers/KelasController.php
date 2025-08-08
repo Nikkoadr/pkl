@@ -2,78 +2,72 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Kelas;
+use App\Models\Kompetensi_keahlian;
 use Illuminate\Http\Request;
 
 class KelasController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
         $this->middleware('auth');
     }
 
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        return redirect()->route('home.dashboard')->with('error', 'Halaman Kelas tidak tersedia.');
+        $data = Kelas::with('kompetensi')->get();
+        return view('home.kelas.index', compact('data'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        $kompetensi = Kompetensi_keahlian::all();
+        return view('home.kelas.create', compact('kompetensi'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'nama_kelas' => 'required|string|max:255',
+            'kompetensi_keahlian_id' => 'required|exists:kompetensi_keahlian,id',
+        ]);
+
+        Kelas::create([
+            'nama_kelas' => $request->nama_kelas,
+            'kompetensi_keahlian_id' => $request->kompetensi_keahlian_id,
+        ]);
+
+        return redirect()->route('kelas.index')->with('success', 'Kelas berhasil ditambahkan.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
-        //
+        $kelas = Kelas::findOrFail($id);
+        $kompetensi = Kompetensi_keahlian::all();
+        return view('home.kelas.edit', compact('kelas', 'kompetensi'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'nama_kelas' => 'required|string|max:255',
+            'kompetensi_keahlian_id' => 'required|exists:kompetensi_keahlian,id',
+        ]);
+
+        $kelas = Kelas::findOrFail($id);
+        $kelas->update([
+            'nama_kelas' => $request->nama_kelas,
+            'kompetensi_keahlian_id' => $request->kompetensi_keahlian_id,
+        ]);
+
+        return redirect()->route('kelas.index')->with('success', 'Kelas berhasil diperbarui.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
-        //
+        $kelas = Kelas::findOrFail($id);
+        $kelas->delete();
+
+        return redirect()->route('kelas.index')->with('success', 'Kelas berhasil dihapus.');
     }
 }

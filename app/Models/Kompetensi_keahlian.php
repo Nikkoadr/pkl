@@ -12,5 +12,8 @@ class Kompetensi_keahlian extends Model
         'nama_kompetensi',
         'deskripsi',
     ];
-
+    public function kelas()
+    {
+        return $this->hasMany(Kelas::class, 'kompetensi_keahlian_id');
+    }
 }

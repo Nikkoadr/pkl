@@ -126,7 +126,6 @@
         }).buttons().container().appendTo('#tabelGuru_wrapper .col-md-6:eq(0)');
     });
 
-    // Konfirmasi hapus
     $(document).on('click', '.btn-konfirmasi-hapus', function (e) {
         e.preventDefault();
         let form = $(this).closest("form");

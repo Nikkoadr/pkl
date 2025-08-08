@@ -15,6 +15,6 @@ class Kelas extends Model
     ];
     public function kompetensi()
     {
-        return $this->belongsTo(Kompetensi_keahlian::class, 'kompetensi_keahlian_id'); // atau nama model kompetensi kamu
+        return $this->belongsTo(Kompetensi_keahlian::class, 'kompetensi_keahlian_id');
     }
 }
