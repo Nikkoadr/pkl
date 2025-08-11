@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Kelas;
 use App\Models\Peserta;
-use App\Models\Tempat_pkl;
+use App\Models\Peserta_pkl;
 use App\Models\Tahun_ajaran;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
@@ -99,7 +99,7 @@ class RegisterController extends Controller
             'tahun_ajaran_id' => $data['tahun_ajaran_id'],
         ]);
 
-        Tempat_pkl::create([
+        Peserta_pkl::create([
             'dudi_id' => $data['dudi_id'],
             'peserta_id' => $peserta_baru->id,
         ]);
