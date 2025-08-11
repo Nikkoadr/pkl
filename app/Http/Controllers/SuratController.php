@@ -28,7 +28,7 @@ class SuratController extends Controller
     public function index()
     {
         $this->authorize('admin');
-        $dudiList = Dudi::has('pesetaPkl')->withCount('pesetaPkl')->get();
+        $dudiList = Dudi::has('peserta_pkl')->withCount('peserta_pkl')->get();
         return view('home.surat.index', compact('dudiList'));
     }
 

@@ -51,12 +51,12 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($dudiList as $index => $dudi)
+                                @foreach($dudiList as  $dudi)
                                     <tr>
                                         <td><input type="checkbox" class="check-dudi" value="{{ $dudi->id }}"></td>
-                                        <td>{{ $index + 1 }}</td>
+                                        <td>{{ $loop->iteration }}</td>
                                         <td>{{ $dudi->nama_dudi }}</td>
-                                        <td>{{ $dudi->tempat_pkl_count }}</td>
+                                        <td>{{ $dudi->peserta_pkl_count }}</td>
                                         <td class="text-center">
                                             <a href="{{ route('surat.permohonan', $dudi->id) }}" class="btn btn-info btn-sm" target="_blank">
                                                 <i class="fas fa-file-alt"></i> Permohonan
