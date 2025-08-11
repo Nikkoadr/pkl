@@ -25,9 +25,11 @@
     <section class="content-header">
         <div class="container-fluid d-flex justify-content-between align-items-center">
             <h1>Logbook PKL</h1>
+            @can('admin')
             <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalTambah">
                 <i class="fas fa-plus"></i> Tambah Logbook
             </button>
+            @endcan
         </div>
     </section>
 

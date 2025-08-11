@@ -29,9 +29,11 @@
     <section class="content">
         <div class="card">
             <div class="card-header">
+                @can('admin')
                 <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalTambah">
                     <i class="fas fa-plus"></i> Tambah Nilai
                 </button>
+                @endcan
             </div>
             <div class="card-body">
                 <table id="datatable" class="table table-bordered table-striped">
