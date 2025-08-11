@@ -62,7 +62,7 @@
   <tr>
     <td>Alokasi Waktu</td>
     <td>:</td>
-    <td><strong>{{ \Carbon\Carbon::parse($tanggal_mulai)->locale('id')->translatedFormat('j F Y') }} s.d {{ \Carbon\Carbon::parse($tanggal_selesai)->locale('id')->translatedFormat('j F Y') }}</strong></td>
+    <td><strong>{{ $tanggal_mulai }} s.d {{ $tanggal_selesai }}</strong></td>
   </tr>
 </table>
 

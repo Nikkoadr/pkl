@@ -6,7 +6,7 @@
         alt="Tanda tangan Ketua"
         height="70"
         /><br />
-        <strong>H. NANANG HADI M, S.T.</strong>
+        <strong>{{ $ketua_pkl }}</strong>
     </div>
     <div class="signature center">
         Mengetahui,<br />
@@ -16,7 +16,7 @@
         alt="Tanda tangan Kepsek"
         height="80"
         /><br />
-        <strong>H. AFANDI, S.Pd.</strong>
+        <strong>{{ $kepala_sekolah }}</strong>
     </div>
     <div class="signature">
         Kandanghaur, {{ \Carbon\Carbon::now()->locale('id')->translatedFormat('j F Y') }} <br> Sekretaris PKL<br />
@@ -25,6 +25,6 @@
         alt="Tanda tangan Kepsek"
         height="60"
         /><br />
-        <strong>RIZKY RAMADONA, S.T.</strong>
+        <strong>{{ $sekretaris_pkl }}</strong>
     </div>
 </div>
