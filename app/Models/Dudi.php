@@ -16,8 +16,8 @@ class Dudi extends Model
         'nama_pimpinan_dudi',
     ];
 
-    public function tempatPkl()
+    public function pesetaPkl()
     {
-        return $this->hasMany(Tempat_pkl::class);
+        return $this->hasMany(Peserta_pkl::class);
     }
 }

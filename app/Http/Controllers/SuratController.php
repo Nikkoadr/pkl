@@ -28,14 +28,14 @@ class SuratController extends Controller
     public function index()
     {
         $this->authorize('admin');
-        $dudiList = Dudi::has('tempatPkl')->withCount('tempatPkl')->get();
+        $dudiList = Dudi::has('pesetaPkl')->withCount('pesetaPkl')->get();
         return view('home.surat.index', compact('dudiList'));
     }
 
     public function cetakPermohonan($dudi_id)
     {
         $peserta = Peserta::with('kelas.kompetensi')
-            ->whereHas('tempat_pkl', fn($q) => $q->where('dudi_id', $dudi_id))
+            ->whereHas('peserta_pkl', fn($q) => $q->where('dudi_id', $dudi_id))
             ->get();
 
         $firstPeserta = $peserta->first();
@@ -54,7 +54,7 @@ class SuratController extends Controller
     public function cetakPengantar($dudi_id)
     {
         $peserta = Peserta::with(['kelas.kompetensi', 'user'])
-            ->whereHas('tempat_pkl', fn($q) => $q->where('dudi_id', $dudi_id))
+            ->whereHas('peserta_pkl', fn($q) => $q->where('dudi_id', $dudi_id))
             ->get();
         $firstPeserta = $peserta->first();
 
@@ -105,7 +105,7 @@ class SuratController extends Controller
             }
 
             $peserta = Peserta::with('kelas.kompetensi')
-                ->whereHas('tempat_pkl', fn($q) => $q->where('dudi_id', $id))
+                ->whereHas('peserta_pkl', fn($q) => $q->where('dudi_id', $id))
                 ->get();
 
             if ($peserta->isEmpty()) {
@@ -145,7 +145,7 @@ class SuratController extends Controller
             }
 
             $peserta = Peserta::with(['kelas.kompetensi', 'user'])
-                ->whereHas('tempat_pkl', fn($q) => $q->where('dudi_id', $id))
+                ->whereHas('peserta_pkl', fn($q) => $q->where('dudi_id', $id))
                 ->get();
 
             if ($peserta->isEmpty()) {

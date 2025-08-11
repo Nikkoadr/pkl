@@ -23,13 +23,12 @@ class Peserta extends Model
     {
         return $this->belongsTo(Tahun_ajaran::class, 'tahun_ajaran_id');
     }
-    public function tempat_pkl()
+    public function peserta_pkl()
     {
-        return $this->hasOne(Tempat_pkl::class);
+        return $this->hasOne(Peserta_pkl::class);
     }
     public function dudi()
     {
         return $this->belongsTo(Dudi::class);
     }
-
 }
