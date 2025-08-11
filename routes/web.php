@@ -8,7 +8,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\Guru_pembimbingController;
 use App\Http\Controllers\GuruController;
 use App\Http\Controllers\PersertaController;
-use App\Http\Controllers\peserta_pklController;
+use App\Http\Controllers\Peserta_pklController;
 use App\Http\Controllers\SuratController;
 use App\Http\Controllers\EsertifikatController;
 use App\Http\Controllers\PengaturanController;
