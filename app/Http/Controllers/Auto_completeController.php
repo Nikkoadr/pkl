@@ -27,6 +27,29 @@ class Auto_completeController extends Controller
         return response()->json($results);
     }
 
+    public function autoCompleteUser(Request $request)
+    {
+        $term = $request->get('term');
+
+        $excludeIds = array_merge(
+            Guru::pluck('user_id')->toArray(),
+            Peserta::pluck('user_id')->toArray()
+        );
+
+        $users = User::whereNotIn('id', $excludeIds)
+            ->where('nama', 'like', '%' . $term . '%')
+            ->get();
+
+        $results = $users->map(function ($user) {
+            return [
+                'id' => $user->id,
+                'label' => $user->nama,
+            ];
+        });
+
+        return response()->json($results);
+    }
+
     public function autoCompleteGuru(Request $request)
     {
         $term = $request->get('term');
@@ -103,30 +126,6 @@ class Auto_completeController extends Controller
                 'value' => $item->peserta->user->nama ?? '',
                 'peserta_id' => $item->peserta_id,
                 'dudi_id' => $item->dudi_id,
-            ];
-        });
-
-        return response()->json($results);
-    }
-
-
-    public function autoCompleteUser(Request $request)
-    {
-        $term = $request->get('term');
-
-        $excludeIds = array_merge(
-            Guru::pluck('user_id')->toArray(),
-            Peserta::pluck('user_id')->toArray()
-        );
-
-        $users = User::whereNotIn('id', $excludeIds)
-            ->where('nama', 'like', '%' . $term . '%')
-            ->get();
-
-        $results = $users->map(function ($user) {
-            return [
-                'id' => $user->id,
-                'label' => $user->nama,
             ];
         });
 

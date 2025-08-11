@@ -46,18 +46,26 @@ class LogbookController extends Controller
             return redirect()->back()->with('error', 'Peserta sudah mengisi logbook pada tanggal ini.');
         }
 
-        $data = $request->all();
+        $data = $request->only([
+            'peserta_id',
+            'dudi_id',
+            'tanggal',
+            'jam',
+            'keterangan'
+        ]);
 
         if ($request->hasFile('foto_bukti')) {
             $file = $request->file('foto_bukti');
-            $path = $file->store('foto_bukti', 'public');
-            $data['foto_bukti'] = $path;
+            $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+            $file->storeAs('bukti_logbook', $filename, 'public');
+            $data['foto_bukti'] = $filename;
         }
 
         Logbook::create($data);
 
         return redirect()->back()->with('success', 'Logbook berhasil ditambahkan.');
     }
+
 
 
     public function edit($id)

@@ -45,7 +45,7 @@
                 </div>
 
                 <div class="card-body">
-                    <table id="tabelTempatPKL" class="table table-bordered table-striped">
+                    <table id="tabelPesertaPKL" class="table table-bordered table-striped">
                         <thead>
                             <tr>
                                 <th>No</th>
@@ -55,16 +55,16 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($tempat_pkl as $item)
+                            @foreach($peserta_pkl as $item)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $item->dudi->nama_dudi ?? '-' }}</td>
                                 <td>{{ $item->peserta->user->nama ?? '-' }}</td>
                                 <td class="text-center">
-                                    <a href="{{ route('tempat_pkl.edit', $item->id) }}" class="btn btn-primary btn-sm">
+                                    <a href="{{ route('peserta_pkl.edit', $item->id) }}" class="btn btn-primary btn-sm">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <form action="{{ route('tempat_pkl.destroy', $item->id) }}" method="POST" class="d-inline form-hapus">
+                                    <form action="{{ route('peserta_pkl.destroy', $item->id) }}" method="POST" class="d-inline form-hapus">
                                         @csrf
                                         @method('DELETE')
                                         <button type="button" class="btn btn-danger btn-sm btn-konfirmasi-hapus">
@@ -83,7 +83,7 @@
 </div>
 <div class="modal fade" id="modalTambah">
     <div class="modal-dialog">
-        <form action="{{ route('tempat_pkl.store') }}" method="POST">
+        <form action="{{ route('peserta_pkl.store') }}" method="POST">
             @csrf
             <div class="modal-content">
                 <div class="modal-header">
@@ -126,12 +126,12 @@
 
 <script>
     $(function () {
-        $("#tabelTempatPKL").DataTable({
+        $("#tabelPesertaPKL").DataTable({
             responsive: true,
             lengthChange: false,
             autoWidth: false,
             buttons: ["copy", "csv", "excel", "pdf", "print", "colvis"]
-        }).buttons().container().appendTo('#tabelTempatPKL_wrapper .col-md-6:eq(0)');
+        }).buttons().container().appendTo('#tabelPesertaPKL_wrapper .col-md-6:eq(0)');
     });
 
     // Konfirmasi hapus

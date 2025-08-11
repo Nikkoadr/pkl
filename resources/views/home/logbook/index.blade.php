@@ -58,8 +58,8 @@
                                 <td>{{ $log->guru_pembimbing->guru->user->nama ?? '-' }}</td>
                                 <td>
                                     @if($log->foto_bukti)
-                                    <a href="{{ asset('storage/'.$log->foto_bukti) }}" target="_blank">
-                                        <img src="{{ asset('storage/'.$log->foto_bukti) }}" alt="Foto" width="60">
+                                    <a href="{{ asset('storage/bukti_logbook/'.$log->foto_bukti) }}" target="_blank">
+                                        <img src="{{ asset('storage/bukti_logbook/'.$log->foto_bukti) }}" alt="Foto" width="60">
                                     </a>
                                     @else
                                     -

@@ -102,8 +102,8 @@
             @endcan
             @can('akses_admin_prodi_guru_Pembimbing')
                     <!-- PKL -->
-                    <li class="nav-item {{ request()->is('home/tempat_pkl','home/surat') ? 'menu-open' : '' }}">
-                        <a href="#" class="nav-link {{ request()->is('home/tempat_pkl','home/surat') ? 'active' : '' }}">
+                    <li class="nav-item {{ request()->is('home/peserta_pkl','home/surat') ? 'menu-open' : '' }}">
+                        <a href="#" class="nav-link {{ request()->is('home/peserta_pkl','home/surat') ? 'active' : '' }}">
                             <i class="nav-icon fa-solid fa-map-location-dot"></i>
                             <p>
                                 PKL
@@ -112,7 +112,7 @@
                         </a>
                         <ul class="nav nav-treeview">
                             <li class="nav-item">
-                                <a href="/home/tempat_pkl" class="nav-link {{ request()->is('home/tempat_pkl') ? 'active' : '' }}">
+                                <a href="/home/peserta_pkl" class="nav-link {{ request()->is('home/peserta_pkl') ? 'active' : '' }}">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Peserta PKL</p>
                                 </a>

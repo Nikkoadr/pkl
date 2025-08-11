@@ -8,7 +8,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\Guru_pembimbingController;
 use App\Http\Controllers\GuruController;
 use App\Http\Controllers\PersertaController;
-use App\Http\Controllers\Tempat_pklController;
+use App\Http\Controllers\peserta_pklController;
 use App\Http\Controllers\SuratController;
 use App\Http\Controllers\EsertifikatController;
 use App\Http\Controllers\PengaturanController;
@@ -50,7 +50,7 @@ Route::resource('/home/dudi', DudiController::class);
 Route::resource('/home/guru', GuruController::class);
 Route::resource('/home/peserta', PersertaController::class);
 Route::resource('/home/guru_pembimbing', Guru_pembimbingController::class);
-Route::resource('/home/tempat_pkl', Tempat_pklController::class);
+Route::resource('/home/peserta_pkl', Peserta_pklController::class);
 Route::resource('/home/pengaturan', PengaturanController::class)->only('index', 'update');
 Route::resource('/home/logbook', LogbookController::class);
 
@@ -80,3 +80,7 @@ Route::get('/home/esertifikat', [EsertifikatController::class, 'index'])->name('
 // 📄 Nilai
 // ==============================
 Route::get('/home/nilai_pkl', [Nilai_pklController::class, 'index'])->name('nilai_pkl.index');
+Route::post('/home/nilai_pkl/store', [Nilai_pklController::class, 'store'])->name('nilai_pkl.store');
+Route::get('/home/nilai_pkl/{id}/edit/', [Nilai_pklController::class, 'edit'])->name('nilai_pkl.edit');
+Route::put('/home/nilai_pkl/{id}/update/', [Nilai_pklController::class, 'update'])->name('nilai_pkl.update');
+Route::post('/home/nilai_pkl/{id}/destroy/', [Nilai_pklController::class, 'destroy'])->name('nilai_pkl.destroy');

@@ -19,7 +19,7 @@ return new class extends Migration
             $table->integer('nilai_kualitas_kerja')->nullable();
             $table->integer('nilai_inisiatif_kreatifitas')->nullable();
             $table->integer('nilai_prilaku')->nullable();
-            $table->integer('foto_bukti_nilai_pkl')->nullable();
+            $table->string('foto_bukti_nilai_pkl')->nullable();
             $table->integer('nilai_sidang_pkl')->nullable();
             $table->string('komentar')->nullable();
             $table->timestamps();

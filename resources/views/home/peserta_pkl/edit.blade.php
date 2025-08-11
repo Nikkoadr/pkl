@@ -11,7 +11,7 @@
     </section>
 
     <section class="content">
-        <form action="{{ route('tempat_pkl.update', $data->id) }}" method="POST">
+        <form action="{{ route('peserta_pkl.update', $data->id) }}" method="POST">
             @csrf
             @method('PUT')
 
@@ -28,7 +28,7 @@
             </div>
 
             <button type="submit" class="btn btn-primary">Update</button>
-            <a href="{{ route('tempat_pkl.index') }}" class="btn btn-secondary">Kembali</a>
+            <a href="{{ route('peserta_pkl.index') }}" class="btn btn-secondary">Kembali</a>
         </form>
     </section>
 </div>

@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Tempat_pkl;
+use App\Models\Peserta_pkl;
 
-class Tempat_pklController extends Controller
+class Peserta_pklController extends Controller
 {
 
     /**
@@ -26,8 +26,8 @@ class Tempat_pklController extends Controller
     public function index()
     {
         $this->authorize('admin');
-        $tempat_pkl = Tempat_pkl::with(['dudi', 'peserta.user'])->get();
-        return view('home.tempat_pkl.index', compact('tempat_pkl'));
+        $peserta_pkl = Peserta_pkl::with(['dudi', 'peserta.user'])->get();
+        return view('home.peserta_pkl.index', compact('peserta_pkl'));
     }
 
     public function store(Request $request)
@@ -37,13 +37,13 @@ class Tempat_pklController extends Controller
             'peserta_id' => 'required',
         ]);
 
-        $sudahTerdaftar = Tempat_pkl::where('peserta_id', $request->peserta_id)->exists();
+        $sudahTerdaftar = Peserta_pkl::where('peserta_id', $request->peserta_id)->exists();
 
         if ($sudahTerdaftar) {
             return redirect()->back()->withErrors(['peserta_id' => 'Peserta ini sudah terdaftar di tempat PKL lain.'])->withInput();
         }
 
-        Tempat_pkl::create([
+        Peserta_pkl::create([
             'dudi_id' => $request->dudi_id,
             'peserta_id' => $request->peserta_id,
         ]);
@@ -53,8 +53,8 @@ class Tempat_pklController extends Controller
 
     function edit(Request $request, $id)
     {
-        $data = Tempat_pkl::findOrFail($id);
-        return view('home.tempat_pkl.edit', compact('data'));
+        $data = Peserta_pkl::findOrFail($id);
+        return view('home.peserta_pkl.edit', compact('data'));
     }
 
     public function update(Request $request, $id)
@@ -64,7 +64,7 @@ class Tempat_pklController extends Controller
             'peserta_id' => 'required',
         ]);
 
-        $duplikat = Tempat_pkl::where('peserta_id', $request->peserta_id)
+        $duplikat = Peserta_pkl::where('peserta_id', $request->peserta_id)
             ->where('id', '!=', $id)
             ->exists();
 
@@ -74,20 +74,20 @@ class Tempat_pklController extends Controller
             ])->withInput();
         }
 
-        $tempat_pkl = Tempat_pkl::findOrFail($id);
-        $tempat_pkl->update([
+        $peserta_pkl = Peserta_pkl::findOrFail($id);
+        $peserta_pkl->update([
             'dudi_id' => $request->dudi_id,
             'peserta_id' => $request->peserta_id,
         ]);
 
-        return redirect()->route('tempat_pkl.index')->with('success', 'Data berhasil diupdate');
+        return redirect()->route('peserta_pkl.index')->with('success', 'Data berhasil diupdate');
     }
 
 
     function destroy($id)
     {
-        $tempat_pkl = Tempat_pkl::findOrFail($id);
-        $tempat_pkl->delete();
+        $peserta_pkl = Peserta_pkl::findOrFail($id);
+        $peserta_pkl->delete();
         return redirect()->back()->with('success', 'Data berhasil dihapus');
     }
 }
