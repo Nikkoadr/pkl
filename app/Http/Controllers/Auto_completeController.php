@@ -8,6 +8,7 @@ use App\Models\Guru;
 use App\Models\Guru_pembimbing;
 use App\Models\User;
 use App\Models\Peserta;
+use App\Models\Peserta_pkl;
 use App\Models\Tempat_pkl;
 
 class Auto_completeController extends Controller
@@ -114,7 +115,7 @@ class Auto_completeController extends Controller
     {
         $term = $request->get('term');
 
-        $pesertaPKL = Tempat_pkl::with(['peserta.user', 'dudi'])
+        $pesertaPKL = Peserta_pkl::with(['peserta.user', 'dudi'])
             ->whereHas('peserta.user', function ($query) use ($term) {
                 $query->where('nama', 'like', '%' . $term . '%');
             })

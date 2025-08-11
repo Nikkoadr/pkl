@@ -83,4 +83,4 @@ Route::get('/home/nilai_pkl', [Nilai_pklController::class, 'index'])->name('nila
 Route::post('/home/nilai_pkl/store', [Nilai_pklController::class, 'store'])->name('nilai_pkl.store');
 Route::get('/home/nilai_pkl/{id}/edit/', [Nilai_pklController::class, 'edit'])->name('nilai_pkl.edit');
 Route::put('/home/nilai_pkl/{id}/update/', [Nilai_pklController::class, 'update'])->name('nilai_pkl.update');
-Route::post('/home/nilai_pkl/{id}/destroy/', [Nilai_pklController::class, 'destroy'])->name('nilai_pkl.destroy');
+Route::delete('/home/nilai_pkl/{id}/destroy/', [Nilai_pklController::class, 'destroy'])->name('nilai_pkl.destroy');
