@@ -65,7 +65,7 @@
     <div class="carousel-inner">
 
         <!-- Slide 1 -->
-        <div class="carousel-item active" style="background-image: url('https://www.smkmuhkandanghaur.sch.id/assets/website/img/carousel-1.jpg');">
+        <div class="carousel-item active" style="background-image: url('{{ asset('assets/dist/img/bg1.jpeg') }}')">
         <div class="carousel-overlay"></div>
         <div class="hero-content container">
             <h1>Selamat Datang di Sistem Manajemen PKL</h1>
@@ -86,7 +86,47 @@
         </div>
 
         <!-- Slide 2 -->
-        <div class="carousel-item" style="background-image: url('https://www.smkmuhkandanghaur.sch.id/assets/website/img/carousel-2.jpg');">
+        <div class="carousel-item" style="background-image: url('{{ asset('assets/dist/img/bg2.jpeg') }}')">
+        <div class="carousel-overlay"></div>
+        <div class="hero-content container">
+            <h1>Selamat Datang di Sistem Manajemen PKL</h1>
+            <p>Kelola kegiatan PKL secara mudah, efisien, dan terintegrasi.</p>
+            <div class="mt-4">
+            @if (Route::has('login'))
+                @auth
+                <a href="{{ url('/home/dashboard') }}" class="btn btn-primary btn-lg me-2">Dashboard</a>
+                @else
+                <a href="{{ route('login') }}" class="btn btn-outline-light btn-lg me-2">Masuk</a>
+                @if (Route::has('register'))
+                    <a href="{{ route('register') }}" class="btn btn-success btn-lg">Daftar Sekarang</a>
+                @endif
+                @endauth
+            @endif
+            </div>
+        </div>
+        </div>
+        <!-- Slide 3 -->
+        <div class="carousel-item" style="background-image: url('{{ asset('assets/dist/img/bg3.jpeg') }}')">
+        <div class="carousel-overlay"></div>
+        <div class="hero-content container">
+            <h1>Selamat Datang di Sistem Manajemen PKL</h1>
+            <p>Kelola kegiatan PKL secara mudah, efisien, dan terintegrasi.</p>
+            <div class="mt-4">
+            @if (Route::has('login'))
+                @auth
+                <a href="{{ url('/home/dashboard') }}" class="btn btn-primary btn-lg me-2">Dashboard</a>
+                @else
+                <a href="{{ route('login') }}" class="btn btn-outline-light btn-lg me-2">Masuk</a>
+                @if (Route::has('register'))
+                    <a href="{{ route('register') }}" class="btn btn-success btn-lg">Daftar Sekarang</a>
+                @endif
+                @endauth
+            @endif
+            </div>
+        </div>
+        </div>
+        <!-- Slide 4 -->
+        <div class="carousel-item" style="background-image: url('{{ asset('assets/dist/img/bg4.jpeg') }}')">
         <div class="carousel-overlay"></div>
         <div class="hero-content container">
             <h1>Selamat Datang di Sistem Manajemen PKL</h1>
