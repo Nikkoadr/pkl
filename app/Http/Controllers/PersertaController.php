@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Peserta;
 use App\Models\User;
 use App\Models\Kelas;
+use App\Models\Peserta_pkl;
 use App\Models\Tahun_ajaran;
 use App\Models\Tempat_pkl;
 use Illuminate\Support\Facades\Hash;
@@ -88,7 +89,7 @@ class PersertaController extends Controller
             'tahun_ajaran_id' => $validated['tahun_ajaran_id'],
         ]);
 
-        Tempat_pkl::create([
+        Peserta_pkl::create([
             'dudi_id' => $validated['dudi_id'],
             'peserta_id' => $peserta_baru->id,
         ]);
@@ -98,7 +99,7 @@ class PersertaController extends Controller
 
     public function edit($id)
     {
-        $peserta = Peserta::with(['user', 'tempat_pkl.dudi'])->findOrFail($id);
+        $peserta = Peserta::with(['user', 'peserta_pkl.dudi'])->findOrFail($id);
         $kelas = Kelas::all();
         $tahun_ajaran = Tahun_ajaran::all();
 

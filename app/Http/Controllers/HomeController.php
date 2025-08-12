@@ -36,7 +36,7 @@ class HomeController extends Controller
             return view('home.dashboard.admin.index', compact('jumlahDudi', 'jumlahPeserta'));
         } elseif (Gate::allows('peserta')) {
             $user = Auth::user();
-            $namaDudi = $user->peserta?->tempat_pkl?->dudi?->nama_dudi;
+            $namaDudi = $user->peserta?->peserta_pkl?->dudi?->nama_dudi;
             return view('home.dashboard.peserta.index', compact('namaDudi'));
         } else {
             abort(403, 'Unauthorized');

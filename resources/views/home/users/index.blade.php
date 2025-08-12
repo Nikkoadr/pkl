@@ -41,8 +41,9 @@
                             <tr>
                                 <th><input type="checkbox" id="checkAll"></th>
                                 <th>No</th>
-                                <th>Nama</th>
                                 <th>Role</th>
+                                <th>Nama</th>
+                                <th>Email</th>
                                 <th>Jenis Kelamin</th>
                                 <th>Tempat Lahir</th>
                                 <th>Tanggal Lahir</th>
@@ -54,8 +55,9 @@
                             <tr id="row-{{ $user->id }}">
                                 <td><input type="checkbox" class="check-item" value="{{ $user->id }}"></td>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $user->nama }}</td>
                                 <td>{{ $user->role->nama_role ?? '-' }}</td>
+                                <td>{{ $user->nama }}</td>
+                                <td>{{ $user->email }}</td>
                                 <td>{{ $user->jenis_kelamin ?? '-' }}</td>
                                 <td>{{ $user->tempat_lahir ?? '-' }}</td>
                                 <td>{{ $user->tanggal_lahir ? \Carbon\Carbon::parse($user->tanggal_lahir)->format('d-m-Y') : '-' }}</td>
