@@ -52,7 +52,7 @@
                                     <th>Nama DUDI</th>
                                     <th>Nilai Rata-rata</th>
                                     <th>Nilai Sidang</th>
-                                    <th class="text-center">Aksi</th>
+                                    <th class="text-center">Cetak E-Sertifikat</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -89,11 +89,13 @@
                                             @endif
                                         </td>
                                         <td class="text-center">
-                                            <a href="{{ route('cetak.esertifikat_depan', $p->id) }}" class="btn btn-info btn-sm" target="_blank">
-                                                <i class="fas fa-file-alt"></i> Cetak Depan
+                                            <a href="{{ route('cetak.esertifikat_depan', $p->id) }}" 
+                                            class="btn btn-info btn-sm m-1" target="_blank">
+                                                <i class="fas fa-file-alt"></i> Depan
                                             </a>
-                                            <a href="{{ route('cetak.esertifikat_belakang', $p->id) }}" class="btn btn-success btn-sm" target="_blank">
-                                                <i class="fas fa-envelope-open-text"></i> Cetak Belakang
+                                            <a href="{{ route('cetak.esertifikat_belakang', $p->id) }}" 
+                                            class="btn btn-success btn-sm" target="_blank">
+                                                <i class="fas fa-envelope-open-text"></i> Belakang
                                             </a>
                                         </td>
                                     </tr>
@@ -160,7 +162,6 @@ $(function () {
             return;
         }
 
-        // 🔹 Cek apakah ada peserta yang belum punya nilai
         let pesertaTanpaNilai = [];
         $('.check-peserta:checked').each(function () {
             let row = $(this).closest('tr');

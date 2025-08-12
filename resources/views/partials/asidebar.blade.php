@@ -1,6 +1,6 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="/admin/dashboard" class="brand-link">
+    <a href="/home/dashboard" class="brand-link">
         <img src="{{ asset('assets/dist/img/logo.png') }}" alt="PKL" class="brand-image img-circle elevation-3" style="opacity: .8">
         <span class="brand-text font-weight-light">{{ config('app.name') }}</span>
     </a>
@@ -10,10 +10,10 @@
         <!-- User Panel -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
             <div class="image">
-                    <img src="{{ asset('assets/dist/img/avatar.png') }}" class="img-circle elevation-2" alt="Default User Image">
+                    <img src="{{ asset('assets/dist/img/avatar.png') }}" class="img-circle elevation-2" alt="Foto Profil">
             </div>
             <div class="info">
-                <a href="#" class="d-block">{{ Auth::user()->nama }}</a>
+                <a href="/home/profil" class="d-block">{{ Auth::user()->nama }}</a>
             </div>
         </div>
         
