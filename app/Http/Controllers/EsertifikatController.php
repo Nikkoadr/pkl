@@ -57,4 +57,51 @@ class EsertifikatController extends Controller
         $pengaturan = Pengaturan::latest()->first();
         return view('partials.esertifikat.belakang', compact('peserta_pkl', 'pengaturan'));
     }
+
+    public function cetak_depan_massal(Request $request)
+    {
+        $ids = explode(',', $request->input('ids'));
+
+        $data = [];
+
+        $pengaturan = Pengaturan::latest()->first();
+
+        foreach ($ids as $id) {
+            $peserta = Peserta_pkl::with([
+                'peserta.user',
+                'peserta.kelas.kompetensi',
+                'dudi',
+                'nilai_pkl'
+            ])->find($id);
+
+            if ($peserta) {
+                $data[] = $peserta;
+            }
+        }
+
+        return view('partials.esertifikat.depan_massal', compact('data', 'pengaturan'));
+    }
+    public function cetak_belakang_massal(Request $request)
+    {
+        $ids = explode(',', $request->input('ids'));
+
+        $data = [];
+
+        $pengaturan = Pengaturan::latest()->first();
+
+        foreach ($ids as $id) {
+            $peserta_pkl = Peserta_pkl::with([
+                'peserta.user',
+                'peserta.kelas.kompetensi',
+                'dudi',
+                'nilai_pkl'
+            ])->find($id);
+
+            if ($peserta_pkl) {
+                $data[] = $peserta_pkl;
+            }
+        }
+
+        return view('partials.esertifikat.belakang_massal', compact('data', 'pengaturan'));
+    }
 }

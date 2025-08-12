@@ -17,6 +17,8 @@
             font-family: "Times New Roman", serif;
             display: flex;
             justify-content: center;
+            flex-direction: column; /* susun ke bawah */
+            align-items: center;    /* tetap rata tengah */
         }
 
         /* Container halaman sertifikat */
@@ -24,11 +26,13 @@
             position: relative;
             width: 210mm;
             height: 297mm;
-            background: white;
             background: white url('{{ asset("assets/dist/img/sertifikat-bg.jpeg") }}') no-repeat center/cover;
             box-shadow: 0 0 15px rgba(0,0,0,0.25);
+            page-break-after: always;
         }
-
+        .page:last-child {
+            page-break-after: auto; /* Tidak paksa break di akhir */
+        }
         /* Nomor PKL */
         .nomor {
             position: absolute;
@@ -137,11 +141,16 @@
             .page {
                 box-shadow: none;
                 margin: 0 auto;
+                background: white !important;
                 background-size: contain !important;
                 background-repeat: no-repeat !important;
                 background-position: center !important;
+                page-break-after: always;
             }
-        }
+            .page:last-child {
+                page-break-after: auto;
+            }
+                    }
     </style>
 </head>
 <body>
@@ -185,5 +194,10 @@
     </div>
 
 </div>
+<script>
+    window.onload = function () {
+        window.print();
+    };
+</script>
 </body>
 </html>

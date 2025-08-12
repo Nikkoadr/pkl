@@ -20,25 +20,23 @@
         <div class="container-fluid">
             <form id="printForm">
                 <div class="card">
-<div class="card-header">
-    <div class="row w-100 align-items-center">
-        <div class="col-md-6">
-            <h5 class="mb-0">Daftar Surat DUDI</h5>
-        </div>
-        <div class="col-md-6 text-md-right text-left mt-2 mt-md-0">
-            <div class="btn-group">
-                <button type="button" class="btn btn-primary btn-sm" id="btnPermohonan">
-                    <i class="fas fa-file-alt"></i> Cetak Permohonan
-                </button>
-                <button type="button" class="btn btn-success btn-sm" id="btnPengantar">
-                    <i class="fas fa-envelope-open-text"></i> Cetak Pengantar
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-
-
+                    <div class="card-header">
+                        <div class="row w-100 align-items-center">
+                            <div class="col-md-6">
+                                <h5 class="mb-0">Daftar Surat DUDI</h5>
+                            </div>
+                            <div class="col-md-6 text-md-right text-left mt-2 mt-md-0">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-primary btn-sm" id="btnPermohonan">
+                                        <i class="fas fa-file-alt"></i> Cetak Permohonan
+                                    </button>
+                                    <button type="button" class="btn btn-success btn-sm" id="btnPengantar">
+                                        <i class="fas fa-envelope-open-text"></i> Cetak Pengantar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="card-body">
                         <table id="dataTable" class="table table-bordered table-striped">
                             <thead>

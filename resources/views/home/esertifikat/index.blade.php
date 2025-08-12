@@ -58,7 +58,7 @@
                             <tbody>
                                 @foreach($peserta as $index => $p)
                                     <tr>
-                                        <td><input type="checkbox" class="check-dudi" value="{{ $p->id }}"></td>
+                                        <td><input type="checkbox" class="check-peserta" value="{{ $p->id }}"></td>
                                         <td>{{ $index + 1 }}</td>
                                         <td>{{ $p->peserta->nis ?? '-' }}</td>
                                         <td>{{ $p->peserta->nisn ?? '-' }}</td>
@@ -108,11 +108,11 @@
 </div>
 
 <!-- Modal Preview Surat -->
-<div class="modal fade" id="modalSurat" tabindex="-1" role="dialog" aria-labelledby="modalSuratLabel" aria-hidden="true">
+<div class="modal fade" id="modalEsertifikat" tabindex="-1" role="dialog" aria-labelledby="modalEsertifikatLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl" style="max-width: 90%;">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Preview Surat</h5>
+                <h5 class="modal-title">Preview Esertifikat</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Tutup">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -142,11 +142,11 @@ $(function () {
     });
 
     $('#selectAll').on('click', function () {
-        $('.check-dudi').prop('checked', this.checked);
+        $('.check-peserta').prop('checked', this.checked);
     });
 
-    function showModalWithIframes(suratType) {
-        const selectedIds = $('.check-dudi:checked').map(function () {
+    function showModalWithIframes(esertifikatType) {
+        const selectedIds = $('.check-peserta:checked').map(function () {
             return $(this).val();
         }).get();
 
@@ -162,20 +162,20 @@ $(function () {
 
         $('#iframeContainer').empty();
 
-        const url = `/surat/${suratType}?ids=${selectedIds.join(',')}`;
+        const url = `/home/esertifikat/${esertifikatType}?ids=${selectedIds.join(',')}`;
         $('#iframeContainer').append(`
             <iframe src="${url}" width="100%" height="600px" style="border:1px solid #ccc; margin-bottom:15px;"></iframe>
         `);
 
-        $('#modalSurat').modal('show');
+        $('#modalEsertifikat').modal('show');
     }
 
     $('#btnDepan').on('click', function () {
-        showModalWithIframes('depan-massal');
+        showModalWithIframes('cetak_depan_massal');
     });
 
     $('#btnBelakang').on('click', function () {
-        showModalWithIframes('belakang-massal');
+        showModalWithIframes('cetak_belakang_massal');
     });
 });
 </script>

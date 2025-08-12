@@ -4,7 +4,8 @@
     <meta charset="UTF-8" />
     <title>Penilaian Peserta Praktik Kerja Lapangan (PKL)</title>
     <style>
-        body { font-family: "Times New Roman", serif; font-size: 12pt; margin: 0; padding: 40px 0; background-color: #e0e0e0; display: flex; justify-content: center; }
+        body { font-family: "Times New Roman", serif; font-size: 12pt; margin: 0; padding: 40px 0; background-color: #e0e0e0; display: flex; justify-content: center; flex-direction: column;
+            align-items: center;}
         .a4-paper { background-color: white; width: 210mm; min-height: 297mm; padding: 30px 40px; box-shadow: 0 0 10px rgba(0,0,0,0.2); box-sizing: border-box; }
         h2, h3 { margin-bottom: 5px; }
         table { border-collapse: collapse; width: 100%; margin-bottom: 15px; font-size: 12pt; }
@@ -30,15 +31,17 @@
         $nilai = $peserta_pkl->nilai_pkl->first();
         $rata_sikap = ($nilai->nilai_disiplin_kerja + $nilai->nilai_kemajuan_kerja + $nilai->nilai_kualitas_kerja + $nilai->nilai_inisiatif_kreatifitas + $nilai->nilai_prilaku) / 5;
         $nilai_akhir = ($rata_sikap + $nilai->nilai_sidang_pkl) / 2;
-
-        function predikat($n) {
-            if ($n >= 90) return 'Sangat Kompeten';
-            if ($n >= 80) return 'Kompeten';
-            if ($n >= 70) return 'Cukup Kompeten';
-            return 'Belum Kompeten';
-        }
     @endphp
-
+    @if (!function_exists('predikat'))
+        @php
+            function predikat($n) {
+                if ($n >= 90) return 'Sangat Kompeten';
+                if ($n >= 80) return 'Kompeten';
+                if ($n >= 70) return 'Cukup Kompeten';
+                return 'Belum Kompeten';
+            }
+        @endphp
+    @endif
     <div class="a4-paper">
         <h3 class="center bold">PENILAIAN PESERTA PRAKTIK KERJA LAPANGAN (PKL)</h3>
         
@@ -179,5 +182,10 @@
         </div>
 
     </div>
+<script>
+    window.onload = function () {
+        window.print();
+    };
+</script>
 </body>
 </html>
