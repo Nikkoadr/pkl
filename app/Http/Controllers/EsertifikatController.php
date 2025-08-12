@@ -39,8 +39,7 @@ class EsertifikatController extends Controller
         $peserta = Peserta_pkl::with([
             'peserta.user',
             'peserta.kelas.kompetensi',
-            'dudi',
-            'nilai_pkl'
+            'dudi'
         ])->find($id);
         $pengaturan = Pengaturan::latest()->first();
         return view('partials.esertifikat.depan', compact('peserta', 'pengaturan'));
@@ -54,6 +53,11 @@ class EsertifikatController extends Controller
             'dudi',
             'nilai_pkl'
         ])->find($id);
+
+        if (!$peserta_pkl->nilai_pkl || $peserta_pkl->nilai_pkl->isEmpty()) {
+            return redirect()->back()->with('error', 'Nilai PKL belum diisi untuk peserta ini.');
+        }
+
         $pengaturan = Pengaturan::latest()->first();
         return view('partials.esertifikat.belakang', compact('peserta_pkl', 'pengaturan'));
     }
@@ -70,8 +74,7 @@ class EsertifikatController extends Controller
             $peserta = Peserta_pkl::with([
                 'peserta.user',
                 'peserta.kelas.kompetensi',
-                'dudi',
-                'nilai_pkl'
+                'dudi'
             ])->find($id);
 
             if ($peserta) {
