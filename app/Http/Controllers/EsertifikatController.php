@@ -92,6 +92,8 @@ class EsertifikatController extends Controller
 
         $pengaturan = Pengaturan::latest()->first();
 
+        $pesertaTanpaNilai = [];
+
         foreach ($ids as $id) {
             $peserta_pkl = Peserta_pkl::with([
                 'peserta.user',
@@ -101,8 +103,19 @@ class EsertifikatController extends Controller
             ])->find($id);
 
             if ($peserta_pkl) {
-                $data[] = $peserta_pkl;
+                if (!$peserta_pkl->nilai_pkl || $peserta_pkl->nilai_pkl->isEmpty()) {
+                    $pesertaTanpaNilai[] = $peserta_pkl->peserta->user->name ?? 'Peserta ID: ' . $id;
+                } else {
+                    $data[] = $peserta_pkl;
+                }
             }
+        }
+
+        if (!empty($pesertaTanpaNilai)) {
+            return redirect()->back()->with(
+                'error',
+                'Peserta berikut belum memiliki nilai: ' . implode(', ', $pesertaTanpaNilai)
+            );
         }
 
         return view('partials.esertifikat.belakang_massal', compact('data', 'pengaturan'));

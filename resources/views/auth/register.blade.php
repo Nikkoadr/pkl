@@ -55,12 +55,12 @@
                             <!-- Nama -->
                             <div class="mb-3">
                                 <input type="text" oninput="this.value = this.value.toUpperCase()" name="nama" class="form-control @error('nama') is-invalid @enderror"
-                                        value="{{ old('nama') }}" placeholder="Nama Lengkap" required>
+                                        value="{{ old('nama') }}" placeholder="NAMA LENGKAP ANDA" required>
                                 @error('nama')<div class="invalid-feedback">{{ $message }}</div>@enderror
                             </div>
                             <div class="mb-3">
                                 <input type="text" oninput="this.value = this.value.toUpperCase()" name="tempat_lahir" class="form-control @error('tempat_lahir') is-invalid @enderror"
-                                    value="{{ old('tempat_lahir') }}" placeholder="Tempat Lahir">
+                                    value="{{ old('tempat_lahir') }}" placeholder="CONTOH INDRAMAYU">
                                 @error('tempat_lahir')<div class="invalid-feedback">{{ $message }}</div>@enderror
                             </div>
 
@@ -98,7 +98,7 @@
                             <!-- Nama DUDI -->
                             <div class="mb-3">
                                 <input type="text" id="nama_dudi" class="form-control @error('dudi_id') is-invalid @enderror"
-                                        placeholder="Nama DUDI" required>
+                                        placeholder="KETIK DUDINYA" required>
                                 <input type="hidden" name="dudi_id" id="dudi_id" required>
                                 @error('dudi_id')<div class="invalid-feedback">{{ $message }}</div>@enderror
                             </div>

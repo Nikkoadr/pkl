@@ -160,13 +160,34 @@ $(function () {
             return;
         }
 
-        $('#iframeContainer').empty();
+        // 🔹 Cek apakah ada peserta yang belum punya nilai
+        let pesertaTanpaNilai = [];
+        $('.check-peserta:checked').each(function () {
+            let row = $(this).closest('tr');
+            let nilaiRata = row.find('td').eq(8).text().trim(); 
+            let nilaiSidang = row.find('td').eq(9).text().trim();
 
+            if (nilaiRata === '-' || nilaiSidang === '-') {
+                let namaPeserta = row.find('td').eq(4).text().trim();
+                pesertaTanpaNilai.push(namaPeserta);
+            }
+        });
+
+        if (pesertaTanpaNilai.length > 0) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Tidak Bisa Mencetak',
+                html: 'Peserta berikut belum memiliki nilai:<br><b>' + pesertaTanpaNilai.join(', ') + '</b>',
+                confirmButtonText: 'OK'
+            });
+            return;
+        }
+
+        $('#iframeContainer').empty();
         const url = `/home/esertifikat/${esertifikatType}?ids=${selectedIds.join(',')}`;
         $('#iframeContainer').append(`
             <iframe src="${url}" width="100%" height="600px" style="border:1px solid #ccc; margin-bottom:15px;"></iframe>
         `);
-
         $('#modalEsertifikat').modal('show');
     }
 
