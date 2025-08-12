@@ -10,14 +10,14 @@ class Nilai_pklController extends Controller
 {
     public function index()
     {
-        $nilai_pkl = Nilai_pkl::with('peserta.user')->get();
+        $nilai_pkl = Nilai_pkl::with('peserta_pkl.peserta.user')->get();
         return view('home.nilai_pkl.index', compact('nilai_pkl'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'peserta_id' => 'required|exists:peserta,id',
+            'peserta_pkl_id' => 'required|exists:peserta_pkl,id',
             'nilai_disiplin_kerja' => 'required|integer|min:0|max:100',
             'nilai_kemajuan_kerja' => 'required|integer|min:0|max:100',
             'nilai_kualitas_kerja' => 'required|integer|min:0|max:100',
@@ -29,7 +29,7 @@ class Nilai_pklController extends Controller
         ]);
 
         $data = $request->only([
-            'peserta_id',
+            'peserta_pkl_id',
             'nilai_disiplin_kerja',
             'nilai_kemajuan_kerja',
             'nilai_kualitas_kerja',
@@ -60,7 +60,7 @@ class Nilai_pklController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'peserta_id' => 'required|exists:peserta,id',
+            'peserta_pkl_id' => 'required|exists:peserta_pkl,id',
             'nilai_disiplin_kerja' => 'required|integer|min:0|max:100',
             'nilai_kemajuan_kerja' => 'required|integer|min:0|max:100',
             'nilai_kualitas_kerja' => 'required|integer|min:0|max:100',
@@ -72,7 +72,7 @@ class Nilai_pklController extends Controller
         ]);
 
         $data = $request->only([
-            'peserta_id',
+            'peserta_pkl_id',
             'nilai_disiplin_kerja',
             'nilai_kemajuan_kerja',
             'nilai_kualitas_kerja',

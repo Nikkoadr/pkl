@@ -9,8 +9,8 @@ class Nilai_pkl extends Model
     protected $table = 'nilai_pkl';
     protected $guarded = [];
 
-    function peserta()
+    function peserta_pkl()
     {
-        return $this->belongsTo(Peserta::class);
+        return $this->belongsTo(Peserta_pkl::class);
     }
 }

@@ -75,6 +75,8 @@ Route::get('/home/pengantar/{id}', [SuratController::class, 'cetakPengantar'])->
 Route::get('/home/permohonan-massal', [SuratController::class, 'cetakPermohonanMassal'])->name('surat.permohonan.massal');
 Route::get('/home/pengantar-massal', [SuratController::class, 'cetakPengantarMassal'])->name('surat.pengantar.massal');
 Route::get('/home/esertifikat', [EsertifikatController::class, 'index'])->name('home.esertifikat');
+Route::get('/home/esertifikat/cetak_depan/{id}', [EsertifikatController::class, 'cetak_depan'])->name('cetak.esertifikat_depan');
+Route::get('/home/esertifikat/cetak_belakang/{id}', [EsertifikatController::class, 'cetak_belakang'])->name('cetak.esertifikat_belakang');
 
 // ==============================
 // 📄 Nilai

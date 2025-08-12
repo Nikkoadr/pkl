@@ -20,4 +20,8 @@ class Peserta_pkl extends Model
         return $this->belongsTo(Peserta::class);
     }
 
+    public function nilai_pkl()
+    {
+        return $this->hasMany(Nilai_pkl::class);
+    }
 }

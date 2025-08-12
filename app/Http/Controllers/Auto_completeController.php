@@ -115,7 +115,7 @@ class Auto_completeController extends Controller
     {
         $term = $request->get('term');
 
-        $pesertaPKL = Peserta_pkl::with(['peserta.user', 'dudi'])
+        $pesertaPKL = Peserta_pkl::with(['peserta.user'])
             ->whereHas('peserta.user', function ($query) use ($term) {
                 $query->where('nama', 'like', '%' . $term . '%');
             })
@@ -125,8 +125,7 @@ class Auto_completeController extends Controller
             return [
                 'label' => $item->peserta->user->nama ?? '-',
                 'value' => $item->peserta->user->nama ?? '',
-                'peserta_id' => $item->peserta_id,
-                'dudi_id' => $item->dudi_id,
+                'peserta_pkl_id' => $item->id,
             ];
         });
 

@@ -56,7 +56,7 @@
                         @foreach($nilai_pkl as $key => $nilai)
                         <tr>
                             <td>{{ $key + 1 }}</td>
-                            <td>{{ $nilai->peserta->user->nama ?? '-' }}</td>
+                            <td>{{ $nilai->peserta_pkl->peserta->user->nama ?? '-' }}</td>
                             <td>{{ $nilai->nilai_disiplin_kerja }}</td>
                             <td>{{ $nilai->nilai_kemajuan_kerja }}</td>
                             <td>{{ $nilai->nilai_kualitas_kerja }}</td>
@@ -106,7 +106,7 @@
                     <div class="form-group">
                         <label for="autocomplete_peserta_pkl">Nama Peserta</label>
                         <input type="text" id="autocomplete_peserta_pkl" class="form-control" placeholder="Ketik nama peserta..." autocomplete="off">
-                        <input type="hidden" name="peserta_id" id="peserta_id">
+                        <input type="hidden" name="peserta_pkl_id" id="peserta_pkl_id">
                     </div>
 
                     <div class="form-group">
@@ -199,7 +199,7 @@
     source: "/autocomplete/peserta_pkl",
     minLength: 2,
     select: function(event, ui) {
-        $('#peserta_id').val(ui.item.peserta_id);
+        $('#peserta_pkl_id').val(ui.item.peserta_pkl_id);
     }
 });
 </script>

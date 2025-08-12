@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('nilai_pkl', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('peserta_id')->constrained('peserta')->onDelete('cascade');
+            $table->foreignId('peserta_pkl_id')->constrained('peserta_pkl')->onDelete('cascade');
             $table->integer('nilai_disiplin_kerja')->nullable();
             $table->integer('nilai_kemajuan_kerja')->nullable();
             $table->integer('nilai_kualitas_kerja')->nullable();

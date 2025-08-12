@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Peserta_pkl;
+use App\Models\Pengaturan;
 
 class EsertifikatController extends Controller
 {
@@ -23,7 +25,36 @@ class EsertifikatController extends Controller
      */
     public function index()
     {
-        $this->authorize('admin');
-        return redirect()->route('home.dashboard')->with('error', 'Halaman E-Sertifikat tidak tersedia.');
+        $peserta = Peserta_pkl::with([
+            'peserta.user',
+            'peserta.kelas.kompetensi',
+            'dudi',
+            'nilai_pkl'
+        ])->get();
+        return view('home.esertifikat.index', compact('peserta'));
+    }
+
+    public function cetak_depan($id)
+    {
+        $peserta = Peserta_pkl::with([
+            'peserta.user',
+            'peserta.kelas.kompetensi',
+            'dudi',
+            'nilai_pkl'
+        ])->find($id);
+        $pengaturan = Pengaturan::latest()->first();
+        return view('partials.esertifikat.depan', compact('peserta', 'pengaturan'));
+    }
+
+    public function cetak_belakang($id)
+    {
+        $peserta_pkl = Peserta_pkl::with([
+            'peserta.user',
+            'peserta.kelas.kompetensi',
+            'dudi',
+            'nilai_pkl'
+        ])->find($id);
+        $pengaturan = Pengaturan::latest()->first();
+        return view('partials.esertifikat.belakang', compact('peserta_pkl', 'pengaturan'));
     }
 }
