@@ -25,7 +25,7 @@
                         {{-- Foto Profil --}}
                         <div class="col-md-4 text-center">
                             <div class="mb-3">
-                                <img src="{{ auth()->user()->foto_profil ? asset('storage/foto_profil/' . auth()->user()->foto_profil) : asset('assets/dist/img/avatar.png') }}"
+                                <img src="{{ auth()->user()->foto_profil ? asset('storage/foto_profil/' . auth()->user()->foto_profil) : asset('assets/dist/img/about.png') }}"
                                     class="img-fluid rounded" style="max-height: 220px; object-fit: cover;" alt="Foto Profil">
                             </div>
                             <div class="form-group">
