@@ -53,6 +53,7 @@
                                 <th>NISN</th>
                                 <th>NIS</th>
                                 <th>Nama</th>
+                                <th>Email</th>
                                 <th>Kelas</th>
                                 <th class="text-center">Aksi</th>
                             </tr>
@@ -65,6 +66,7 @@
                                 <td>{{ $item->nisn ?? '-' }}</td>
                                 <td>{{ $item->nis ?? '-' }}</td>
                                 <td>{{ $item->user->nama ?? '-' }}</td>
+                                <td>{{ $item->user->email ?? '-' }}</td>
                                 <td>{{ $item->kelas->nama_kelas ?? '-' }}</td>
                                 <td class="text-center">
                                     <a href="{{ route('peserta.edit', $item->id) }}" class="btn btn-primary btn-sm">
