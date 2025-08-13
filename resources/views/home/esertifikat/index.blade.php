@@ -67,7 +67,7 @@
                                             {{ $p->peserta->user->tanggal_lahir 
                                                     ? \Carbon\Carbon::parse($p->peserta->user->tanggal_lahir)
                                                         ->locale('id')
-                                                        ->translatedFormat('d-F-Y') 
+                                                        ->translatedFormat('d F Y') 
                                                     : '-' 
                                                 }} </td>
                                         <td>{{ $p->peserta->kelas->kompetensi->nama_kompetensi ?? '-' }}</td>
