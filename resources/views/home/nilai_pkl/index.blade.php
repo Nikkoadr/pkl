@@ -29,12 +29,20 @@
     <section class="content">
         <div class="card">
             <div class="card-header">
-                @can('admin')
-                <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalTambah">
-                    <i class="fas fa-plus"></i> Tambah Nilai
-                </button>
-                @endcan
+                <div class="row w-100">
+                    <div class="col-md-6 d-flex align-items-center">
+                        <h3 class="card-title mb-0">Daftar Logbook</h3>
+                    </div>
+                    <div class="col-md-6 text-right">
+                        @can('admin')
+                    <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalTambah">
+                        <i class="fas fa-plus"></i> Tambah Nilai
+                    </button>
+                        @endcan
+                    </div>
+                </div>
             </div>
+
             <div class="card-body">
                 <table id="datatable" class="table table-bordered table-striped">
                     <thead>

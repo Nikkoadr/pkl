@@ -129,13 +129,10 @@
                     <div class="form-group">
                         <label for="import_dudi">File input</label>
                         <div class="input-group">
-                        <div class="custom-file">
-                            <input type="file" class="custom-file-input" id="import_dudi" name="file" required accept=".xlsx, .xls, .csv">
-                            <label class="custom-file-label" for="import_dudi">Choose file</label>
-                        </div>
-                        <div class="input-group-append">
-                            <span class="input-group-text">Upload</span>
-                        </div>
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" id="import_dudi" name="file" required accept=".xlsx, .xls, .csv">
+                                <label class="custom-file-label" for="import_dudi">Choose file</label>
+                            </div>
                         </div>
                     </div>
                 </div>

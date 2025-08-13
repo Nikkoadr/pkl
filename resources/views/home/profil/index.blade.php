@@ -22,21 +22,56 @@
                     @method('PUT')
 
                     <div class="card-body row">
+                        {{-- Foto Profil --}}
                         <div class="col-md-4 text-center">
                             <div class="mb-3">
-                                <img src="{{ auth()->user()->foto ? asset('storage/' . auth()->user()->foto) : asset('assets/dist/img/avatar.png') }}"
+                                <img src="{{ auth()->user()->foto_profil ? asset('storage/foto_profil/' . auth()->user()->foto_profil) : asset('assets/dist/img/avatar.png') }}"
                                     class="img-fluid rounded" style="max-height: 220px; object-fit: cover;" alt="Foto Profil">
                             </div>
-                                <div class="form-group">
-                                    <label for="foto">Foto Profil</label>
-                                    <div class="custom-file">
-                                        <input type="file" class="custom-file-input" id="foto_profil" name="foto" accept="image/*">
-                                        <label class="custom-file-label" for="foto_profil">Choose file</label>
-                                    </div>
+                            <div class="form-group">
+                                <label for="foto_profil">Foto Profil</label>
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="foto_profil" name="foto_profil" accept="image/*">
+                                    <label class="custom-file-label" for="foto_profil">Pilih file</label>
                                 </div>
+                            </div>
                         </div>
 
+                        {{-- Data User --}}
                         <div class="col-md-8">
+                            @if(auth()->user()->peserta)
+                                    <div class="form-group">
+                                        <label for="nis">NIS</label>
+                                        <input type="text" name="nis" id="nis" 
+                                            class="form-control @error('nis') is-invalid @enderror"
+                                            value="{{ old('nis', auth()->user()->peserta->nis ?? '') }}">
+                                        @error('nis') <span class="invalid-feedback">{{ $message }}</span> @enderror
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="nisn">NISN</label>
+                                        <input type="text" name="nisn" id="nisn" 
+                                            class="form-control @error('nisn') is-invalid @enderror"
+                                            value="{{ old('nisn', auth()->user()->peserta->nisn ?? '') }}">
+                                        @error('nisn') <span class="invalid-feedback">{{ $message }}</span> @enderror
+                                    </div>
+
+                                @if(isset($kelas) && $kelas->count())
+                                        <div class="form-group">
+                                            <label for="kelas_id">Kelas</label>
+                                            <select name="kelas_id" id="kelas_id" class="form-control @error('kelas_id') is-invalid @enderror">
+                                                <option value="" disabled selected>-- Pilih Kelas --</option>
+                                                @foreach($kelas as $k)
+                                                    <option value="{{ $k->id }}" 
+                                                        {{ old('kelas_id', auth()->user()->peserta->kelas_id ?? '') == $k->id ? 'selected' : '' }}>
+                                                        {{ $k->nama_kelas }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                            @error('kelas_id') <span class="invalid-feedback">{{ $message }}</span> @enderror
+                                        </div>
+                                @endif
+                            @endif
                             <div class="form-group">
                                 <label for="nama">Nama</label>
                                 <input type="text" name="nama" id="nama" class="form-control @error('nama') is-invalid @enderror"
@@ -79,7 +114,10 @@
                                     @error('tanggal_lahir') <span class="invalid-feedback">{{ $message }}</span> @enderror
                                 </div>
                             </div>
+
                             <hr>
+
+                            {{-- Password --}}
                             <div class="form-group">
                                 <label for="password">Password Baru</label>
                                 <input type="password" 
@@ -98,6 +136,7 @@
                                     placeholder="Ulangi password baru">
                                 @error('password_confirmation') <span class="invalid-feedback">{{ $message }}</span> @enderror
                             </div>
+
                             <div class="form-group text-right">
                                 <a href="{{ url()->previous() }}" class="btn btn-secondary">Batal</a>
                                 <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
@@ -110,6 +149,7 @@
     </section>
 </div>
 @endsection
+
 @section('scripts')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="{{ asset('assets/plugins/bs-custom-file-input/bs-custom-file-input.min.js') }}"></script>
@@ -126,6 +166,7 @@ $(function () {
     });
 });
 </script>
+
 @if (session('success'))
 <script>
     Swal.fire({

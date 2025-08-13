@@ -19,14 +19,11 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'role_id',
-        'kelas_id',
-        'dudi_id',
-        'nisn',
-        'nis',
+        'foto_profil',
+        'nama',
         'jenis_kelamin',
         'tempat_lahir',
         'tanggal_lahir',
-        'nama',
         'email',
         'password',
     ];
@@ -63,5 +60,4 @@ class User extends Authenticatable
     {
         return $this->hasOne(Peserta::class);
     }
-
 }

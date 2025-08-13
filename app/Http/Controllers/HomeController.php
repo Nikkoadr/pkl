@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use App\Models\Kelas;
+use App\Models\Tahun_ajaran;
 
 
 
@@ -47,44 +50,68 @@ class HomeController extends Controller
 
     public function profil()
     {
-        return view('home.profil.index');
+        $kelas = Kelas::all();
+
+        return view('home.profil.index', compact('kelas'));
     }
 
     public function update_profil(Request $request)
     {
-        $user = $request->user();
+        $user = $request->user()->load('peserta');
 
-        $validated = $request->validate([
-            'nama' => 'required|string|max:255',
-            'jenis_kelamin' => 'nullable|in:Laki-laki,Perempuan',
-            'email' => 'required|email|unique:users,email,' . $user->id,
-            'password' => 'nullable|string|min:6|confirmed',
-            'tempat_lahir' => 'nullable|string|max:255',
-            'tanggal_lahir' => 'nullable|date',
-            'foto' => 'nullable|image|max:2048'
+        $rules = [
+            'nama'           => 'required|string|max:255',
+            'jenis_kelamin'  => 'nullable|in:Laki-laki,Perempuan',
+            'email'          => 'required|email|unique:users,email,' . $user->id,
+            'password'       => 'nullable|string|min:6|confirmed',
+            'tempat_lahir'   => 'nullable|string|max:255',
+            'tanggal_lahir'  => 'nullable|date',
+            'foto_profil'    => 'nullable|image|max:2048',
+        ];
+
+        if ($user->peserta) {
+            $rules = array_merge($rules, [
+                'nis' => 'nullable|string|max:50',
+                'nisn' => 'nullable|string|max:50',
+                'kelas_id' => 'nullable|exists:kelas,id',
+            ]);
+        }
+
+        $validated = $request->validate($rules);
+
+        $user->fill([
+            'nama'          => $validated['nama'],
+            'jenis_kelamin' => $validated['jenis_kelamin'] ?? $user->jenis_kelamin,
+            'email'         => $validated['email'],
+            'tempat_lahir'  => $validated['tempat_lahir'] ?? $user->tempat_lahir,
+            'tanggal_lahir' => $validated['tanggal_lahir'] ?? $user->tanggal_lahir,
         ]);
-
-        $user->nama = $validated['nama'];
-        $user->jenis_kelamin = $validated['jenis_kelamin'] ?? $user->jenis_kelamin;
-        $user->email = $validated['email'];
-        $user->tempat_lahir = $validated['tempat_lahir'] ?? null;
-        $user->tanggal_lahir = $validated['tanggal_lahir'] ?? null;
 
         if (!empty($validated['password'])) {
             $user->password = Hash::make($validated['password']);
         }
 
-        if ($request->hasFile('foto')) {
-            $path = $request->file('foto')->store('profile', 'public');
+        if ($request->hasFile('foto_profil')) {
+            $ext = $request->file('foto_profil')->getClientOriginalExtension();
+            $filename = Str::slug($user->nama) . '.' . $ext;
 
-            if ($user->foto && Storage::disk('public')->exists($user->foto)) {
-                Storage::disk('public')->delete($user->foto);
+            if (!empty($user->foto_profil) && Storage::disk('public')->exists('foto_profil/' . $user->foto_profil)) {
+                Storage::disk('public')->delete('foto_profil/' . $user->foto_profil);
             }
 
-            $user->foto = $path;
+            $request->file('foto_profil')->storeAs('foto_profil', $filename, 'public');
+            $user->foto_profil = $filename;
         }
 
         $user->save();
+
+        if ($user->peserta) {
+            $user->peserta()->update([
+                'nis' => $validated['nis'] ?? $user->peserta->nis,
+                'nisn' => $validated['nisn'] ?? $user->peserta->nisn,
+                'kelas_id' => $validated['kelas_id'] ?? $user->peserta->kelas_id,
+            ]);
+        }
 
         return redirect()->route('home.profil')->with('success', 'Profil berhasil diperbarui.');
     }

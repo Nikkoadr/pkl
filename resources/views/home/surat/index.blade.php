@@ -18,63 +18,72 @@
 
     <section class="content">
         <div class="container-fluid">
-            <form id="printForm">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="row w-100 align-items-center">
-                            <div class="col-md-6">
-                                <h5 class="mb-0">Daftar Surat DUDI</h5>
-                            </div>
-                            <div class="col-md-6 text-md-right text-left mt-2 mt-md-0">
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-primary btn-sm" id="btnPermohonan">
-                                        <i class="fas fa-file-alt"></i> Cetak Permohonan
-                                    </button>
-                                    <button type="button" class="btn btn-success btn-sm" id="btnPengantar">
-                                        <i class="fas fa-envelope-open-text"></i> Cetak Pengantar
-                                    </button>
-                                </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <div class="row w-100 align-items-center">
+                        <div class="col-md-6">
+                            <h5 class="mb-0">Daftar Surat DUDI</h5>
+                        </div>
+                        @can('admin')
+                        <div class="col-md-6 text-md-right text-left mt-2 mt-md-0">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-info btn-sm" id="btnPermohonan">
+                                    <i class="fas fa-file-alt"></i> Cetak Permohonan
+                                </button>
+                                <button type="button" class="btn btn-success btn-sm" id="btnPengantar">
+                                    <i class="fas fa-envelope-open-text"></i> Cetak Pengantar
+                                </button>
                             </div>
                         </div>
-                    </div>
-                    <div class="card-body">
-                        <table id="dataTable" class="table table-bordered table-striped">
-                            <thead>
-                                <tr>
-                                    <th data-orderable="false"><input type="checkbox" id="selectAll" ></th>
-                                    <th>No</th>
-                                    <th>Nama DUDI</th>
-                                    <th>Jumlah Peserta</th>
-                                    <th class="text-center" data-orderable="false">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($dudiList as  $dudi)
-                                    <tr>
-                                        <td><input type="checkbox" class="check-dudi" value="{{ $dudi->id }}"></td>
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $dudi->nama_dudi }}</td>
-                                        <td>{{ $dudi->peserta_pkl_count }}</td>
-                                        <td class="text-center">
-                                            <a href="{{ route('surat.permohonan', $dudi->id) }}" class="btn btn-info btn-sm" target="_blank">
-                                                <i class="fas fa-file-alt"></i> Permohonan
-                                            </a>
-                                            <a href="{{ route('surat.pengantar', $dudi->id) }}" class="btn btn-success btn-sm" target="_blank">
-                                                <i class="fas fa-envelope-open-text"></i> Pengantar
-                                            </a>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                        @endcan
                     </div>
                 </div>
-            </form>
+
+                <div class="card-body">
+                    <table id="dataTable" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th data-orderable="false" style="width:42px;">
+                                    <input type="checkbox" id="selectAll">
+                                </th>
+                                <th style="width:60px;">No</th>
+                                <th>Nama DUDI</th>
+                                <th>Jumlah Peserta</th>
+                                <th class="text-center" data-orderable="false" style="width:220px;">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($dudiList as $dudi)
+                                <tr>
+                                    <td><input type="checkbox" class="check-dudi" value="{{ $dudi->id }}"></td>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>{{ $dudi->nama_dudi }}</td>
+                                    <td>{{ $dudi->peserta_pkl_count }}</td>
+                                    <td class="text-center">
+                                        <a href="{{ route('surat.permohonan', $dudi->id) }}" class="btn btn-info btn-sm" target="_blank">
+                                            <i class="fas fa-file-alt"></i> Permohonan
+                                        </a>
+                                        <a href="{{ route('surat.pengantar', $dudi->id) }}" class="btn btn-success btn-sm" target="_blank">
+                                            <i class="fas fa-envelope-open-text"></i> Pengantar
+                                        </a>
+                                    </td>
+                                </tr>
+                            @endforeach
+                            @if ($dudiList->count() === 0)
+                                <tr>
+                                    <td colspan="5" class="text-center">Tidak ada data.</td>
+                                </tr>
+                            @endif
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
         </div>
     </section>
 </div>
 
-<!-- Modal Floating Iframe -->
 <div class="modal fade" id="modalSurat" tabindex="-1" role="dialog" aria-labelledby="modalSuratLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl" style="max-width: 90%;">
         <div class="modal-content">
@@ -101,41 +110,47 @@
 
 <script>
 $(function () {
-    $('#dataTable').DataTable({
+    let table = $('#dataTable').DataTable({
         responsive: true,
         lengthChange: true,
         autoWidth: false,
-        pageLength: 10,
+        pageLength: 10
     });
 
-    $('#selectAll').on('click', function () {
+    $(document).on('click', '#selectAll', function () {
         $('.check-dudi').prop('checked', this.checked);
     });
 
-function showModalWithIframes(suratType) {
-    const selectedIds = $('.check-dudi:checked').map(function () {
-        return $(this).val();
-    }).get();
+    $(document).on('click', '.check-dudi', function () {
+        const all = $('.check-dudi').length;
+        const checked = $('.check-dudi:checked').length;
+        $('#selectAll').prop('checked', all > 0 && all === checked);
+    });
 
-    if (selectedIds.length === 0) {
-        Swal.fire({
-            icon: 'warning',
-            title: 'Oops!',
-            text: 'Pilih minimal satu DUDI terlebih dahulu.',
-            confirmButtonText: 'OK'
-        });
-        return;
+    function showModalWithIframes(suratType) {
+        const selectedIds = $('.check-dudi:checked').map(function () {
+            return $(this).val();
+        }).get();
+
+        if (selectedIds.length === 0) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Oops!',
+                text: 'Pilih minimal satu DUDI terlebih dahulu.',
+                confirmButtonText: 'OK'
+            });
+            return;
+        }
+
+        $('#iframeContainer').empty();
+
+        const url = `/home/${suratType}?ids=${selectedIds.join(',')}`;
+        $('#iframeContainer').append(`
+            <iframe src="${url}" width="100%" height="600px" style="border:1px solid #ccc; margin-bottom:15px;"></iframe>
+        `);
+
+        $('#modalSurat').modal('show');
     }
-
-    $('#iframeContainer').empty();
-
-    const url = `/home/${suratType}?ids=${selectedIds.join(',')}`;
-    $('#iframeContainer').append(`
-        <iframe src="${url}" width="100%" height="600px" style="border:1px solid #ccc; margin-bottom:15px;"></iframe>
-    `);
-
-    $('#modalSurat').modal('show');
-}
 
     $('#btnPermohonan').on('click', function () {
         showModalWithIframes('permohonan-massal');

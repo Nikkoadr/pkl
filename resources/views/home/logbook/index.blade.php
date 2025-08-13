@@ -25,17 +25,26 @@
     <section class="content-header">
         <div class="container-fluid d-flex justify-content-between align-items-center">
             <h1>Logbook PKL</h1>
-            @can('admin')
-            <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalTambah">
-                <i class="fas fa-plus"></i> Tambah Logbook
-            </button>
-            @endcan
         </div>
     </section>
 
     <section class="content">
         <div class="container-fluid">
             <div class="card">
+                <div class="card-header">
+                    <div class="row w-100">
+                        <div class="col-md-6 d-flex align-items-center">
+                            <h3 class="card-title mb-0">Daftar Logbook</h3>
+                        </div>
+                        <div class="col-md-6 text-right">
+                        @can('admin')
+                            <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalTambah">
+                                <i class="fas fa-plus"></i> Tambah Logbook
+                            </button>
+                        @endcan
+                        </div>
+                    </div>
+                </div>
                 <div class="card-body">
                     <table id="tabelLogbook" class="table table-bordered table-striped">
                         <thead>
