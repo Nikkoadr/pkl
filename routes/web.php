@@ -88,6 +88,8 @@ Route::get('/home/esertifikat/cetak_belakang_massal', [EsertifikatController::cl
 // ==============================
 Route::get('/home/nilai_pkl', [Nilai_pklController::class, 'index'])->name('nilai_pkl.index');
 Route::post('/home/nilai_pkl/store', [Nilai_pklController::class, 'store'])->name('nilai_pkl.store');
+Route::post('/home/nilai_pkl/store_peserta', [Nilai_pklController::class, 'store_peserta'])->name('nilai_pkl.store_peserta');
 Route::get('/home/nilai_pkl/{id}/edit/', [Nilai_pklController::class, 'edit'])->name('nilai_pkl.edit');
 Route::put('/home/nilai_pkl/{id}/update/', [Nilai_pklController::class, 'update'])->name('nilai_pkl.update');
+Route::put('/home/nilai_pkl/{id}/update_peserta/', [Nilai_pklController::class, 'update_siswa'])->name('nilai_pkl.update_siswa');
 Route::delete('/home/nilai_pkl/{id}/destroy/', [Nilai_pklController::class, 'destroy'])->name('nilai_pkl.destroy');

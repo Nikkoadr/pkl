@@ -5,13 +5,50 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Nilai_pkl;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
+use App\Models\Peserta;
+use App\Models\Peserta_pkl;
 
 class Nilai_pklController extends Controller
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+    /**
+     * Show the application dashboard.
+     *
+     * @return \Illuminate\Contracts\Support\Renderable
+     */
+
     public function index()
     {
-        $nilai_pkl = Nilai_pkl::with('peserta_pkl.peserta.user')->get();
-        return view('home.nilai_pkl.index', compact('nilai_pkl'));
+        if (Gate::allows('admin')) {
+            // Admin → semua data
+            $nilai_pkl = Nilai_pkl::with('peserta_pkl.peserta.user', 'peserta_pkl.dudi')->get();
+            return view('home.nilai_pkl.index', compact('nilai_pkl'));
+        }
+
+        if (Gate::allows('peserta')) {
+            $userId = Auth::id();
+
+            $nilai_pkl = Nilai_pkl::whereHas('peserta_pkl.peserta.user', function ($query) use ($userId) {
+                $query->where('id', $userId);
+            })
+                ->with('peserta_pkl.peserta.user', 'peserta_pkl.dudi')
+                ->first() ?? new Nilai_pkl();
+
+            return view('home.nilai_pkl.index_peserta', compact('nilai_pkl'));
+        }
+
+        abort(403);
     }
 
     public function store(Request $request)
@@ -50,17 +87,9 @@ class Nilai_pklController extends Controller
 
         return redirect()->route('nilai_pkl.index')->with('success', 'Data nilai PKL berhasil ditambahkan.');
     }
-
-    public function edit($id)
-    {
-        $nilai_pkl = Nilai_pkl::findOrFail($id);
-        return view('home.nilai_pkl.edit', compact('nilai_pkl'));
-    }
-
-    public function update(Request $request, $id)
+    public function store_peserta(Request $request)
     {
         $request->validate([
-            'peserta_pkl_id' => 'required|exists:peserta_pkl,id',
             'nilai_disiplin_kerja' => 'required|integer|min:0|max:100',
             'nilai_kemajuan_kerja' => 'required|integer|min:0|max:100',
             'nilai_kualitas_kerja' => 'required|integer|min:0|max:100',
@@ -71,8 +100,63 @@ class Nilai_pklController extends Controller
             'foto_bukti_nilai_pkl' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
+        $peserta = Peserta::where('user_id', Auth::id())->first();
+        if (!$peserta) {
+            return back()->withErrors(['msg' => 'Data peserta tidak ditemukan.']);
+        }
+
+        $peserta_pkl = Peserta_pkl::where('peserta_id', $peserta->id)->latest()->first();
+        if (!$peserta_pkl) {
+            return back()->withErrors(['msg' => 'Anda belum terdaftar PKL.']);
+        }
+
         $data = $request->only([
-            'peserta_pkl_id',
+            'nilai_disiplin_kerja',
+            'nilai_kemajuan_kerja',
+            'nilai_kualitas_kerja',
+            'nilai_inisiatif_kreatifitas',
+            'nilai_prilaku',
+            'nilai_sidang_pkl',
+            'komentar'
+        ]);
+
+        $data['peserta_pkl_id'] = $peserta_pkl->id;
+
+        if ($request->hasFile('foto_bukti_nilai_pkl')) {
+            $file = $request->file('foto_bukti_nilai_pkl');
+            $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+            $file->storeAs('bukti_nilai_pkl', $filename, 'public');
+            $data['foto_bukti_nilai_pkl'] = $filename;
+        }
+
+        Nilai_pkl::create($data);
+
+        return redirect()->route('nilai_pkl.index')->with('success', 'Data nilai PKL berhasil ditambahkan.');
+    }
+
+
+    public function edit($id)
+    {
+        $nilai_pkl = Nilai_pkl::findOrFail($id);
+        return view('home.nilai_pkl.edit', compact('nilai_pkl'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'nilai_disiplin_kerja' => 'required|integer|min:0|max:100',
+            'nilai_kemajuan_kerja' => 'required|integer|min:0|max:100',
+            'nilai_kualitas_kerja' => 'required|integer|min:0|max:100',
+            'nilai_inisiatif_kreatifitas' => 'required|integer|min:0|max:100',
+            'nilai_prilaku' => 'required|integer|min:0|max:100',
+            'foto_bukti_nilai_pkl' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'nilai_sidang_pkl' => 'nullable|integer|min:0|max:100',
+            'komentar' => 'nullable|string',
+        ]);
+
+        $nilai_pkl = Nilai_pkl::findOrFail($id);
+
+        $data = $request->only([
             'nilai_disiplin_kerja',
             'nilai_kemajuan_kerja',
             'nilai_kualitas_kerja',
@@ -83,13 +167,52 @@ class Nilai_pklController extends Controller
         ]);
 
         if ($request->hasFile('foto_bukti_nilai_pkl')) {
+            if ($nilai_pkl->foto_bukti_nilai_pkl && Storage::disk('public')->exists('bukti_nilai_pkl/' . $nilai_pkl->foto_bukti_nilai_pkl)) {
+                Storage::disk('public')->delete('bukti_nilai_pkl/' . $nilai_pkl->foto_bukti_nilai_pkl);
+            }
+
             $file = $request->file('foto_bukti_nilai_pkl');
             $filename = uniqid() . '.' . $file->getClientOriginalExtension();
             $file->storeAs('bukti_nilai_pkl', $filename, 'public');
             $data['foto_bukti_nilai_pkl'] = $filename;
         }
 
+        $nilai_pkl->update($data);
+
+        return redirect()->route('nilai_pkl.index')->with('success', 'Data nilai PKL berhasil diperbarui.');
+    }
+    public function update_siswa(Request $request, $id)
+    {
+        $request->validate([
+            'nilai_disiplin_kerja' => 'required|integer|min:0|max:100',
+            'nilai_kemajuan_kerja' => 'required|integer|min:0|max:100',
+            'nilai_kualitas_kerja' => 'required|integer|min:0|max:100',
+            'nilai_inisiatif_kreatifitas' => 'required|integer|min:0|max:100',
+            'nilai_prilaku' => 'required|integer|min:0|max:100',
+            'foto_bukti_nilai_pkl' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
         $nilai_pkl = Nilai_pkl::findOrFail($id);
+
+        $data = $request->only([
+            'nilai_disiplin_kerja',
+            'nilai_kemajuan_kerja',
+            'nilai_kualitas_kerja',
+            'nilai_inisiatif_kreatifitas',
+            'nilai_prilaku',
+        ]);
+
+        if ($request->hasFile('foto_bukti_nilai_pkl')) {
+            if ($nilai_pkl->foto_bukti_nilai_pkl && Storage::disk('public')->exists('bukti_nilai_pkl/' . $nilai_pkl->foto_bukti_nilai_pkl)) {
+                Storage::disk('public')->delete('bukti_nilai_pkl/' . $nilai_pkl->foto_bukti_nilai_pkl);
+            }
+
+            $file = $request->file('foto_bukti_nilai_pkl');
+            $filename = uniqid() . '.' . $file->getClientOriginalExtension();
+            $file->storeAs('bukti_nilai_pkl', $filename, 'public');
+            $data['foto_bukti_nilai_pkl'] = $filename;
+        }
+
         $nilai_pkl->update($data);
 
         return redirect()->route('nilai_pkl.index')->with('success', 'Data nilai PKL berhasil diperbarui.');

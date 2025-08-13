@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Logbook;
 use App\Models\Peserta;
 use App\Models\Dudi;
-use App\Models\Guru_pembimbing;
 use Illuminate\Http\Request;
 
 class LogbookController extends Controller
