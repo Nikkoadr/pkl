@@ -11,7 +11,6 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use App\Models\Kelas;
-use App\Models\Tahun_ajaran;
 
 
 
@@ -39,6 +38,10 @@ class HomeController extends Controller
             $jumlahDudi = Dudi::count();
             $jumlahPeserta = User::where('role_id', 4)->count();
             return view('home.dashboard.admin.index', compact('jumlahDudi', 'jumlahPeserta'));
+        } elseif (Gate::allows('prodi')) {
+            $user = Auth::user();
+            $namaDudi = $user->peserta?->peserta_pkl?->dudi?->nama_dudi;
+            return view('home.dashboard.peserta.index', compact('namaDudi'));
         } elseif (Gate::allows('peserta')) {
             $user = Auth::user();
             $namaDudi = $user->peserta?->peserta_pkl?->dudi?->nama_dudi;

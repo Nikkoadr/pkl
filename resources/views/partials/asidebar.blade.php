@@ -20,7 +20,6 @@
         <!-- Menu Sidebar -->
             <nav class="mt-2">
                 <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-
                     <!-- Dashboard -->
                     <li class="nav-item">
                         <a href="/home/dashboard" class="nav-link {{ request()->is('home/dashboard') ? 'active' : '' }}">
@@ -28,7 +27,6 @@
                             <p>Dashboard</p>
                         </a>
                     </li>
-                    
             @can('admin')
                     <!-- Master Data -->
                     <li class="nav-item {{ request()->is('home/tahun_ajaran','home/dudi','home/users','home/kelas') ? 'menu-open' : '' }}">
