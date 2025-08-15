@@ -85,10 +85,10 @@ class UserController extends Controller
     public function resetPassword($id)
     {
         $user = User::findOrFail($id);
-        $user->password = Hash::make('password1234');
+        $user->password = Hash::make('12345678');
         $user->save();
 
-        return redirect()->route('users.index')->with('success', 'Password berhasil direset ke default.');
+        return redirect()->route('users.index')->with('success', 'Password berhasil direset ke default (12345678).');
     }
 
     public function destroy(User $user)

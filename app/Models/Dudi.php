@@ -14,6 +14,7 @@ class Dudi extends Model
         'alamat_dudi',
         'no_telp_dudi',
         'nama_pimpinan_dudi',
+        'kuota',
     ];
 
     public function peserta_pkl()

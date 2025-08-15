@@ -52,8 +52,8 @@
                         </div>
                     </div>
                     <div class="card-footer">
-                        <a href="{{ route('guru.index') }}" class="btn btn-secondary">Kembali</a>
-                        <button type="submit" class="btn btn-primary">Simpan</button>
+                        <a href="{{ route('guru.index') }}" class="btn btn-secondary">Batal</a>
+                        <button type="submit" class="btn btn-primary float-right">Simpan</button>
                     </div>
                 </form>
             </div>

@@ -136,8 +136,8 @@
                     </div>
 
                     <div class="card-footer">
-                        <button type="submit" class="btn btn-primary">Simpan</button>
-                        <a href="{{ route('peserta.index') }}" class="btn btn-secondary float-right">Batal</a>
+                        <a href="{{ route('peserta.index') }}" class="btn btn-secondary">Batal</a>
+                        <button type="submit" class="btn btn-primary float-right">Simpan</button>
                     </div>
                 </form>
             </div>

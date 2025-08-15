@@ -43,6 +43,7 @@
                                 <th>Nama DUDI</th>
                                 <th>Alamat</th>
                                 <th>Pimpinan</th>
+                                <th>Kuota</th>
                                 <th class="text-center">Aksi</th>
                             </tr>
                         </thead>
@@ -53,7 +54,11 @@
                                 <td>{{ $item->nama_dudi }}</td>
                                 <td>{{ $item->alamat_dudi }}</td>
                                 <td>{{ $item->nama_pimpinan_dudi }}</td>
+                                <td>{{ $item->kuota }}</td>
                                 <td class="text-center">
+                                        <a href="{{ route('surat.permohonan', $item->id) }}" class="btn btn-info btn-sm" target="_blank">
+                                            <i class="fas fa-file-alt"></i>
+                                        </a>
                                     <a href="{{ route('dudi.edit', $item->id) }}" class="btn btn-primary btn-sm">
                                         <i class="fas fa-edit"></i>
                                     </a>
@@ -105,6 +110,10 @@
                     <div class="form-group col-md-12">
                         <label>Nama Pimpinan</label>
                         <input type="text" name="nama_pimpinan_dudi" class="form-control">
+                    </div>
+                    <div class="form-group col-md-12">
+                        <label>Kuota</label>
+                        <input type="number" name="kuota" class="form-control">
                     </div>
                 </div>
                 <div class="modal-footer">

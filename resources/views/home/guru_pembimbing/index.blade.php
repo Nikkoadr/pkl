@@ -101,8 +101,8 @@
 
                     <!-- Daftar DUDI -->
                     <label for="dudi_id">Pilih DUDI</label>
-                    <div class="table-responsive" style="max-height: 300px; overflow-y: auto;">
-                        <table class="table table-bordered table-sm">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-sm" id="datatable-dudi">
                             <thead>
                                 <tr>
                                     <th style="width: 5%; text-align:center;">
@@ -129,15 +129,13 @@
 
                 <!-- Footer -->
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Simpan</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary float-right">Simpan</button>
                 </div>
             </div>
         </form>
     </div>
 </div>
-
-
 @endsection
 
 @section('scripts')
@@ -146,83 +144,79 @@
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
 <script>
-    $(function() {
-        $('#datatable').DataTable();
+$(function() {
+    // DataTable daftar guru pembimbing
+    $('#datatable').DataTable();
 
-        $('.btn-konfirmasi-hapus').click(function() {
-            let form = $(this).closest('form');
-            Swal.fire({
-                title: 'Yakin ingin menghapus?',
-                text: "Data yang dihapus tidak dapat dikembalikan!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#aaa',
-                confirmButtonText: 'Ya, hapus!',
-                cancelButtonText: 'Batal'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    form.submit();
-                }
-            });
+    // Konfirmasi hapus
+    $('.btn-konfirmasi-hapus').click(function() {
+        let form = $(this).closest('form');
+        Swal.fire({
+            title: 'Yakin ingin menghapus?',
+            text: "Data yang dihapus tidak dapat dikembalikan!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#aaa',
+            confirmButtonText: 'Ya, hapus!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                form.submit();
+            }
         });
     });
-</script>
 
-<script>
-$('#modalTambah').on('shown.bs.modal', function () {
-    $('#nama_guru').autocomplete({
-        source: "/autocomplete/guru",
-        minLength: 2,
-        select: function(event, ui) {
-            $('#nama_guru').val(ui.item.label);
-            $('#guru_id').val(ui.item.id);
-            return false;
+    // Autocomplete nama guru
+    $('#modalTambah').on('shown.bs.modal', function () {
+        $('#nama_guru').autocomplete({
+            source: "/autocomplete/guru",
+            minLength: 2,
+            select: function(event, ui) {
+                $('#nama_guru').val(ui.item.label);
+                $('#guru_id').val(ui.item.id);
+                return false;
+            }
+        });
+
+        // Inisialisasi DataTable untuk daftar DUDI di modal
+        if (!$.fn.DataTable.isDataTable('#datatable-dudi')) {
+            $('#datatable-dudi').DataTable({
+                pageLength: 5,
+                lengthChange: false
+            });
         }
     });
 
-    $('#nama_dudi').autocomplete({
-        source: "/autocomplete/dudi",
-        minLength: 2,
-        select: function(event, ui) {
-            $('#nama_dudi').val(ui.item.label);
-            $('#dudi_id').val(ui.item.id);
-            return false;
-        }
-    });
-});
-
-</script>
-<script>
+    // Checkbox select all
     $('#checkAll').click(function () {
         $('input[name="dudi_id[]"]').prop('checked', this.checked);
     });
-</script>
+});
+
+// SweetAlert untuk notifikasi sukses/error
 @if (session('success'))
-<script>
-    Swal.fire({
-        toast: true,
-        position: 'top-end',
-        icon: 'success',
-        title: @json(session('success')),
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true
-    });
-</script>
+Swal.fire({
+    toast: true,
+    position: 'top-end',
+    icon: 'success',
+    title: @json(session('success')),
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true
+});
 @endif
 
 @if (session('error'))
-<script>
-    Swal.fire({
-        toast: true,
-        position: 'top-end',
-        icon: 'error',
-        title: @json(session('error')),
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true
-    });
-</script>
+Swal.fire({
+    toast: true,
+    position: 'top-end',
+    icon: 'error',
+    title: @json(session('error')),
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true
+});
 @endif
+</script>
 @endsection

@@ -10,22 +10,7 @@
 
     <section class="content">
         <div class="container-fluid">
-
-            <!-- Notifikasi -->
-            @if(session('success'))
-                <script>
-                    Swal.fire({
-                        toast: true,
-                        position: 'top-end',
-                        icon: 'success',
-                        title: '{{ session("success") }}',
-                        showConfirmButton: false,
-                        timer: 2000
-                    });
-                </script>
-            @endif
-
-            <div class="card card-warning">
+            <div class="card card-primary">
                 <div class="card-header">
                     <h3 class="card-title">Form Edit</h3>
                 </div>
@@ -53,14 +38,33 @@
                             <label>Nama Pimpinan</label>
                             <input type="text" name="nama_pimpinan_dudi" value="{{ $data->nama_pimpinan_dudi }}" class="form-control">
                         </div>
+                        <div class="form-group col-md-6">
+                            <label>Kuota</label>
+                            <input type="number" name="kuota" value="{{ $data->kuota }}" class="form-control">
+                        </div>
                     </div>
                     <div class="card-footer">
-                        <a href="{{ route('dudi.index') }}" class="btn btn-secondary">Kembali</a>
-                        <button type="submit" class="btn btn-warning">Update</button>
+                        <a href="{{ route('dudi.index') }}" class="btn btn-secondary">Batal</a>
+                        <button type="submit" class="btn btn-primary float-right">Simpan</button>
                     </div>
                 </form>
             </div>
         </div>
     </section>
 </div>
+@endsection
+@section('scripts')
+<!-- Notifikasi -->
+@if(session('success'))
+    <script>
+        Swal.fire({
+            toast: true,
+            position: 'top-end',
+            icon: 'success',
+            title: '{{ session("success") }}',
+            showConfirmButton: false,
+            timer: 2000
+        });
+    </script>
+@endif
 @endsection

@@ -40,6 +40,7 @@ class DudiController extends Controller
             'no_telp_dudi' => 'nullable|string|max:20',
             'nomor_kepegawaian' => 'nullable|string|max:50',
             'nama_pimpinan_dudi' => 'nullable|string|max:255',
+            'kuota' => 'nullable|string|max:255',
         ]);
         Dudi::create(
             $request->all()
@@ -66,7 +67,15 @@ class DudiController extends Controller
 
     public function update(Request $request, $id)
     {
-        Dudi::findOrFail($id)->update($request->all());
+        $validated = $request->validate([
+            'nama_dudi' => 'required|string|max:255',
+            'alamat_dudi' => 'nullable|string|max:255',
+            'no_telp_dudi' => 'nullable|string|max:20',
+            'nomor_kepegawaian' => 'nullable|string|max:50',
+            'nama_pimpinan_dudi' => 'nullable|string|max:255',
+            'kuota' => 'nullable|string|max:255',
+        ]);
+        Dudi::where('id', $id)->update($validated);
         return redirect()->route('dudi.index')->with('success', 'Data berhasil diupdate');
     }
 
