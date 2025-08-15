@@ -13,8 +13,7 @@ return new class extends Migration
     {
         Schema::create('logbook', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('peserta_id')->constrained('peserta')->onDelete('cascade');
-            $table->foreignId('dudi_id')->constrained('dudi')->onDelete('cascade');
+            $table->foreignId('peserta_pkl_id')->constrained('peserta_pkl')->onDelete('cascade');
             $table->date('tanggal')->nullable();
             $table->time('jam')->nullable();
             $table->string('foto_bukti')->nullable();

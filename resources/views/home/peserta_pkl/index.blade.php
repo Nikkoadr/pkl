@@ -61,7 +61,7 @@
                                 <td>{{ $item->dudi->nama_dudi ?? '-' }}</td>
                                 <td>{{ $item->peserta->user->nama ?? '-' }}</td>
                                 <td class="text-center">
-                                    <a href="{{ route('peserta_pkl.edit', $item->id) }}" class="btn btn-primary btn-sm">
+                                    <a href="{{ route('peserta_pkl.edit', $item->id) }}" class="btn btn-warning btn-sm">
                                         <i class="fas fa-edit"></i>
                                     </a>
                                     <form action="{{ route('peserta_pkl.destroy', $item->id) }}" method="POST" class="d-inline form-hapus">
@@ -107,7 +107,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-primary">Simpan</button>
+                    <button type="submit" class="btn btn-success">Simpan</button>
                 </div>
             </div>
         </form>

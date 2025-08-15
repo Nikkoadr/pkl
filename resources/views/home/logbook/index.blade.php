@@ -42,6 +42,9 @@
                                 <i class="fas fa-plus"></i> Tambah Logbook
                             </button>
                         @endcan
+                        @can('peserta')
+                            <a href="{{ route('logbook.create') }}" class="btn btn-primary btn-sm"><i class="fas fa-plus"></i> Tambah Logbook</a>
+                        @endcan
                         </div>
                     </div>
                 </div>
@@ -49,11 +52,11 @@
                     <table id="tabelLogbook" class="table table-bordered table-striped">
                         <thead>
                             <tr>
+                                <th>No</th>
                                 <th>Tanggal</th>
                                 <th>Jam</th>
                                 <th>Peserta</th>
                                 <th>DUDI</th>
-                                <th>Guru Pembimbing</th>
                                 <th>Foto</th>
                                 <th>Keterangan</th>
                                 <th class="text-center">Aksi</th>
@@ -62,11 +65,11 @@
                         <tbody>
                             @foreach($logbook as $log)
                             <tr>
+                                <td>{{ $loop->iteration }}</td>
                                 <td>{{ $log->tanggal }}</td>
                                 <td>{{ $log->jam }}</td>
-                                <td>{{ $log->peserta->user->nama ?? '-' }}</td>
-                                <td>{{ $log->dudi->nama_dudi ?? '-' }}</td>
-                                <td>{{ $log->guru_pembimbing->guru->user->nama ?? '-' }}</td>
+                                <td>{{ $log->peserta_pkl->peserta->user->nama ?? '-'}}</td>
+                                <td>{{ $log->peserta_pkl->dudi->nama_dudi ?? '-' }}</td>
                                 <td>
                                     @if($log->foto_bukti)
                                     <a href="{{ asset('storage/bukti_logbook/'.$log->foto_bukti) }}" target="_blank">
@@ -78,9 +81,11 @@
                                 </td>
                                 <td>{{ $log->keterangan }}</td>
                                 <td class="text-center">
-                                    <a href="{{ route('logbook.edit', $log->id) }}" class="btn btn-primary btn-sm">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
+                                    @can('admin')
+                                        <a href="{{ route('logbook.edit', $log->id) }}" class="btn btn-warning btn-sm">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                    @endcan
                                     <form action="{{ route('logbook.destroy', $log->id) }}" method="POST" class="d-inline form-hapus">
                                         @csrf
                                         @method('DELETE')
@@ -100,6 +105,7 @@
 </div>
 
 {{-- Modal Tambah --}}
+@can('admin')
 <div class="modal fade" id="modalTambah" tabindex="-1" role="dialog" aria-labelledby="modalTambahLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <form action="{{ route('logbook.store') }}" method="POST" enctype="multipart/form-data" id="formTambahLogbook">
@@ -136,8 +142,7 @@
                         <div class="form-group col-md-12">
                             <label for="autocomplete_peserta_pkl">Nama Peserta</label>
                             <input type="text" id="autocomplete_peserta_pkl" class="form-control" placeholder="Ketik nama peserta...">
-                            <input type="hidden" name="peserta_id" id="peserta_id">
-                            <input type="hidden" name="dudi_id" id="dudi_id">
+                            <input type="hidden" name="peserta_pkl_id" id="peserta_pkl_id">
                         </div>
 
                         <!-- Foto Bukti -->
@@ -171,6 +176,7 @@
         </form>
     </div>
 </div>
+@endcan
 @endsection
 
 @section('scripts')
@@ -197,8 +203,7 @@
             source: "/autocomplete/peserta_pkl",
             minLength: 2,
             select: function(event, ui) {
-                $('#peserta_id').val(ui.item.peserta_id);
-                $('#dudi_id').val(ui.item.dudi_id);
+                $('#peserta_pkl_id').val(ui.item.peserta_pkl_id);
             }
         });
 

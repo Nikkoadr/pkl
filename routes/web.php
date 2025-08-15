@@ -55,7 +55,7 @@ Route::resource('/home/guru_pembimbing', Guru_pembimbingController::class);
 Route::resource('/home/peserta_pkl', Peserta_pklController::class);
 Route::resource('/home/pengaturan', PengaturanController::class)->only('index', 'update');
 Route::resource('/home/logbook', LogbookController::class);
-
+Route::post('/home/logbook/store_siswa', [LogbookController::class, 'store_siswa'])->name('logbook.store_siswa');
 // ==============================
 // 📤 Import Data
 // ==============================

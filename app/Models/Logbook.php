@@ -8,17 +8,9 @@ class Logbook extends Model
 {
     protected $table = 'logbook';
     protected $guarded = [];
-    public function peserta()
+    function peserta_pkl()
     {
-        return $this->belongsTo(Peserta::class);
+        return $this->belongsTo(Peserta_pkl::class);
     }
 
-    public function dudi()
-    {
-        return $this->belongsTo(Dudi::class);
-    }
-    public function guru_pembimbing()
-    {
-        return $this->hasOne(Guru_pembimbing::class, 'dudi_id', 'dudi_id');
-    }
 }
