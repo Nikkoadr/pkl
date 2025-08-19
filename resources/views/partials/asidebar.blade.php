@@ -246,6 +246,23 @@
                     </li>
                 @endcan
                 @can('guru_pembimbing')
+                    <li class="nav-item {{ request()->is('home/tahun_ajaran','home/dudi','home/users','home/kelas') ? 'menu-open' : '' }}">
+                        <a href="#" class="nav-link {{ request()->is('home/tahun_ajaran','home/dudi','home/users','home/kelas') ? 'active' : '' }}">
+                            <i class="nav-icon fa-solid fa-database"></i>
+                            <p>
+                                Master Data
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="/home/dudi" class="nav-link {{ request()->is('home/dudi') ? 'active' : '' }}">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>DU/DI</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
                     <li class="nav-item {{ request()->is('home/peserta_pkl','home/surat') ? 'menu-open' : '' }}">
                         <a href="#" class="nav-link {{ request()->is('home/peserta_pkl','home/surat') ? 'active' : '' }}">
                             <i class="nav-icon fa-solid fa-map-location-dot"></i>
