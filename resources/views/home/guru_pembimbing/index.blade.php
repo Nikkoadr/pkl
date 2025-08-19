@@ -190,8 +190,10 @@ $(function() {
         // Inisialisasi DataTable untuk daftar DUDI di modal
         if (!$.fn.DataTable.isDataTable('#datatable-dudi')) {
             $('#datatable-dudi').DataTable({
-                pageLength: 5,
-                lengthChange: false
+                pageLength: 10,
+                lengthChange: true,
+                responsive: true,
+                
             });
         }
     });
