@@ -20,11 +20,13 @@ class LogbookController extends Controller
     public function index()
     {
         if (Gate::allows('admin')) {
+            // Admin → semua logbook
             $logbook = Logbook::with([
                 'peserta_pkl.peserta.user',
                 'peserta_pkl.dudi'
             ])->latest()->get();
         } elseif (Gate::allows('peserta')) {
+            // Peserta → hanya logbook dirinya
             $logbook = Logbook::with([
                 'peserta_pkl.peserta.user',
                 'peserta_pkl.dudi'
@@ -32,6 +34,44 @@ class LogbookController extends Controller
                 ->whereHas('peserta_pkl.peserta', function ($query) {
                     $query->where('user_id', Auth::id());
                 })
+                ->latest()
+                ->get();
+        } elseif (Gate::allows('prodi')) {
+            // Prodi → logbook peserta sesuai kompetensi keahlian kaprodinya
+            $user = Auth::user();
+            $kaprodi = \App\Models\Kaprodi::where('user_id', $user->id)->first();
+
+            if (!$kaprodi) {
+                abort(403, 'Anda tidak terdaftar sebagai Kaprodi');
+            }
+
+            $logbook = Logbook::whereHas('peserta_pkl.peserta.kelas', function ($q) use ($kaprodi) {
+                $q->where('kompetensi_keahlian_id', $kaprodi->kompetensi_keahlian_id);
+            })
+                ->with([
+                    'peserta_pkl.peserta.user',
+                    'peserta_pkl.dudi'
+                ])
+                ->latest()
+                ->get();
+        } elseif (Gate::allows('guru_pembimbing')) {
+            // Guru pembimbing → logbook peserta di DUDI yang dibimbingnya
+            $user = Auth::user();
+            $guru = \App\Models\Guru::where('user_id', $user->id)->first();
+
+            if (!$guru) {
+                abort(403, 'Anda tidak terdaftar sebagai Guru');
+            }
+
+            $dudi_ids = \App\Models\Guru_pembimbing::where('guru_id', $guru->id)->pluck('dudi_id');
+
+            $logbook = Logbook::whereHas('peserta_pkl', function ($q) use ($dudi_ids) {
+                $q->whereIn('dudi_id', $dudi_ids);
+            })
+                ->with([
+                    'peserta_pkl.peserta.user',
+                    'peserta_pkl.dudi'
+                ])
                 ->latest()
                 ->get();
         } else {
@@ -43,6 +83,7 @@ class LogbookController extends Controller
 
         return view('home.logbook.index', compact('logbook', 'peserta', 'dudi'));
     }
+
 
 
     public function create()

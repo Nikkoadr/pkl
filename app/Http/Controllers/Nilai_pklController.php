@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use App\Models\Peserta;
 use App\Models\Peserta_pkl;
+use App\Models\Kaprodi;
+use App\Models\Guru;
+use App\Models\Guru_pembimbing;
 
 class Nilai_pklController extends Controller
 {
@@ -48,8 +51,45 @@ class Nilai_pklController extends Controller
             return view('home.nilai_pkl.index_peserta', compact('nilai_pkl'));
         }
 
+        if (Gate::allows('prodi')) {
+            $user = Auth::user();
+            $kaprodi = Kaprodi::where('user_id', $user->id)->first();
+
+            if (!$kaprodi) {
+                abort(403, 'Anda tidak terdaftar sebagai Kaprodi');
+            }
+
+            $nilai_pkl = Nilai_pkl::whereHas('peserta_pkl.peserta.kelas', function ($q) use ($kaprodi) {
+                $q->where('kompetensi_keahlian_id', $kaprodi->kompetensi_keahlian_id);
+            })
+                ->with('peserta_pkl.peserta.user', 'peserta_pkl.dudi')
+                ->get();
+
+            return view('home.nilai_pkl.index', compact('nilai_pkl'));
+        }
+
+        if (Gate::allows('guru_pembimbing')) {
+            $user = Auth::user();
+            $guru = Guru::where('user_id', $user->id)->first();
+
+            if (!$guru) {
+                abort(403, 'Anda tidak terdaftar sebagai Guru');
+            }
+
+            $dudi_ids = Guru_pembimbing::where('guru_id', $guru->id)->pluck('dudi_id');
+
+            $nilai_pkl = Nilai_pkl::whereHas('peserta_pkl', function ($q) use ($dudi_ids) {
+                $q->whereIn('dudi_id', $dudi_ids);
+            })
+                ->with('peserta_pkl.peserta.user', 'peserta_pkl.dudi')
+                ->get();
+
+            return view('home.nilai_pkl.index', compact('nilai_pkl'));
+        }
+
         abort(403);
     }
+
 
     public function store(Request $request)
     {

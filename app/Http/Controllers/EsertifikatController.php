@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Peserta_pkl;
 use App\Models\Pengaturan;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Auth;
 
 class EsertifikatController extends Controller
 {
@@ -25,14 +27,40 @@ class EsertifikatController extends Controller
      */
     public function index()
     {
-        $peserta = Peserta_pkl::with([
-            'peserta.user',
-            'peserta.kelas.kompetensi',
-            'dudi',
-            'nilai_pkl'
-        ])->get();
+        if (Gate::allows('admin')) {
+            // Admin → semua peserta PKL
+            $peserta = Peserta_pkl::with([
+                'peserta.user',
+                'peserta.kelas.kompetensi',
+                'dudi',
+                'nilai_pkl'
+            ])->get();
+        } elseif (Gate::allows('prodi')) {
+            // Prodi → peserta PKL sesuai kompetensi keahlian kaprodinya
+            $user = Auth::user();
+            $kaprodi = \App\Models\Kaprodi::where('user_id', $user->id)->first();
+
+            if (!$kaprodi) {
+                abort(403, 'Anda tidak terdaftar sebagai Kaprodi');
+            }
+
+            $peserta = Peserta_pkl::whereHas('peserta.kelas', function ($q) use ($kaprodi) {
+                $q->where('kompetensi_keahlian_id', $kaprodi->kompetensi_keahlian_id);
+            })
+                ->with([
+                    'peserta.user',
+                    'peserta.kelas.kompetensi',
+                    'dudi',
+                    'nilai_pkl'
+                ])
+                ->get();
+        } else {
+            abort(403);
+        }
+
         return view('home.esertifikat.index', compact('peserta'));
     }
+
 
     public function cetak_depan($id)
     {
