@@ -53,13 +53,13 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($pembimbing as $row)
+                            @foreach ($pembimbing as $item)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $row->guru->user->nama }}</td>
-                                <td>{{ $row->dudi->nama_dudi }}</td>
+                                <td>{{ $item->guru->user->nama }}</td>
+                                <td>{{ $item->dudi->nama_dudi }}</td>
                                 <td class="text-center">
-                                    <a href="{{ route('guru_pembimbing.edit', $row->id) }}" class="btn btn-primary btn-sm">
+                                    <a href="{{ route('guru_pembimbing.edit', $item->id) }}" class="btn btn-primary btn-sm">
                                         <i class="fas fa-edit"></i>
                                     </a>
                                     <form action="{{ route('guru_pembimbing.destroy', $item->id) }}" method="POST" class="d-inline form-hapus">
