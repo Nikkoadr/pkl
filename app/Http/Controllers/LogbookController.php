@@ -35,7 +35,6 @@ class LogbookController extends Controller
                 ->latest()
                 ->get();
         } else {
-            // Role lain → data kosong
             $logbook = collect();
         }
 

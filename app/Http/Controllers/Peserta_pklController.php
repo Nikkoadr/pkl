@@ -4,6 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Peserta_pkl;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Kaprodi;
+use App\Models\Guru;
+use App\Models\Guru_pembimbing;
 
 class Peserta_pklController extends Controller
 {
@@ -25,10 +30,46 @@ class Peserta_pklController extends Controller
      */
     public function index()
     {
-        $this->authorize('admin');
-        $peserta_pkl = Peserta_pkl::with(['dudi', 'peserta.user'])->get();
-        return view('home.peserta_pkl.index', compact('peserta_pkl'));
+        if (Gate::allows('admin')) {
+            $peserta_pkl = Peserta_pkl::with(['dudi', 'peserta.user', 'peserta.kelas.kompetensi'])->get();
+            return view('home.peserta_pkl.index', compact('peserta_pkl'));
+        }
+
+        if (Gate::allows('prodi')) {
+            $user = Auth::user();
+
+            $kaprodi = Kaprodi::where('user_id', $user->id)->first();
+            if (!$kaprodi) {
+                abort(403, 'Anda tidak terdaftar sebagai Kaprodi');
+            }
+
+            $peserta_pkl = Peserta_pkl::with(['dudi', 'peserta.user', 'peserta.kelas.kompetensi'])
+                ->whereHas('peserta.kelas', function ($q) use ($kaprodi) {
+                    $q->where('kompetensi_keahlian_id', $kaprodi->kompetensi_keahlian_id);
+                })
+                ->get();
+
+            return view('home.peserta_pkl.index', compact('peserta_pkl'));
+        }
+
+        if (Gate::allows('guru_pembimbing')) {
+            $user = Auth::user();
+
+            $guru = Guru::where('user_id', $user->id)->first();
+            if (!$guru) {
+                abort(403, 'Anda tidak terdaftar sebagai Guru');
+            }
+
+            $dudi_ids = Guru_pembimbing::where('guru_id', $guru->id)->pluck('dudi_id');
+
+            $peserta_pkl = Peserta_pkl::with(['dudi', 'peserta.user', 'peserta.kelas.kompetensi'])
+                ->whereIn('dudi_id', $dudi_ids)
+                ->get();
+
+            return view('home.peserta_pkl.index', compact('peserta_pkl'));
+        }
     }
+
 
     public function store(Request $request)
     {

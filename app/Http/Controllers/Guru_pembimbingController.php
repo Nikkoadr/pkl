@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Guru_pembimbing;
 use App\Models\Guru;
 use App\Models\Dudi;
+use Illuminate\Support\Facades\Gate;
 
 class Guru_pembimbingController extends Controller
 {
@@ -26,11 +27,12 @@ class Guru_pembimbingController extends Controller
      */
     public function index()
     {
-        $this->authorize('admin');
-        $pembimbing = Guru_pembimbing::with('guru.user', 'dudi')->get();
-        $guru = Guru::with('user')->get();
-        $dudiList = Dudi::all();
-        return view('home.guru_pembimbing.index', compact('pembimbing', 'guru', 'dudiList'));
+        if (Gate::allows('admin') || Gate::allows('prodi')) {
+            $pembimbing = Guru_pembimbing::with('guru.user', 'dudi')->get();
+            $guru = Guru::with('user')->get();
+            $dudiList = Dudi::all();
+            return view('home.guru_pembimbing.index', compact('pembimbing', 'guru', 'dudiList'));
+        }
     }
 
     public function store(Request $request)

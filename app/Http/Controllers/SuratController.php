@@ -6,7 +6,12 @@ use Illuminate\Http\Request;
 use App\Models\Dudi;
 use App\Models\Peserta;
 use App\Models\Pengaturan;
+use App\Models\Kaprodi;
+use App\Models\Guru;
+use App\Models\Guru_pembimbing;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Auth;
 
 class SuratController extends Controller
 {
@@ -27,9 +32,56 @@ class SuratController extends Controller
      */
     public function index()
     {
-        $this->authorize('admin');
-        $dudiList = Dudi::has('peserta_pkl')->withCount('peserta_pkl')->get();
-        return view('home.surat.index', compact('dudiList'));
+        if (Gate::allows('admin')) {
+            $dudiList = Dudi::has('peserta_pkl')
+                ->withCount('peserta_pkl')
+                ->get();
+
+            return view('home.surat.index', compact('dudiList'));
+        }
+
+        if (Gate::allows('prodi')) {
+            $user = Auth::user();
+
+            // Ambil kompetensi keahlian dari kaprodi
+            $kaprodi = Kaprodi::where('user_id', $user->id)->first();
+            if (!$kaprodi) {
+                abort(403, 'Anda tidak terdaftar sebagai Kaprodi');
+            }
+
+            $dudiList = Dudi::whereHas('peserta_pkl.peserta.kelas', function ($q) use ($kaprodi) {
+                $q->where('kompetensi_keahlian_id', $kaprodi->kompetensi_keahlian_id);
+            })
+                ->withCount(['peserta_pkl' => function ($q) use ($kaprodi) {
+                    $q->whereHas('peserta.kelas', function ($qq) use ($kaprodi) {
+                        $qq->where('kompetensi_keahlian_id', $kaprodi->kompetensi_keahlian_id);
+                    });
+                }])
+                ->get();
+
+            return view('home.surat.index', compact('dudiList'));
+        }
+
+        if (Gate::allows('guru_pembimbing')) {
+            $user = Auth::user();
+
+            // ambil guru dari user
+            $guru = Guru::where('user_id', $user->id)->first();
+            if (!$guru) {
+                abort(403, 'Anda tidak terdaftar sebagai Guru');
+            }
+
+            // ambil daftar dudi yang dibimbing guru
+            $dudi_ids = Guru_pembimbing::where('guru_id', $guru->id)->pluck('dudi_id');
+
+            $dudiList = Dudi::whereIn('id', $dudi_ids)
+                ->withCount('peserta_pkl')
+                ->get();
+
+            return view('home.surat.index', compact('dudiList'));
+        }
+
+        abort(403);
     }
 
     public function cetakPermohonan($dudi_id)

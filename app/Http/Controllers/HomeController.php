@@ -42,6 +42,10 @@ class HomeController extends Controller
             $user = Auth::user();
             $namaDudi = $user->peserta?->peserta_pkl?->dudi?->nama_dudi;
             return view('home.dashboard.peserta.index', compact('namaDudi'));
+        } elseif (Gate::allows('guru_pembimbing')) {
+            $user = Auth::user();
+            $namaDudi = $user->peserta?->peserta_pkl?->dudi?->nama_dudi;
+            return view('home.dashboard.peserta.index', compact('namaDudi'));
         } elseif (Gate::allows('peserta')) {
             $user = Auth::user();
             $namaDudi = $user->peserta?->peserta_pkl?->dudi?->nama_dudi;

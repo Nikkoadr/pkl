@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Dudi;
 use App\Imports\DudiImport;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Gate;
 
 class DudiController extends Controller
 {
@@ -27,9 +28,11 @@ class DudiController extends Controller
 
     public function index()
     {
-        $this->authorize('admin');
-        $dudi = Dudi::all();
-        return view('home.dudi.index', compact('dudi'));
+        if(Gate::allows('admin') || Gate::allows('prodi')){
+            $dudi = Dudi::all();
+            return view('home.dudi.index', compact('dudi'));
+        }
+
     }
 
     public function store(Request $request)

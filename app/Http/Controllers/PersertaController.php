@@ -8,8 +8,10 @@ use App\Models\User;
 use App\Models\Kelas;
 use App\Models\Peserta_pkl;
 use App\Models\Tahun_ajaran;
-use App\Models\Tempat_pkl;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Kaprodi;
 
 class PersertaController extends Controller
 {
@@ -32,19 +34,41 @@ class PersertaController extends Controller
 
     public function index(Request $request)
     {
-        $this->authorize('admin');
-        $semua_tahun_ajaran = Tahun_ajaran::orderBy('id', 'desc')->get();
-        $tahun_terbaru = $semua_tahun_ajaran->first();
+        if (Gate::allows('admin')) {
+            $semua_tahun_ajaran = Tahun_ajaran::orderBy('id', 'desc')->get();
+            $tahun_terbaru = $semua_tahun_ajaran->first();
+            $tahun_ajaran_id = $request->tahun_ajaran_id ?? $tahun_terbaru->id;
 
-        $tahun_ajaran_id = $request->tahun_ajaran_id ?? $tahun_terbaru->id;
+            $peserta = Peserta::with(['tahun_ajaran', 'kelas.kompetensi', 'user'])
+                ->where('tahun_ajaran_id', $tahun_ajaran_id)
+                ->get();
 
-        $peserta = Peserta::with(['tahun_ajaran', 'kelas', 'user'])
-            ->where('tahun_ajaran_id', $tahun_ajaran_id)
-            ->get();
+            return view('home.peserta.index', compact('peserta', 'semua_tahun_ajaran'));
+        }
 
-        return view('home.peserta.index', compact('peserta', 'semua_tahun_ajaran'));
+        if (Gate::allows('prodi')) {
+            $user = Auth::user();
+
+            $kaprodi = Kaprodi::where('user_id', $user->id)->first();
+
+            if (!$kaprodi) {
+                abort(403, 'Anda tidak terdaftar sebagai kaprodi');
+            }
+
+            $semua_tahun_ajaran = Tahun_ajaran::orderBy('id', 'desc')->get();
+            $tahun_terbaru = $semua_tahun_ajaran->first();
+            $tahun_ajaran_id = $request->tahun_ajaran_id ?? $tahun_terbaru->id;
+
+            $peserta = Peserta::with(['tahun_ajaran', 'kelas.kompetensi', 'user'])
+                ->where('tahun_ajaran_id', $tahun_ajaran_id)
+                ->whereHas('kelas', function ($q) use ($kaprodi) {
+                    $q->where('kompetensi_keahlian_id', $kaprodi->kompetensi_keahlian_id);
+                })
+                ->get();
+
+            return view('home.peserta.index', compact('peserta', 'semua_tahun_ajaran'));
+        }
     }
-
 
     public function create()
     {

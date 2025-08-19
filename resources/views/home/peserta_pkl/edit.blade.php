@@ -28,7 +28,7 @@
                                 <div class="form-group">
                                     <label for="nama_peserta">Nama Peserta</label>
                                     <input type="text" class="form-control" id="nama_peserta" 
-                                        value="{{ $data->peserta->user->nama }}" readonly>
+                                        value="{{ $data->peserta->user->nama }}">
                                     <input type="hidden" name="peserta_id" id="peserta_id" 
                                         value="{{ $data->peserta_id }}">
                                 </div>
@@ -36,7 +36,7 @@
                                 <div class="form-group">
                                     <label for="nama_dudi">Nama DUDI</label>
                                     <input type="text" class="form-control" id="nama_dudi" 
-                                        value="{{ $data->dudi->nama_dudi }}" readonly>
+                                        value="{{ $data->dudi->nama_dudi }}">
                                     <input type="hidden" name="dudi_id" id="dudi_id" 
                                         value="{{ $data->dudi_id }}">
                                 </div>

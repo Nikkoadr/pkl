@@ -24,7 +24,7 @@
 <div class="content-wrapper">
     <section class="content-header">
         <div class="container-fluid">
-            <h1>Manajemen Tempat PKL</h1>
+            <h1>Manajemen Peserta PKL</h1>
         </div>
     </section>
 
@@ -34,7 +34,7 @@
                 <div class="card-header">
                     <div class="row w-100">
                         <div class="col-md-6 d-flex align-items-center">
-                            <h3 class="card-title mb-0">Daftar Tempat PKL</h3>
+                            <h3 class="card-title mb-0">Daftar Peserta PKL</h3>
                         </div>
                         <div class="col-md-6 text-right">
                             <button class="btn btn-primary" data-toggle="modal" data-target="#modalTambah">
@@ -50,7 +50,7 @@
                             <tr>
                                 <th>No</th>
                                 <th>Nama DUDI</th>
-                                <th>Nama Siswa</th>
+                                <th>Nama Peserta</th>
                                 <th class="text-center">Aksi</th>
                             </tr>
                         </thead>

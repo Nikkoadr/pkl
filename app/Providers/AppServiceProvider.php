@@ -33,11 +33,5 @@ class AppServiceProvider extends ServiceProvider
         Gate::define('peserta', function (User $user) {
             return $user->role_id == '4';
         });
-        Gate::define('akses_admin_prodi', function (User $user) {
-            return in_array($user->role_id, ['1', '2']);
-        });
-        Gate::define('akses_admin_prodi_guru_Pembimbing', function (User $user) {
-            return in_array($user->role_id, ['1', '2','3']);
-        });
     }
 }
