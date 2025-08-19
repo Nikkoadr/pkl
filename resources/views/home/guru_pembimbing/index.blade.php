@@ -43,7 +43,7 @@
                 </div>
 
                 <div class="card-body">
-                    <table class="table table-bordered table-striped" id="datatable">
+                    <table class="table table-bordered table-striped" id="tabel_guru_pembimbing">
                         <thead>
                             <tr>
                                 <th>No</th>
@@ -62,7 +62,7 @@
                                     <a href="{{ route('guru_pembimbing.edit', $row->id) }}" class="btn btn-primary btn-sm">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <form action="{{ route('guru_pembimbing.destroy', $row->id) }}" method="POST" class="d-inline form-hapus">
+                                    <form action="{{ route('guru_pembimbing.destroy', $item->id) }}" method="POST" class="d-inline form-hapus">
                                         @csrf
                                         @method('DELETE')
                                         <button type="button" class="btn btn-danger btn-sm btn-konfirmasi-hapus">
@@ -146,18 +146,26 @@
 <script>
 $(function() {
     // DataTable daftar guru pembimbing
-    $('#datatable').DataTable();
+        $(function () {
+        $("#tabel_guru_pembimbing").DataTable({
+            responsive: true,
+            lengthChange: true,
+            autoWidth: true,
+        }).buttons().container().appendTo('#tabel_guru_pembimbing_wrapper .col-md-6:eq(0)');
+    });
 
     // Konfirmasi hapus
-    $('.btn-konfirmasi-hapus').click(function() {
-        let form = $(this).closest('form');
+    $(document).on('click', '.btn-konfirmasi-hapus', function (e) {
+        e.preventDefault();
+        let form = $(this).closest("form");
+
         Swal.fire({
-            title: 'Yakin ingin menghapus?',
-            text: "Data yang dihapus tidak dapat dikembalikan!",
+            title: 'Apakah Anda yakin?',
+            text: "Data guru akan dihapus secara permanen!",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#d33',
-            cancelButtonColor: '#aaa',
+            cancelButtonColor: '#6c757d',
             confirmButtonText: 'Ya, hapus!',
             cancelButtonText: 'Batal'
         }).then((result) => {
