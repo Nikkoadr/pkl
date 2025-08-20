@@ -17,6 +17,7 @@ use App\Http\Controllers\Tahun_ajaranController;
 use App\Http\Controllers\KelasController;
 use App\Http\Controllers\LogbookController;
 use App\Http\Controllers\Nilai_pklController;
+use App\Http\Controllers\KaprodiController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -33,6 +34,7 @@ Route::prefix('autocomplete')->group(function () {
     Route::get('/guru_pembimbing', [Auto_completeController::class, 'autoCompleteGuruPembimbing']);
     Route::get('/peserta', [Auto_completeController::class, 'autoCompletePeserta']);
     Route::get('/peserta_pkl', [Auto_completeController::class, 'autoCompletePesertaPKL']);
+    Route::get('/kompetensi', [Auto_completeController::class, 'autoCompleteKompetensi']);
 });
 
 // ==============================
@@ -47,6 +49,7 @@ Route::put('/home/profil/update', [HomeController::class, 'update_profil'])->nam
 // ==============================
 Route::resource('/home/tahun_ajaran', Tahun_ajaranController::class);
 Route::resource('/home/kelas', KelasController::class);
+Route::resource('/home/kaprodi', KaprodiController::class);
 Route::resource('/home/users', UserController::class);
 Route::resource('/home/dudi', DudiController::class);
 Route::resource('/home/guru', GuruController::class);

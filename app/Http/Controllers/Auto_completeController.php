@@ -9,7 +9,8 @@ use App\Models\Guru_pembimbing;
 use App\Models\User;
 use App\Models\Peserta;
 use App\Models\Peserta_pkl;
-use App\Models\Tempat_pkl;
+use App\Models\Kompetensi_keahlian;
+use App\Models\Kaprodi;
 
 class Auto_completeController extends Controller
 {
@@ -34,7 +35,8 @@ class Auto_completeController extends Controller
 
         $excludeIds = array_merge(
             Guru::pluck('user_id')->toArray(),
-            Peserta::pluck('user_id')->toArray()
+            Peserta::pluck('user_id')->toArray(),
+            Kaprodi::pluck('user_id')->toArray()
         );
 
         $users = User::whereNotIn('id', $excludeIds)
@@ -130,5 +132,23 @@ class Auto_completeController extends Controller
         });
 
         return response()->json($results);
+    }
+
+    public function autoCompleteKompetensi(Request $request)
+    {
+        $term = $request->get('term');
+        $kompetensi = Kompetensi_keahlian::where('nama_kompetensi', 'like', "%$term%")
+            ->limit(10)
+            ->get(['id', 'nama_kompetensi']);
+
+        $data = [];
+        foreach ($kompetensi as $item) {
+            $data[] = [
+                'id' => $item->id,
+                'label' => $item->nama_kompetensi,
+                'value' => $item->nama_kompetensi,
+            ];
+        }
+        return response()->json($data);
     }
 }
