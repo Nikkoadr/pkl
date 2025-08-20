@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use App\Models\Kelas;
+use App\Models\Peserta_pkl;
+use App\Models\Kaprodi;
 
 
 
@@ -37,23 +39,36 @@ class HomeController extends Controller
         if (Gate::allows('admin')) {
             $jumlahDudi = Dudi::count();
             $jumlahPeserta = User::where('role_id', 4)->count();
+
             return view('home.dashboard.admin.index', compact('jumlahDudi', 'jumlahPeserta'));
         } elseif (Gate::allows('prodi')) {
             $user = Auth::user();
-            $namaDudi = $user->peserta?->peserta_pkl?->dudi?->nama_dudi;
-            return view('home.dashboard.peserta.index', compact('namaDudi'));
+            $kaprodi = Kaprodi::where('user_id', $user->id)->first();
+
+            if (!$kaprodi) {
+                abort(403, 'Anda tidak terdaftar sebagai Kaprodi');
+            }
+            $jumlahPeserta = Peserta_pkl::whereHas('peserta.kelas', function ($q) use ($kaprodi) {
+                $q->where('kompetensi_keahlian_id', $kaprodi->kompetensi_keahlian_id);
+            })
+                ->count();
+
+            return view('home.dashboard.prodi.index', compact('jumlahPeserta'));
         } elseif (Gate::allows('guru_pembimbing')) {
             $user = Auth::user();
             $namaDudi = $user->peserta?->peserta_pkl?->dudi?->nama_dudi;
+
             return view('home.dashboard.peserta.index', compact('namaDudi'));
         } elseif (Gate::allows('peserta')) {
             $user = Auth::user();
             $namaDudi = $user->peserta?->peserta_pkl?->dudi?->nama_dudi;
+
             return view('home.dashboard.peserta.index', compact('namaDudi'));
-        } else {
-            abort(403, 'Unauthorized');
         }
+
+        abort(403, 'Unauthorized');
     }
+
 
     public function profil()
     {
