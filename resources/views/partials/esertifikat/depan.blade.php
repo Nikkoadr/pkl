@@ -175,8 +175,8 @@
         Yang telah menyelesaikan <br>
         <b>PRAKTIK KERJA LAPANGAN (PKL)</b><br>
         <i>di <b>{{ strtoupper($peserta->dudi->nama_dudi ?? '-') }}</b></i><br>
-        <i>dari tanggal {{ \Carbon\Carbon::parse($pengaturan->tanggal_mulai_pkl)->locale('id')->translatedFormat('j F Y') }} 
-        sampai dengan tanggal {{ \Carbon\Carbon::parse($pengaturan->tanggal_selesai_pkl)->locale('id')->translatedFormat('j F Y') }}</i>
+        <i>dari tanggal {{ \Carbon\Carbon::parse($pengaturan->tanggal_mulai_pkl)->locale('id')->translatedFormat('d F Y') }} 
+        sampai dengan tanggal {{ \Carbon\Carbon::parse($pengaturan->tanggal_selesai_pkl)->locale('id')->translatedFormat('d F Y') }}</i>
     </div>
 
     {{-- Tanggal --}}
