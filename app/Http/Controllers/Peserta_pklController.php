@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Kaprodi;
 use App\Models\Guru;
 use App\Models\Guru_pembimbing;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\Peserta_pklExport;
+use Illuminate\Support\Carbon;
 
 class Peserta_pklController extends Controller
 {
@@ -48,7 +51,6 @@ class Peserta_pklController extends Controller
                     $q->where('kompetensi_keahlian_id', $kaprodi->kompetensi_keahlian_id);
                 })
                 ->get();
-
             return view('home.peserta_pkl.index', compact('peserta_pkl'));
         }
 
@@ -124,6 +126,11 @@ class Peserta_pklController extends Controller
         return redirect()->route('peserta_pkl.index')->with('success', 'Data berhasil diupdate');
     }
 
+    public function export()
+    {
+        $tanggal = Carbon::now()->format('Y-m-d');
+        return Excel::download(new Peserta_pklExport, 'peserta_pkl_' . $tanggal . '.xlsx');
+    }
 
     function destroy($id)
     {

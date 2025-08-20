@@ -37,6 +37,9 @@
                             <h3 class="card-title mb-0">Daftar Peserta PKL</h3>
                         </div>
                         <div class="col-md-6 text-right">
+                            <a href="{{ route('peserta_pkl.export') }}" class="btn btn-success">
+                                <i class="fas fa-file-excel"></i> Export
+                            </a>
                             <button class="btn btn-primary" data-toggle="modal" data-target="#modalTambah">
                                 <i class="fas fa-plus"></i> Tambah Peserta
                             </button>
@@ -128,8 +131,8 @@
     $(function () {
         $("#tabelPesertaPKL").DataTable({
             responsive: true,
-            lengthChange: false,
-            autoWidth: false,
+            lengthChange: true,
+            autoWidth: true,
             buttons: ["copy", "csv", "excel", "pdf", "print", "colvis"]
         }).buttons().container().appendTo('#tabelPesertaPKL_wrapper .col-md-6:eq(0)');
     });

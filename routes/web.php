@@ -43,7 +43,7 @@ Route::prefix('autocomplete')->group(function () {
 Route::get('/home/dashboard', [HomeController::class, 'index'])->name('home.dashboard');
 Route::get('/home/profil', [HomeController::class, 'profil'])->name('home.profil');
 Route::put('/home/profil/update', [HomeController::class, 'update_profil'])->name('home.profil.update');
-
+Route::get('/home/peserta_pkl/export', [Peserta_pklController::class, 'export'])->name('peserta_pkl.export');
 // ==============================
 // 📚 Master Data
 // ==============================
