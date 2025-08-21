@@ -42,6 +42,8 @@
                                 <th>No</th>
                                 <th>Nama DUDI</th>
                                 <th>Alamat</th>
+                                <th>Jabatan Pimpinan</th>
+                                <th>Nomor Kepegawaian</th>
                                 <th>Pimpinan</th>
                                 <th>Kuota</th>
                                 <th class="text-center">Aksi</th>
@@ -53,6 +55,8 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $item->nama_dudi }}</td>
                                 <td>{{ $item->alamat_dudi }}</td>
+                                <td>{{ $item->jabatan_pimpinan }}</td>
+                                <td>{{ $item->nomor_kepegawaian }}</td>
                                 <td>{{ $item->nama_pimpinan_dudi }}</td>
                                 <td>{{ $item->kuota }}</td>
                                 <td class="text-center">
@@ -102,6 +106,11 @@
                     <div class="form-group col-md-12">
                         <label>No. Telp</label>
                         <input type="text" name="no_telp_dudi" class="form-control">
+                    </div>
+                    <div class="form-group col-md-12">
+                        <label>Jabatan Pimpinan</label>
+                        <input type="text" name="jabatan_pimpinan" class="form-control">
+                    </div>
                     </div>
                     <div class="form-group col-md-12">
                         <label>Nomor Kepegawaian</label>

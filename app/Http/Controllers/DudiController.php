@@ -28,11 +28,10 @@ class DudiController extends Controller
 
     public function index()
     {
-        if(Gate::allows('admin') || Gate::allows('prodi')|| Gate::allows('guru_pembimbing')){
+        if (Gate::allows('admin') || Gate::allows('prodi') || Gate::allows('guru_pembimbing')) {
             $dudi = Dudi::all();
             return view('home.dudi.index', compact('dudi'));
         }
-
     }
 
     public function store(Request $request)
@@ -41,6 +40,7 @@ class DudiController extends Controller
             'nama_dudi' => 'required|string|max:255',
             'alamat_dudi' => 'nullable|string|max:255',
             'no_telp_dudi' => 'nullable|string|max:20',
+            'jabatan_pimpinan' => 'nullable|string|max:50',
             'nomor_kepegawaian' => 'nullable|string|max:50',
             'nama_pimpinan_dudi' => 'nullable|string|max:255',
             'kuota' => 'nullable|string|max:255',
@@ -74,6 +74,7 @@ class DudiController extends Controller
             'nama_dudi' => 'required|string|max:255',
             'alamat_dudi' => 'nullable|string|max:255',
             'no_telp_dudi' => 'nullable|string|max:20',
+            'jabatan_pimpinan' => 'nullable|string|max:50',
             'nomor_kepegawaian' => 'nullable|string|max:50',
             'nama_pimpinan_dudi' => 'nullable|string|max:255',
             'kuota' => 'nullable|string|max:255',

@@ -31,6 +31,10 @@
                             <input type="text" name="no_telp_dudi" value="{{ $data->no_telp_dudi }}" class="form-control">
                         </div>
                         <div class="form-group col-md-6">
+                            <label>Jabatan Pimpinan</label>
+                            <input type="text" name="jabatan_pimpinan" value="{{ $data->jabatan_pimpinan }}" class="form-control">
+                        </div>
+                        <div class="form-group col-md-6">
                             <label>Nomor Kepegawaian</label>
                             <input type="text" name="nomor_kepegawaian" value="{{ $data->nomor_kepegawaian }}" class="form-control">
                         </div>

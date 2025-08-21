@@ -24,23 +24,54 @@
     </section>
 
     <!-- Main Content -->
-    <section class="content">
-        <div class="container-fluid">
-            <div class="card card-info">
-                <div class="card-header">
-                    <h3 class="card-title">Informasi DUDI Anda</h3>
-                </div>
-                <div class="card-body">
-                    @if($namaDudi)
-                        <p>Anda saat ini ditempatkan di DUDI:</p>
-                        <h4><i class="fas fa-building"></i> {{ $namaDudi }}</h4>
-                    @else
-                        <p>Anda belum ditempatkan di DUDI manapun.</p>
-                    @endif
-                </div>
+<section class="content">
+    <div class="container-fluid">
+
+        {{-- Data Diri Peserta --}}
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title">Data Diri Peserta</h3>
+            </div>
+            <div class="card-body">
+                <table class="table table-bordered">
+                    <tr>
+                        <th>NISN</th>
+                        <td>{{ Auth::user()->peserta->nisn ?? '-' }}</td>
+                    </tr>
+                    <tr>
+                        <th>NIS</th>
+                        <td>{{ Auth::user()->peserta->nis ?? '-' }}</td>
+                    </tr>
+                    <tr>
+                        <th>Nama</th>
+                        <td>{{ Auth::user()->nama }}</td>
+                    </tr>
+                    <tr>
+                        <th>Tempat, Tanggal Lahir</th>
+                        <td>{{ Auth::user()->tempat_lahir }}, {{ \Carbon\Carbon::parse(Auth::user()->tanggal_lahir)->locale('id')->translatedFormat('d F Y')}}</td>
+                    </tr>
+                    <tr>
+                        <th>Kelas</th>
+                        <td>{{ Auth::user()->peserta->kelas->nama_kelas ?? '-' }}</td>
+                    </tr>
+                    <tr>
+                        <th>DU/DI</th>
+                        @if($namaDudi)
+                            <td><strong>{{ $namaDudi }}</strong></td>
+                        @else
+                            <td>Anda belum ditempatkan di DUDI manapun.</td>
+                        @endif
+                    </tr>
+                    <tr>
+                        <td colspan="2"><a href="{{ route('home.profil') }}" class="btn btn-primary float-right">Ubah</a></td>
+                    </tr>
+                </table>
             </div>
         </div>
-    </section>
+
+    </div>
+</section>
+
 </div>
 @endsection
 @section('scripts')

@@ -175,9 +175,11 @@
             </table>
 
             <div class="signature" style="text-align: center; margin-top: 0;">
-                Kepala / Teknisi / Mekanik,<br />
+                {{ $peserta_pkl->dudi->jabatan_pimpinan ?? 'Kepala / Teknisi / Mekanik,' }},<br />
                 {{ $peserta_pkl->dudi->nama_dudi }}<br /><br /><br /><br /><br />
-                ............................................
+                {!! $peserta_pkl->dudi->nama_pimpinan_dudi 
+                    ? '<strong>' . e($peserta_pkl->dudi->nama_pimpinan_dudi) . '</strong>' 
+                    : '............................................' !!}
             </div>
         </div>
 
