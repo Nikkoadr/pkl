@@ -26,7 +26,7 @@
                 <div class="row">
                     <div class="col-12 mb-3">
                         <label for="tahun_ajaran_id">Tahun Ajaran</label>
-                        <select name="tahun_ajaran_id" id="tahun_ajaran_id" class="form-control @error('tahun_ajaran_id') is-invalid @enderror" readonly required>
+                        <select name="tahun_ajaran_id" id="tahun_ajaran_id" class="form-control @error('tahun_ajaran_id') is-invalid @enderror" required>
                             @if ($tahun_ajaran)
                                 <option value="{{ $tahun_ajaran->id }}" selected>{{ $tahun_ajaran->nama_tahun_ajaran }}</option>
                             @else
@@ -104,22 +104,6 @@
                     </div>
 
                     <div class="col-12 mb-3">
-                        <label for="alamat_dudi">Alamat DUDI</label>
-                        <input type="text" name="alamat_dudi" id="alamat_dudi"
-                            class="form-control @error('alamat_dudi') is-invalid @enderror"
-                            placeholder="Alamat DUDI akan otomatis terisi" readonly>
-                        @error('alamat_dudi')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                    </div>
-
-                    <div class="col-12 mb-3">
-                        <label for="nama_pimpinan_dudi">Nama Pimpinan DUDI</label>
-                        <input type="text" name="nama_pimpinan_dudi" id="nama_pimpinan_dudi"
-                            class="form-control @error('nama_pimpinan_dudi') is-invalid @enderror"
-                            placeholder="Nama pimpinan akan otomatis terisi" readonly>
-                        @error('nama_pimpinan_dudi')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                    </div>
-
-                    <div class="col-12 mb-3">
                         <label for="email">Email</label>
                         <input type="email" name="email" id="email"
                             class="form-control @error('email') is-invalid @enderror"
@@ -164,8 +148,6 @@
             select: function (event, ui) {
                 $('#nama_dudi').val(ui.item.label);
                 $('#dudi_id').val(ui.item.id);
-                $('#alamat_dudi').val(ui.item.alamat);
-                $('#nama_pimpinan_dudi').val(ui.item.pimpinan);
                 return false;
             }
         });
