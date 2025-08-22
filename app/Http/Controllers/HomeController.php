@@ -13,6 +13,7 @@ use Illuminate\Support\Str;
 use App\Models\Kelas;
 use App\Models\Peserta_pkl;
 use App\Models\Kaprodi;
+use App\Models\Kompetensi_keahlian;
 
 
 
@@ -40,7 +41,18 @@ class HomeController extends Controller
             $jumlahDudi = Dudi::count();
             $jumlahPeserta = User::where('role_id', 4)->count();
 
-            return view('home.dashboard.admin.index', compact('jumlahDudi', 'jumlahPeserta'));
+            // Statistik per kompetensi keahlian (berdasarkan peserta_pkl)
+            $kompetensiStats = Kompetensi_keahlian::withCount([
+                // Peserta yang sudah punya relasi ke peserta_pkl
+                'peserta as sudah_terserap' => function ($q) {
+                    $q->whereHas('peserta_pkl');
+                },
+                // Peserta yang belum punya relasi ke peserta_pkl
+                'peserta as belum_terserap' => function ($q) {
+                    $q->whereDoesntHave('peserta_pkl');
+                }
+            ])->get();
+            return view('home.dashboard.admin.index', compact('jumlahDudi', 'jumlahPeserta', 'kompetensiStats'));
         } elseif (Gate::allows('prodi')) {
             $user = Auth::user();
             $kaprodi = Kaprodi::where('user_id', $user->id)->first();

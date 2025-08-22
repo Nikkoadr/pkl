@@ -34,9 +34,7 @@ class Auto_completeController extends Controller
         $term = $request->get('term');
 
         $excludeIds = array_merge(
-            Guru::pluck('user_id')->toArray(),
-            Peserta::pluck('user_id')->toArray(),
-            Kaprodi::pluck('user_id')->toArray()
+            Peserta::pluck('user_id')->toArray()
         );
 
         $users = User::whereNotIn('id', $excludeIds)
