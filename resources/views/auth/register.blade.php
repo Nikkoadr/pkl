@@ -39,38 +39,38 @@
                     <div class="col-12 mb-3">
                         <label for="nisn">NISN</label>
                         <input type="text" name="nisn" id="nisn" class="form-control @error('nisn') is-invalid @enderror"
-                               placeholder="Contoh: 0062345678" value="{{ old('nisn') }}" required>
+                            placeholder="Contoh: 0062345678" value="{{ old('nisn') }}" required>
                         @error('nisn')<div class="invalid-feedback">{{ $message }}</div>@enderror
                     </div>
 
                     <div class="col-12 mb-3">
                         <label for="nis">NIS</label>
                         <input type="text" name="nis" id="nis" class="form-control @error('nis') is-invalid @enderror"
-                               placeholder="Contoh: 242912xxx" value="{{ old('nis') }}" required>
+                            placeholder="Contoh: 242912xxx" value="{{ old('nis') }}" required>
                         @error('nis')<div class="invalid-feedback">{{ $message }}</div>@enderror
                     </div>
 
                     <div class="col-12 mb-3">
                         <label for="nama">Nama Lengkap</label>
                         <input type="text" oninput="this.value = this.value.toUpperCase()" name="nama" id="nama"
-                               class="form-control @error('nama') is-invalid @enderror"
-                               placeholder="Contoh: ANDI SAPUTRA" value="{{ old('nama') }}" required>
+                            class="form-control @error('nama') is-invalid @enderror"
+                            placeholder="Contoh: ANDI SAPUTRA" value="{{ old('nama') }}" required>
                         @error('nama')<div class="invalid-feedback">{{ $message }}</div>@enderror
                     </div>
 
                     <div class="col-12 mb-3">
                         <label for="tempat_lahir">Tempat Lahir</label>
                         <input type="text" oninput="this.value = this.value.toUpperCase()" name="tempat_lahir" id="tempat_lahir"
-                               class="form-control @error('tempat_lahir') is-invalid @enderror"
-                               placeholder="Contoh: BANDUNG" value="{{ old('tempat_lahir') }}">
+                            class="form-control @error('tempat_lahir') is-invalid @enderror"
+                            placeholder="Contoh: BANDUNG" value="{{ old('tempat_lahir') }}">
                         @error('tempat_lahir')<div class="invalid-feedback">{{ $message }}</div>@enderror
                     </div>
 
                     <div class="col-12 mb-3">
                         <label for="tanggal_lahir">Tanggal Lahir</label>
                         <input type="date" name="tanggal_lahir" id="tanggal_lahir"
-                               class="form-control @error('tanggal_lahir') is-invalid @enderror"
-                               value="{{ old('tanggal_lahir') }}" required>
+                            class="form-control @error('tanggal_lahir') is-invalid @enderror"
+                            value="{{ old('tanggal_lahir') }}" required>
                         @error('tanggal_lahir')<div class="invalid-feedback">{{ $message }}</div>@enderror
                     </div>
 
@@ -98,7 +98,7 @@
                     <div class="col-12 mb-3">
                         <label for="nama_dudi">Nama DUDI</label>
                         <input type="text" id="nama_dudi" class="form-control @error('dudi_id') is-invalid @enderror"
-                               placeholder="Ketik minimal 2 huruf untuk mencari" required>
+                            placeholder="Ketik minimal 2 huruf untuk mencari" required>
                         <input type="hidden" name="dudi_id" id="dudi_id" required>
                         @error('dudi_id')<div class="invalid-feedback">{{ $message }}</div>@enderror
                     </div>
@@ -106,39 +106,39 @@
                     <div class="col-12 mb-3">
                         <label for="alamat_dudi">Alamat DUDI</label>
                         <input type="text" name="alamat_dudi" id="alamat_dudi"
-                               class="form-control @error('alamat_dudi') is-invalid @enderror"
-                               placeholder="Alamat DUDI akan otomatis terisi" readonly>
+                            class="form-control @error('alamat_dudi') is-invalid @enderror"
+                            placeholder="Alamat DUDI akan otomatis terisi" readonly>
                         @error('alamat_dudi')<div class="invalid-feedback">{{ $message }}</div>@enderror
                     </div>
 
                     <div class="col-12 mb-3">
                         <label for="nama_pimpinan_dudi">Nama Pimpinan DUDI</label>
                         <input type="text" name="nama_pimpinan_dudi" id="nama_pimpinan_dudi"
-                               class="form-control @error('nama_pimpinan_dudi') is-invalid @enderror"
-                               placeholder="Nama pimpinan akan otomatis terisi" readonly>
+                            class="form-control @error('nama_pimpinan_dudi') is-invalid @enderror"
+                            placeholder="Nama pimpinan akan otomatis terisi" readonly>
                         @error('nama_pimpinan_dudi')<div class="invalid-feedback">{{ $message }}</div>@enderror
                     </div>
 
                     <div class="col-12 mb-3">
                         <label for="email">Email</label>
                         <input type="email" name="email" id="email"
-                               class="form-control @error('email') is-invalid @enderror"
-                               placeholder="Contoh: andi@example.com" value="{{ old('email') }}" required>
+                            class="form-control @error('email') is-invalid @enderror"
+                            placeholder="Contoh: andi@example.com" value="{{ old('email') }}" required>
                         @error('email')<div class="invalid-feedback">{{ $message }}</div>@enderror
                     </div>
 
                     <div class="col-12 mb-3">
                         <label for="password">Password</label>
                         <input type="password" name="password" id="password"
-                               class="form-control @error('password') is-invalid @enderror"
-                               placeholder="Minimal 8 karakter" required>
+                            class="form-control @error('password') is-invalid @enderror"
+                            placeholder="Minimal 8 karakter" required>
                         @error('password')<div class="invalid-feedback">{{ $message }}</div>@enderror
                     </div>
 
                     <div class="col-12 mb-4">
                         <label for="password_confirmation">Konfirmasi Password</label>
                         <input type="password" name="password_confirmation" id="password_confirmation"
-                               class="form-control" placeholder="Ulangi password" required>
+                            class="form-control" placeholder="Ulangi password" required>
                     </div>
 
                     <div class="col-12 d-flex">
