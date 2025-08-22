@@ -57,9 +57,12 @@
         <button type="submit" class="btn btn-primary btn-block">Masuk</button>
         </div>
         <!-- /.col -->
-        <div class="col-12 mt-2">
-        <a class="btn btn-secondary btn-block" href="{{ route('register') }}">Belum Punya Akun</a>
-        </div>
+        @if (Route::has('register'))
+            <div class="col-12 mt-2">
+                <a class="btn btn-secondary btn-block" href="{{ route('register') }}">Belum Punya Akun</a>
+            </div>
+        @endif
+
     </div>
     </form>
 
