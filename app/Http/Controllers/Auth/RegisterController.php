@@ -12,6 +12,7 @@ use App\Models\Dudi;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class RegisterController extends Controller
 {
@@ -54,12 +55,16 @@ class RegisterController extends Controller
             'dudi_id'         => ['required', 'exists:dudi,id'],
             'tempat_lahir'    => ['nullable', 'string', 'max:255'],
             'tanggal_lahir'   => ['required', 'date'],
-            'nisn'            => ['required', 'string', 'max:255'],
-            'nis'             => ['required', 'string', 'max:255'],
+            'nisn'            => ['required', 'string', 'max:255', 'unique:peserta,nisn'],
+            'nis'             => ['required', 'string', 'max:255', 'unique:peserta,nis'],
             'nama'            => ['required', 'string', 'max:255'],
             'jenis_kelamin'   => ['required', 'in:Laki-laki,Perempuan'],
             'email'           => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password'        => ['required', 'string', 'min:8', 'confirmed'],
+        ], [
+            'nis.unique'   => 'NIS sudah terdaftar.',
+            'nisn.unique'  => 'NISN sudah terdaftar.',
+            'email.unique' => 'Email sudah digunakan.',
         ]);
     }
 
@@ -73,10 +78,19 @@ class RegisterController extends Controller
         $jumlah_peserta = Peserta_pkl::where('dudi_id', $dudi->id)->count();
 
         if ($jumlah_peserta >= $dudi->kuota) {
-            abort(redirect()->route('register')->with('error', 'Kuota DUDI Sudah Penuh.'));
+            abort(redirect()->route('register')->with('error', 'Kuota DUDI sudah penuh.'));
         }
 
-        // 2. Simpan user baru
+        // 2. Cek duplikat kombinasi Nama + Tanggal Lahir
+        $cekNamaTgl = User::where('nama', $data['nama'])
+            ->where('tanggal_lahir', $data['tanggal_lahir'])
+            ->first();
+
+        if ($cekNamaTgl) {
+            abort(redirect()->route('register')->with('error', 'Peserta dengan nama dan tanggal lahir yang sama sudah terdaftar.'));
+        }
+
+        // 3. Simpan user baru
         $user = User::create([
             'role_id'       => 4, // role peserta
             'nama'          => $data['nama'],
@@ -87,7 +101,7 @@ class RegisterController extends Controller
             'password'      => Hash::make($data['password']),
         ]);
 
-        // 3. Simpan ke tabel peserta
+        // 4. Simpan ke tabel peserta
         $peserta = Peserta::create([
             'user_id'         => $user->id,
             'nis'             => $data['nis'],
@@ -96,7 +110,7 @@ class RegisterController extends Controller
             'tahun_ajaran_id' => $data['tahun_ajaran_id'],
         ]);
 
-        // 4. Simpan ke tabel peserta_pkl
+        // 5. Simpan ke tabel peserta_pkl
         Peserta_pkl::create([
             'dudi_id'    => $data['dudi_id'],
             'peserta_id' => $peserta->id,
