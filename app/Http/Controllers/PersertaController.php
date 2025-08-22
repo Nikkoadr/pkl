@@ -12,6 +12,9 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Kaprodi;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\PesertaImport;
+use App\Models\Dudi;
 
 class PersertaController extends Controller
 {
@@ -121,6 +124,16 @@ class PersertaController extends Controller
         return redirect()->route('peserta.index')->with('success', 'Peserta berhasil ditambahkan.');
     }
 
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls,csv'
+        ]);
+
+        Excel::import(new PesertaImport, $request->file('file'));
+
+        return redirect()->back()->with('success', 'Import Peserta Berhasil!');
+    }
     public function edit($id)
     {
         $peserta = Peserta::with(['user', 'peserta_pkl.dudi'])->findOrFail($id);
@@ -163,6 +176,56 @@ class PersertaController extends Controller
         return redirect()->route('peserta.index')->with('success', 'Data peserta berhasil diperbarui.');
     }
 
+    public function request_dudi()
+    {
+        $peserta = Peserta::where('user_id', Auth::id())->first();
+
+        if (!$peserta) {
+            return redirect()->back()->with('error', 'Anda tidak terdaftar sebagai peserta.');
+        }
+
+        if ($peserta->peserta_pkl) {
+            return redirect()->back()->with('error', 'Anda sudah memiliki DUDI.');
+        }
+
+        return view('home.peserta.request_dudi');
+    }
+
+    public function store_request_dudi(Request $request)
+    {
+        $request->validate([
+            'dudi_id' => 'required|exists:dudi,id'
+        ], [
+            'dudi_id.required' => 'Silakan pilih DU/DI.',
+            'dudi_id.exists'   => 'DU/DI tidak ditemukan.'
+        ]);
+
+        $user = Auth::user();
+
+        if (!$user->peserta) {
+            return redirect()->back()->with('error', 'Anda belum terdaftar sebagai peserta.');
+        }
+
+        $sudahTerdaftar = Peserta_pkl::where('peserta_id', $user->peserta->id)->exists();
+        if ($sudahTerdaftar) {
+            return redirect()->back()->with('error', 'Anda sudah memilih DU/DI sebelumnya.');
+        }
+
+        $dudi = Dudi::findOrFail($request->dudi_id);
+
+        $jumlahPeserta = Peserta_pkl::where('dudi_id', $dudi->id)->count();
+
+        if (!is_null($dudi->kuota) && $jumlahPeserta >= $dudi->kuota) {
+            return redirect()->back()->with('error', 'Kuota DU/DI ' . $dudi->nama_dudi . ' sudah penuh.');
+        }
+
+        Peserta_pkl::create([
+            'peserta_id' => $user->peserta->id,
+            'dudi_id'    => $dudi->id,
+        ]);
+
+        return redirect()->route('home.dashboard')->with('success', 'Anda berhasil ditempatkan di DU/DI ' . $dudi->nama_dudi . '.');
+    }
 
     public function destroy($id)
     {

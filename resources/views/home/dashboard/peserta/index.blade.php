@@ -59,7 +59,7 @@
                         @if($namaDudi)
                             <td><strong>{{ $namaDudi }}</strong></td>
                         @else
-                            <td>Anda belum ditempatkan di DUDI manapun.</td>
+                            <td>Belum Memilih DU/DI : <a href="{{ route('peserta.request_dudi') }}"> Pilih DUDI</a></td>
                         @endif
                     </tr>
                     <tr>
