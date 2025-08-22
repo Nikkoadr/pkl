@@ -26,7 +26,7 @@
                 <div class="row">
                     <div class="col-12 mb-3">
                         <label for="tahun_ajaran_id">Tahun Ajaran</label>
-                        <select name="tahun_ajaran_id" id="tahun_ajaran_id" class="form-control @error('tahun_ajaran_id') is-invalid @enderror" required>
+                        <select name="tahun_ajaran_id" id="tahun_ajaran_id" class="form-control @error('tahun_ajaran_id') is-invalid @enderror" readonly required>
                             @if ($tahun_ajaran)
                                 <option value="{{ $tahun_ajaran->id }}" selected>{{ $tahun_ajaran->nama_tahun_ajaran }}</option>
                             @else
