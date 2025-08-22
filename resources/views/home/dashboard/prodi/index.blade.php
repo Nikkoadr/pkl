@@ -26,25 +26,44 @@
     <!-- Main Content -->
     <section class="content">
         <div class="container-fluid">
-            <div class="row">
-                <!-- Box: Jumlah Peserta -->
-                <div class="col-lg-12 col-12">
-                    <div class="small-box bg-success">
-                        <div class="inner">
-                            <h3>{{ $jumlahPeserta }}</h3>
-                            <p>Jumlah Peserta</p>
-                        </div>
-                        <div class="icon">
-                            <i class="fas fa-users"></i>
-                        </div>
-                    </div>
+
+            <!-- Pie Chart -->
+            <div class="card card-primary">
+                <div class="card-header">
+                    <h3 class="card-title">Status Peserta PKL</h3>
+                </div>
+                <div class="card-body text-center">
+                    <canvas id="pklPieChart" style="max-width: 300px; max-height: 300px;"></canvas>
                 </div>
             </div>
+            
         </div>
     </section>
 </div>
 @endsection
 @section('scripts')
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ctx = document.getElementById('pklPieChart');
+    new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: ['Terserap', 'Belum Terserap'],
+            datasets: [{
+                data: [{{ $tersarap }}, {{ $belum }}],
+                backgroundColor: ['#28a745', '#dc3545'],
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false, // supaya tetap proporsional
+            plugins: {
+                legend: { position: 'bottom' },
+                title: { display: true, text: 'Distribusi Peserta PKL' }
+            }
+        }
+    });
+</script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     @if (session('success'))

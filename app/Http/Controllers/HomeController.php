@@ -14,6 +14,7 @@ use App\Models\Kelas;
 use App\Models\Peserta_pkl;
 use App\Models\Kaprodi;
 use App\Models\Kompetensi_keahlian;
+use App\Models\Peserta;
 
 
 
@@ -60,12 +61,21 @@ class HomeController extends Controller
             if (!$kaprodi) {
                 abort(403, 'Anda tidak terdaftar sebagai Kaprodi');
             }
-            $jumlahPeserta = Peserta_pkl::whereHas('peserta.kelas', function ($q) use ($kaprodi) {
-                $q->where('kompetensi_keahlian_id', $kaprodi->kompetensi_keahlian_id);
-            })
-                ->count();
 
-            return view('home.dashboard.prodi.index', compact('jumlahPeserta'));
+            // Hitung semua peserta di prodi tsb
+            $totalPeserta = Peserta::whereHas('kelas', function ($q) use ($kaprodi) {
+                $q->where('kompetensi_keahlian_id', $kaprodi->kompetensi_keahlian_id);
+            })->count();
+
+            // Hitung peserta terserap (sudah ada di peserta_pkl)
+            $tersarap = Peserta_pkl::whereHas('peserta.kelas', function ($q) use ($kaprodi) {
+                $q->where('kompetensi_keahlian_id', $kaprodi->kompetensi_keahlian_id);
+            })->count();
+
+            // Hitung belum terserap
+            $belum = $totalPeserta - $tersarap;
+
+            return view('home.dashboard.prodi.index', compact('totalPeserta', 'tersarap', 'belum'));
         } elseif (Gate::allows('guru_pembimbing')) {
             $user = Auth::user();
             $namaDudi = $user->peserta?->peserta_pkl?->dudi?->nama_dudi;
