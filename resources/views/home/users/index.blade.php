@@ -251,58 +251,79 @@
     });
 </script>
 <script>
+    // simpan semua id yang dipilih ke array global
+    let selectedIds = [];
+
+    // check/uncheck semua item di halaman aktif
     $('#checkAll').on('click', function () {
-    $('.check-item').prop('checked', this.checked);
-});
+        $('.check-item').prop('checked', this.checked).trigger('change');
+    });
 
-        $('#btnDeleteSelected').on('click', function () {
-            let selectedIds = $('.check-item:checked').map(function () {
-                return $(this).val();
-            }).get();
-
-            if (selectedIds.length === 0) {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Tidak ada data terpilih',
-                    text: 'Silakan pilih data yang ingin dihapus.'
-                });
-                return;
+    // ketika checkbox item berubah
+    $(document).on('change', '.check-item', function () {
+        let id = $(this).val();
+        if ($(this).is(':checked')) {
+            if (!selectedIds.includes(id)) {
+                selectedIds.push(id);
             }
+        } else {
+            selectedIds = selectedIds.filter(item => item !== id);
+        }
+        console.log('Selected IDs:', selectedIds);
+    });
 
+    // tombol hapus
+    $('#btnDeleteSelected').on('click', function () {
+        if (selectedIds.length === 0) {
             Swal.fire({
-                title: 'Yakin ingin menghapus?',
-                text: "Data yang dipilih akan dihapus secara permanen!",
                 icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#6c757d',
-                confirmButtonText: 'Ya, hapus!',
-                cancelButtonText: 'Batal'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $.ajax({
-                        url: "{{ route('users.deleteMultiple') }}",
-                        method: 'POST',
-                        data: {
-                            _token: '{{ csrf_token() }}',
-                            ids: selectedIds
-                        },
-                        success: function (response) {
-                            if (response.status) {
-                                selectedIds.forEach(id => {
-                                    $('#row-' + id).remove();
-                                });
-                                Swal.fire('Berhasil!', response.message, 'success');
-                            } else {
-                                Swal.fire('Gagal', response.message, 'error');
-                            }
-                        },
-                        error: function () {
-                            Swal.fire('Gagal', 'Terjadi kesalahan saat menghapus data.', 'error');
-                        }
-                    });
-                }
+                title: 'Tidak ada data terpilih',
+                text: 'Silakan pilih data yang ingin dihapus.'
             });
+            return;
+        }
+
+        Swal.fire({
+            title: 'Yakin ingin menghapus?',
+            text: "Data yang dipilih akan dihapus secara permanen!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Ya, hapus!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: "{{ route('users.deleteMultiple') }}",
+                    method: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        ids: selectedIds
+                    },
+                    success: function (response) {
+                        if (response.status) {
+                            selectedIds.forEach(id => {
+                                $('#row-' + id).fadeOut(500, function () {
+                                    $(this).remove();
+                                });
+                            });
+                            Swal.fire('Berhasil!', response.message, 'success');
+                            selectedIds = [];
+                            setTimeout(() => {
+                                location.reload();
+                            }, 1600);
+                        } else {
+                            Swal.fire('Gagal', response.message, 'error');
+                        }
+                    },
+                    error: function () {
+                        Swal.fire('Gagal', 'Terjadi kesalahan saat menghapus data.', 'error');
+                    }
+                });
+            }
         });
+    });
 </script>
+
 @endsection
