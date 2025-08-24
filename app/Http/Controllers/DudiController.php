@@ -43,7 +43,7 @@ class DudiController extends Controller
             'jabatan_pimpinan' => 'nullable|string|max:50',
             'nomor_kepegawaian' => 'nullable|string|max:50',
             'nama_pimpinan_dudi' => 'nullable|string|max:255',
-            'kuota' => 'nullable|string|max:255',
+            'kuota' => 'required|string|max:255',
         ]);
         Dudi::create(
             $request->all()
