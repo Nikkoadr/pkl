@@ -43,7 +43,7 @@
                                 <th>Tempat Lahir</th>
                                 <th>Tanggal Lahir</th>
                                 <th>Keterangan</th>
-                                <th class="text-center">Aksi</th>
+                                <th data-orderable="false" class="text-center">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>

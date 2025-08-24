@@ -49,7 +49,7 @@
                                 <th>No</th>
                                 <th>Nama Kelas</th>
                                 <th>Kompetensi Keahlian</th>
-                                <th>Aksi</th>
+                                <th data-orderable="false" class="text-center">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>

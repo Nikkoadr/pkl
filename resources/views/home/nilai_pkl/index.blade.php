@@ -57,7 +57,7 @@
                             <th>Foto Bukti</th>
                             <th>Sidang</th>
                             <th>Komentar</th>
-                            <th>Aksi</th>
+                            <th data-orderable="false" class="text-center">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>

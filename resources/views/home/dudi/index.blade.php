@@ -46,7 +46,7 @@
                                 <th>Nomor Kepegawaian</th>
                                 <th>Pimpinan</th>
                                 <th>Kuota</th>
-                                <th class="text-center">Aksi</th>
+                                <th data-orderable="false" class="text-center">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>

@@ -88,7 +88,7 @@
                             @endforeach
                             @if ($users->count() === 0)
                                 <tr>
-                                    <td colspan="8" class="text-center">Tidak ada data.</td>
+                                    <td colspan="9" class="text-center">Tidak ada data.</td>
                                 </tr>
                             @endif
                         </tbody>

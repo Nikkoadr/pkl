@@ -51,7 +51,7 @@
                                 <th>No</th>
                                 <th>Nama</th>
                                 <th>Kompetensi Keahlian</th>
-                                <th class="text-center">Aksi</th>
+                                <th data-orderable="false" class="text-center">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
