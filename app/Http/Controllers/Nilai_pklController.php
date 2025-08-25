@@ -33,26 +33,13 @@ class Nilai_pklController extends Controller
 
     public function index()
     {
+        $user = Auth::user();
+
         if (Gate::allows('admin')) {
             // Admin → semua data
             $nilai_pkl = Nilai_pkl::with('peserta_pkl.peserta.user', 'peserta_pkl.dudi')->get();
             return view('home.nilai_pkl.index', compact('nilai_pkl'));
-        }
-
-        if (Gate::allows('peserta')) {
-            $userId = Auth::id();
-
-            $nilai_pkl = Nilai_pkl::whereHas('peserta_pkl.peserta.user', function ($query) use ($userId) {
-                $query->where('id', $userId);
-            })
-                ->with('peserta_pkl.peserta.user', 'peserta_pkl.dudi')
-                ->first() ?? new Nilai_pkl();
-
-            return view('home.nilai_pkl.index_peserta', compact('nilai_pkl'));
-        }
-
-        if (Gate::allows('prodi')) {
-            $user = Auth::user();
+        } elseif (Gate::allows('prodi')) {
             $kaprodi = Kaprodi::where('user_id', $user->id)->first();
 
             if (!$kaprodi) {
@@ -66,10 +53,7 @@ class Nilai_pklController extends Controller
                 ->get();
 
             return view('home.nilai_pkl.index', compact('nilai_pkl'));
-        }
-
-        if (Gate::allows('guru_pembimbing')) {
-            $user = Auth::user();
+        } elseif (Gate::allows('guru_pembimbing')) {
             $guru = Guru::where('user_id', $user->id)->first();
 
             if (!$guru) {
@@ -85,11 +69,27 @@ class Nilai_pklController extends Controller
                 ->get();
 
             return view('home.nilai_pkl.index', compact('nilai_pkl'));
+        } elseif (Gate::allows('peserta')) {
+            $userId = $user->id;
+
+            $pesertaPkl = Peserta_pkl::whereHas('peserta.user', function ($q) use ($userId) {
+                $q->where('id', $userId);
+            })->first();
+
+            if (!$pesertaPkl) {
+                // lempar balik ke dashboard dengan peringatan
+                return redirect()->route('home.dashboard')->with('error', 'Anda belum terdaftar mengikuti PKL.');
+            }
+
+            $nilai_pkl = Nilai_pkl::where('peserta_pkl_id', $pesertaPkl->id)
+                ->with('peserta_pkl.peserta.user', 'peserta_pkl.dudi')
+                ->first() ?? new Nilai_pkl();
+
+            return view('home.nilai_pkl.index_peserta', compact('nilai_pkl'));
         }
 
         abort(403);
     }
-
 
     public function store(Request $request)
     {

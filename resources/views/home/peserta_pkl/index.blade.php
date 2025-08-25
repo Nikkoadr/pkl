@@ -54,7 +54,7 @@
                                 <th>No</th>
                                 <th>Nama DUDI</th>
                                 <th>Nama Peserta</th>
-                                <th class="text-center">Aksi</th>
+                                <th data-orderable="false" class="text-center">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>

@@ -145,8 +145,8 @@
 <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
 <script>
 $(function() {
-    // DataTable daftar guru pembimbing
-        $(function () {
+
+    $(function () {
         $("#tabel_guru_pembimbing").DataTable({
             responsive: true,
             lengthChange: true,
@@ -154,7 +154,6 @@ $(function() {
         }).buttons().container().appendTo('#tabel_guru_pembimbing_wrapper .col-md-6:eq(0)');
     });
 
-    // Konfirmasi hapus
     $(document).on('click', '.btn-konfirmasi-hapus', function (e) {
         e.preventDefault();
         let form = $(this).closest("form");
@@ -175,36 +174,107 @@ $(function() {
         });
     });
 
-    // Autocomplete nama guru
-    $('#modalTambah').on('shown.bs.modal', function () {
-        $('#nama_guru').autocomplete({
-            source: "/autocomplete/guru",
-            minLength: 2,
-            select: function(event, ui) {
-                $('#nama_guru').val(ui.item.label);
-                $('#guru_id').val(ui.item.id);
-                return false;
-            }
-        });
+    let selectedDudi = new Set();
 
-        // Inisialisasi DataTable untuk daftar DUDI di modal
-        if (!$.fn.DataTable.isDataTable('#datatable-dudi')) {
-            $('#datatable-dudi').DataTable({
-                pageLength: 10,
-                lengthChange: true,
-                responsive: true,
-                
-            });
+$('#modalTambah').on('shown.bs.modal', function () {
+    selectedDudi.clear();
+    $('#checkAll').prop('checked', false);
+
+    // Autocomplete nama guru
+    $('#nama_guru').autocomplete({
+        source: "/autocomplete/guru",
+        minLength: 2,
+        select: function (event, ui) {
+            $('#nama_guru').val(ui.item.label);
+            $('#guru_id').val(ui.item.id);
+            return false;
         }
     });
 
-    // Checkbox select all
-    $('#checkAll').click(function () {
-        $('input[name="dudi_id[]"]').prop('checked', this.checked);
-    });
+    // DataTable DUDI
+    if (!$.fn.DataTable.isDataTable('#datatable-dudi')) {
+        let dudiTable = $('#datatable-dudi').DataTable({
+            pageLength: 10,
+            lengthChange: true,
+            responsive: true,
+        });
+
+        const updateHeaderSelectAll = () => {
+            const nodes = $(dudiTable.rows({ page: 'current' }).nodes());
+            const inputs = nodes.find('input[name="dudi_id[]"]');
+            if (inputs.length === 0) { $('#checkAll').prop('checked', false); return; }
+            let allChecked = true;
+            inputs.each(function () {
+                if (!selectedDudi.has(this.value)) { allChecked = false; return false; }
+            });
+            $('#checkAll').prop('checked', allChecked);
+        };
+
+        $('#datatable-dudi').on('change', 'input[name="dudi_id[]"]', function () {
+            const val = this.value;
+            if (this.checked) {
+                selectedDudi.add(val);
+            } else {
+                selectedDudi.delete(val);
+            }
+            updateHeaderSelectAll();
+        });
+
+        $('#checkAll').off('click').on('click', function () {
+            const isChecked = this.checked;
+            const nodes = $(dudiTable.rows({ page: 'current' }).nodes());
+            nodes.find('input[name="dudi_id[]"]').each(function () {
+                this.checked = isChecked;
+                const v = this.value;
+                if (isChecked) { selectedDudi.add(v); } else { selectedDudi.delete(v); }
+            });
+        });
+
+        dudiTable.on('draw', function () {
+            const nodes = $(dudiTable.rows({ page: 'current' }).nodes());
+            nodes.find('input[name="dudi_id[]"]').each(function () {
+                this.checked = selectedDudi.has(this.value);
+            });
+            updateHeaderSelectAll();
+        });
+
+        $('#modalTambah form').on('submit', function (e) {
+            e.preventDefault();
+
+            let guruId = $('#guru_id').val();
+            if (!guruId) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Silakan pilih guru terlebih dahulu!',
+                });
+                return false;
+            }
+
+            if (selectedDudi.size === 0) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Silakan pilih minimal satu DUDI!',
+                });
+                return false;
+            }
+
+            const $form = $(this);
+            $form.find('input[type="hidden"][name="dudi_id[]"]').remove();
+            selectedDudi.forEach(function (val) {
+                $('<input>').attr({ type: 'hidden', name: 'dudi_id[]', value: val }).appendTo($form);
+            });
+
+            this.submit();
+        });
+    } else {
+        $('#datatable-dudi').DataTable().draw(false);
+    }
 });
 
-// SweetAlert untuk notifikasi sukses/error
+});
+
 @if (session('success'))
 Swal.fire({
     toast: true,

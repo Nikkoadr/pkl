@@ -52,7 +52,7 @@
                                     <th>Nama DUDI</th>
                                     <th>Nilai Rata-rata</th>
                                     <th>Nilai Sidang</th>
-                                    <th class="text-center">Cetak E-Sertifikat</th>
+                                    <th data-orderable="false" class="text-center">Cetak E-Sertifikat</th>
                                 </tr>
                             </thead>
                             <tbody>

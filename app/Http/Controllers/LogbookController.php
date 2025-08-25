@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Peserta_pkl;
 use Illuminate\Support\Facades\Gate;
+use App\Models\Kaprodi;
+use App\Models\Guru;
+use App\Models\Guru_pembimbing;
 
 class LogbookController extends Controller
 {
@@ -19,30 +22,21 @@ class LogbookController extends Controller
 
     public function index()
     {
+        // ADMIN → semua logbook
         if (Gate::allows('admin')) {
-            // Admin → semua logbook
             $logbook = Logbook::with([
                 'peserta_pkl.peserta.user',
                 'peserta_pkl.dudi'
             ])->latest()->get();
-        } elseif (Gate::allows('peserta')) {
-            // Peserta → hanya logbook dirinya
-            $logbook = Logbook::with([
-                'peserta_pkl.peserta.user',
-                'peserta_pkl.dudi'
-            ])
-                ->whereHas('peserta_pkl.peserta', function ($query) {
-                    $query->where('user_id', Auth::id());
-                })
-                ->latest()
-                ->get();
+
+            // PRODI → sesuai kompetensi keahlian kaprodi
         } elseif (Gate::allows('prodi')) {
-            // Prodi → logbook peserta sesuai kompetensi keahlian kaprodinya
             $user = Auth::user();
-            $kaprodi = \App\Models\Kaprodi::where('user_id', $user->id)->first();
+            $kaprodi = Kaprodi::where('user_id', $user->id)->first();
 
             if (!$kaprodi) {
-                abort(403, 'Anda tidak terdaftar sebagai Kaprodi');
+                return redirect()->route('home.dashboard')
+                    ->with('error', 'Anda tidak terdaftar sebagai Kaprodi.');
             }
 
             $logbook = Logbook::whereHas('peserta_pkl.peserta.kelas', function ($q) use ($kaprodi) {
@@ -54,16 +48,18 @@ class LogbookController extends Controller
                 ])
                 ->latest()
                 ->get();
+
+            // GURU PEMBIMBING → logbook peserta di DUDI yang dibimbing
         } elseif (Gate::allows('guru_pembimbing')) {
-            // Guru pembimbing → logbook peserta di DUDI yang dibimbingnya
             $user = Auth::user();
-            $guru = \App\Models\Guru::where('user_id', $user->id)->first();
+            $guru = Guru::where('user_id', $user->id)->first();
 
             if (!$guru) {
-                abort(403, 'Anda tidak terdaftar sebagai Guru');
+                return redirect()->route('home.dashboard')
+                    ->with('error', 'Anda tidak terdaftar sebagai Guru.');
             }
 
-            $dudi_ids = \App\Models\Guru_pembimbing::where('guru_id', $guru->id)->pluck('dudi_id');
+            $dudi_ids = Guru_pembimbing::where('guru_id', $guru->id)->pluck('dudi_id');
 
             $logbook = Logbook::whereHas('peserta_pkl', function ($q) use ($dudi_ids) {
                 $q->whereIn('dudi_id', $dudi_ids);
@@ -74,17 +70,42 @@ class LogbookController extends Controller
                 ])
                 ->latest()
                 ->get();
+
+            // PESERTA → cek dulu apakah sudah ikut PKL
+        } elseif (Gate::allows('peserta')) {
+            $peserta = Peserta::where('user_id', Auth::id())->first();
+
+            if (!$peserta) {
+                return redirect()->route('home.dashboard')
+                    ->with('error', 'Anda belum terdaftar sebagai Peserta.');
+            }
+
+            $peserta_pkl = Peserta_pkl::where('peserta_id', $peserta->id)->first();
+
+            if (!$peserta_pkl) {
+                return redirect()->route('home.dashboard')
+                    ->with('error', 'Anda belum mengikuti PKL.');
+            }
+
+            // Sudah ikut PKL → tampilkan logbooknya
+            $logbook = Logbook::with([
+                'peserta_pkl.peserta.user',
+                'peserta_pkl.dudi'
+            ])
+                ->where('peserta_pkl_id', $peserta_pkl->id)
+                ->latest()
+                ->get();
+
+            // ROLE lain → kosong
         } else {
             $logbook = collect();
         }
 
         $peserta = Peserta::all();
-        $dudi = Dudi::all();
+        $dudi    = Dudi::all();
 
         return view('home.logbook.index', compact('logbook', 'peserta', 'dudi'));
     }
-
-
 
     public function create()
     {

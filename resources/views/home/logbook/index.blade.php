@@ -59,7 +59,7 @@
                                 <th>DUDI</th>
                                 <th>Foto</th>
                                 <th>Keterangan</th>
-                                <th class="text-center">Aksi</th>
+                                <th data-orderable="false" class="text-center">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>

@@ -57,7 +57,7 @@
                                 <th>Nama</th>
                                 <th>Email</th>
                                 <th>Kelas</th>
-                                <th class="text-center">Aksi</th>
+                                <th data-orderable="false" class="text-center">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>

@@ -43,7 +43,10 @@ class Guru_pembimbingController extends Controller
             'dudi_id.*' => 'exists:dudi,id',
         ]);
 
-        $sudahDipilih = Guru_pembimbing::whereIn('dudi_id', $request->dudi_id)->pluck('dudi_id')->toArray();
+        $sudahDipilih = Guru_pembimbing::whereIn('dudi_id', $request->dudi_id)
+            ->where('guru_id', '!=', $request->guru_id)
+            ->pluck('dudi_id')
+            ->toArray();
 
         if (!empty($sudahDipilih)) {
             $dudiTerpakai = Dudi::whereIn('id', $sudahDipilih)->pluck('nama_dudi')->toArray();
@@ -53,7 +56,7 @@ class Guru_pembimbingController extends Controller
         }
 
         foreach ($request->dudi_id as $dudiId) {
-            Guru_pembimbing::create([
+            Guru_pembimbing::firstOrCreate([
                 'guru_id' => $request->guru_id,
                 'dudi_id' => $dudiId,
             ]);
@@ -61,7 +64,6 @@ class Guru_pembimbingController extends Controller
 
         return redirect()->back()->with('success', 'Guru pembimbing berhasil ditambahkan.');
     }
-
 
 
     public function edit($id)
