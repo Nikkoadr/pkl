@@ -3,7 +3,6 @@
 namespace App\Exports;
 
 use App\Models\Peserta;
-use App\Models\Peserta_pkl;
 use App\Models\Kaprodi;
 use App\Models\Guru;
 use App\Models\Guru_pembimbing;
@@ -17,7 +16,6 @@ class Peserta_pklExport implements FromCollection, WithHeadings
 {
     public function collection()
     {
-        // base query → ambil semua peserta dengan relasi user, kelas, kompetensi, peserta_pkl & dudi
         $query = Peserta::with(['user', 'kelas.kompetensi', 'peserta_pkl.dudi']);
 
         if (Gate::allows('prodi')) {
@@ -48,7 +46,6 @@ class Peserta_pklExport implements FromCollection, WithHeadings
         }
 
         return $query->get()->map(function ($peserta) {
-            // cek apakah punya peserta_pkl & dudi
             $dudiName = $peserta->peserta_pkl->dudi->nama_dudi ?? 'Belum memiliki DUDI';
 
             return [
