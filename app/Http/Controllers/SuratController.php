@@ -84,6 +84,12 @@ class SuratController extends Controller
         abort(403);
     }
 
+    public function cetakKopSurat($dudi_id)
+    {
+        $dudi = Dudi::findOrFail($dudi_id);
+        return view('partials.docx.kop_surat', compact('dudi'));
+    }
+
     public function cetakPermohonan($dudi_id)
     {
         $peserta = Peserta::with('kelas.kompetensi')
@@ -136,6 +142,19 @@ class SuratController extends Controller
         ));
     }
 
+    public function cetakKopSuratMassal(Request $request)
+    {
+        $ids = explode(',', $request->input('ids'));
+        $data = [];
+        foreach ($ids as $id) {
+            $dudi = Dudi::find($id);
+            $data[] = [
+                'dudi' => $dudi,
+            ];
+        }
+
+        return view('partials.docx.cetak_masal_kop_surat', compact('data'));
+    }
     public function cetakPermohonanMassal(Request $request)
     {
         $ids = explode(',', $request->input('ids'));

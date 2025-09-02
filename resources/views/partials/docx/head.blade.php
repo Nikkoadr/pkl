@@ -2,7 +2,7 @@
     <table style="width: 100%; border-collapse: collapse">
         <tr>
         <td style="width: 100px" align="center">
-            <img src="{{ asset('assets/dist/img/dikdasmenmuh.png') }}" width="100" />
+            <img src="{{ asset('assets/dist/img/dikdasmenmuh2.png') }}" width="110" />
         </td>
         <td align="center">
             <div style="font-size: 10pt; font-weight: bold; color: #007bff">

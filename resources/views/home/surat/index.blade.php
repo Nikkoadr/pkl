@@ -26,16 +26,24 @@
                             <h5 class="mb-0">Daftar Surat DUDI</h5>
                         </div>
                         @can('admin')
-                        <div class="col-md-6 text-md-right text-left mt-2 mt-md-0">
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-info btn-sm" id="btnPermohonan">
-                                    <i class="fas fa-file-alt"></i> Cetak Permohonan
-                                </button>
-                                <button type="button" class="btn btn-success btn-sm" id="btnPengantar">
-                                    <i class="fas fa-envelope-open-text"></i> Cetak Pengantar
-                                </button>
+                            <div class="col-md-6 text-md-right text-left mt-2 mt-md-0">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                        <i class="fas fa-print"></i> Cetak Surat
+                                    </button>
+                                    <div class="dropdown-menu dropdown-menu-right">
+                                        <a class="dropdown-item" href="#" id="btnKopSurat">
+                                            <i class="fas fa-file-contract text-primary"></i> Kop Surat
+                                        </a>
+                                        <a class="dropdown-item" href="#" id="btnPermohonan">
+                                            <i class="fas fa-file-signature text-info"></i> Permohonan
+                                        </a>
+                                        <a class="dropdown-item" href="#" id="btnPengantar">
+                                            <i class="fas fa-paper-plane text-success"></i> Pengantar
+                                        </a>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
                         @endcan
                     </div>
                 </div>
@@ -61,12 +69,17 @@
                                     <td>{{ $dudi->nama_dudi }}</td>
                                     <td>{{ $dudi->peserta_pkl_count }}/{{ $dudi->kuota }}</td>
                                     <td class="text-center">
-                                        <a href="{{ route('surat.permohonan', $dudi->id) }}" class="btn btn-info btn-sm" target="_blank">
-                                            <i class="fas fa-file-alt"></i> Permohonan
-                                        </a>
-                                        <a href="{{ route('surat.pengantar', $dudi->id) }}" class="btn btn-success btn-sm" target="_blank">
-                                            <i class="fas fa-envelope-open-text"></i> Pengantar
-                                        </a>
+                                        <div class="d-flex flex-column align-items-center gap-2">
+                                            <a href="{{ route('surat.kop_surat', $dudi->id) }}" class="btn btn-primary btn-sm w-100" target="_blank">
+                                                <i class="fas fa-file-contract"></i> Kop Surat
+                                            </a>
+                                            <a href="{{ route('surat.permohonan', $dudi->id) }}" class="btn btn-info btn-sm w-100" target="_blank">
+                                                <i class="fas fa-file-signature"></i> Permohonan
+                                            </a>
+                                            <a href="{{ route('surat.pengantar', $dudi->id) }}" class="btn btn-success btn-sm w-100" target="_blank">
+                                                <i class="fas fa-paper-plane"></i> Pengantar
+                                            </a>
+                                        </div>
                                     </td>
                                 </tr>
                             @endforeach
@@ -151,6 +164,10 @@ $(function () {
 
         $('#modalSurat').modal('show');
     }
+
+    $('#btnKopSurat').on('click', function () {
+        showModalWithIframes('kop-surat-massal');
+    });
 
     $('#btnPermohonan').on('click', function () {
         showModalWithIframes('permohonan-massal');
