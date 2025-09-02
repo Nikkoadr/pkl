@@ -73,7 +73,7 @@
                                             <a href="{{ route('surat.kop_surat', $dudi->id) }}" class="btn btn-primary btn-sm w-100" target="_blank">
                                                 <i class="fas fa-file-contract"></i> Kop Surat
                                             </a>
-                                            <a href="{{ route('surat.permohonan', $dudi->id) }}" class="btn btn-info btn-sm w-100" target="_blank">
+                                            <a href="{{ route('surat.permohonan', $dudi->id) }}" class="btn btn-warning btn-sm w-100" target="_blank">
                                                 <i class="fas fa-file-signature"></i> Permohonan
                                             </a>
                                             <a href="{{ route('surat.pengantar', $dudi->id) }}" class="btn btn-success btn-sm w-100" target="_blank">
