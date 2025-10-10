@@ -44,6 +44,7 @@
                         @endcan
                         @can('peserta')
                             <a href="{{ route('logbook.create') }}" class="btn btn-primary btn-sm"><i class="fas fa-plus"></i> Tambah Logbook</a>
+                            <a href="{{ route('logbook.cetak.rekap') }}" class="btn btn-success btn-sm"><i class="fas fa-print"></i> Cetak Rekap</a>
                         @endcan
                         </div>
                     </div>

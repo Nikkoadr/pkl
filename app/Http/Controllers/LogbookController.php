@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Gate;
 use App\Models\Kaprodi;
 use App\Models\Guru;
 use App\Models\Guru_pembimbing;
+use App\Models\Pengaturan;
 
 class LogbookController extends Controller
 {
@@ -235,6 +236,53 @@ class LogbookController extends Controller
         return redirect()->route('logbook.index')->with('success', 'Logbook berhasil diperbarui.');
     }
 
+    public function cetak_rekap()
+    {
+        $user = Auth::user();
+
+        // Pastikan hanya peserta PKL yang boleh akses
+        if (!Gate::allows('peserta')) {
+            return redirect()->route('home.dashboard')
+                ->with('error', 'Akses ditolak. Hanya peserta yang dapat mengunduh rekap logbook.');
+        }
+
+        // Ambil data peserta
+        $peserta = Peserta::where('user_id', $user->id)->first();
+
+        if (!$peserta) {
+            return redirect()->route('home.dashboard')
+                ->with('error', 'Anda tidak terdaftar sebagai Peserta.');
+        }
+
+        // Ambil data PKL peserta
+        $peserta_pkl = Peserta_pkl::with('dudi')
+            ->where('peserta_id', $peserta->id)
+            ->first();
+
+        if (!$peserta_pkl) {
+            return redirect()->route('home.dashboard')
+                ->with('error', 'Anda belum mengikuti PKL.');
+        }
+
+        // Ambil logbook peserta PKL
+        $logbooks = Logbook::where('peserta_pkl_id', $peserta_pkl->id)
+            ->orderBy('tanggal', 'asc')
+            ->get();
+
+        // Ambil rentang tanggal (pastikan tanggal mulai & selesai ada di tabel peserta_pkl)
+        $tanggal_mulai = Pengaturan::first()->tanggal_mulai_pkl;
+        $tanggal_selesai = Pengaturan::first()->tanggal_selesai_pkl;
+
+        // Kirim ke view
+        return view('home.logbook.rekap', [
+            'peserta' => $peserta,
+            'peserta_pkl' => $peserta_pkl,
+            'logbooks' => $logbooks,
+            'tanggal_mulai' => $tanggal_mulai,
+            'tanggal_selesai' => $tanggal_selesai,
+            'tahun_ajaran' => '2025 / 2026'
+        ]);
+    }
 
     public function destroy($id)
     {

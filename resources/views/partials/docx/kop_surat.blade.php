@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <title>Kop Surat Envelope #10</title>
+  <title>Kop Surat PKL</title>
   <style>
     body {
       font-family: "Times New Roman", serif;
@@ -11,7 +11,6 @@
       background: #ddd;
     }
 
-    /* Ukuran halaman amplop #10 */
     .page {
       width: 24.13cm;
       height: 10.48cm;
@@ -23,9 +22,8 @@
       position: relative;
     }
 
-    /* Setting untuk print */
     @page {
-      size: 24.13cm 10.48cm; /* Envelope #10 */
+      size: 24.13cm 10.48cm;
       margin-top: 0.3cm;
       margin-bottom: 0.3cm;
       margin-left: 2cm;
@@ -75,12 +73,10 @@
 <div class="kop">
   <table width="100%">
     <tr>
-      <!-- Logo kiri -->
       <td style="width: 100px;" align="center">
         <img src="{{ asset('assets/dist/img/dikdasmenmuh2.png') }}" style="width:120px; height:auto;" />
       </td>
 
-      <!-- Teks tengah -->
       <td align="center" style="line-height: 1.3;">
         <div style="font-size: 12pt; font-weight: bold; color: #007bff;">
           MAJELIS PENDIDIKAN DASAR DAN MENENGAH PENDIDIKAN NONFORMAL
@@ -106,7 +102,6 @@
         </div>
       </td>
 
-      <!-- Logo kanan -->
       <td style="width: 100px;" align="center">
         <img src="{{ asset('assets/dist/img/logo.png') }}" style="width:85px; height:auto;" />
       </td>
@@ -116,7 +111,6 @@
 </div>
 
 
-    <!-- Isi alamat tujuan -->
     <div class="tujuan">
       <p>Kepada Yth:</p>
       <p>{{ $dudi->jabatan_pimpinan ?? 'Bapak/Ibu Pimpinan/Direktur' }}</p>

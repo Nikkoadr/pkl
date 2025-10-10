@@ -51,6 +51,7 @@ Route::put('/home/profil/update', [HomeController::class, 'update_profil'])->nam
 Route::get('/home/peserta_pkl/export', [Peserta_pklController::class, 'export'])->name('peserta_pkl.export');
 Route::get('/home/peserta/request_dudi', [PersertaController::class, 'request_dudi'])->name('peserta.request_dudi');
 Route::post('/home/peserta/store_request_dudi', [PersertaController::class, 'store_request_dudi'])->name('peserta.store_request_dudi');
+Route::get('/home/logbook/cetak_rekap', [LogbookController::class, 'cetak_rekap'])->name('logbook.cetak.rekap');
 // ==============================
 // 📚 Master Data
 // ==============================
