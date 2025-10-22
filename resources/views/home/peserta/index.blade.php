@@ -142,33 +142,33 @@
             responsive: true,
             lengthChange: true,
             autoWidth: true,
-            buttons: [
-                {
-                    extend: 'copyHtml5',
-                    text: '<i class="fas fa-copy"></i> Copy',
-                    className: 'btn btn-secondary btn-sm'
-                },
-                {
-                    extend: 'excelHtml5',
-                    text: '<i class="fas fa-file-excel"></i> Excel',
-                    className: 'btn btn-success btn-sm'
-                },
-                {
-                    extend: 'csvHtml5',
-                    text: '<i class="fas fa-file-csv"></i> CSV',
-                    className: 'btn btn-info btn-sm'
-                },
-                {
-                    extend: 'pdfHtml5',
-                    text: '<i class="fas fa-file-pdf"></i> PDF',
-                    className: 'btn btn-danger btn-sm'
-                },
-                {
-                    extend: 'print',
-                    text: '<i class="fas fa-print"></i> Print',
-                    className: 'btn btn-primary btn-sm'
-                }
-            ],
+            // buttons: [
+            //     {
+            //         extend: 'copyHtml5',
+            //         text: '<i class="fas fa-copy"></i> Copy',
+            //         className: 'btn btn-secondary btn-sm'
+            //     },
+            //     {
+            //         extend: 'excelHtml5',
+            //         text: '<i class="fas fa-file-excel"></i> Excel',
+            //         className: 'btn btn-success btn-sm'
+            //     },
+            //     {
+            //         extend: 'csvHtml5',
+            //         text: '<i class="fas fa-file-csv"></i> CSV',
+            //         className: 'btn btn-info btn-sm'
+            //     },
+            //     {
+            //         extend: 'pdfHtml5',
+            //         text: '<i class="fas fa-file-pdf"></i> PDF',
+            //         className: 'btn btn-danger btn-sm'
+            //     },
+            //     {
+            //         extend: 'print',
+            //         text: '<i class="fas fa-print"></i> Print',
+            //         className: 'btn btn-primary btn-sm'
+            //     }
+            // ],
         }).buttons().container().appendTo('#tabelPeserta_wrapper .col-md-6:eq(0)');
     });
 

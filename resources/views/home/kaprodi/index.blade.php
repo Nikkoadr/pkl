@@ -96,8 +96,8 @@
                     <div class="form-group">
                         <label for="nama">Nama</label>
                         <input type="text" class="form-control @error('user_id') is-invalid @enderror" 
-                               name="nama" id="nama" value="{{ old('nama') }}" 
-                               placeholder="Ketik nama...">
+                            name="nama" id="nama" value="{{ old('nama') }}" 
+                            placeholder="Ketik nama...">
                         <input type="hidden" name="user_id" id="user_id" value="{{ old('user_id') }}">
                         @error('user_id')
                             <div class="invalid-feedback">{{ $message }}</div>
@@ -132,8 +132,8 @@
     $(function () {
         $("#tabelKaprodi").DataTable({
             responsive: true,
-            lengthChange: false,
-            autoWidth: false
+            lengthChange: true,
+            autoWidth: true
         });
     });
 

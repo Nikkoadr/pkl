@@ -118,9 +118,8 @@
     $(function () {
         $("#tabel_kelas").DataTable({
             responsive: true,
-            lengthChange: false,
-            autoWidth: false,
-            buttons: ["copy", "csv", "excel", "pdf", "print", "colvis"]
+            lengthChange: true,
+            autoWidth: true,
         }).buttons().container().appendTo('#tabel_kelas_wrapper .col-md-6:eq(0)');
     });
 

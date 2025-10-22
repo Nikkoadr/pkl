@@ -194,9 +194,8 @@
     $(function () {
         $("#tabelLogbook").DataTable({
             responsive: true,
-            lengthChange: false,
-            autoWidth: false,
-            buttons: ["copy", "csv", "excel", "pdf", "print", "colvis"]
+            lengthChange: true,
+            autoWidth: true,
         }).buttons().container().appendTo('#tabelLogbook_wrapper .col-md-6:eq(0)');
 
         // Autocomplete Peserta
