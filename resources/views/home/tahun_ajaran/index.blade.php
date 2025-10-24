@@ -45,29 +45,31 @@
                     <table id="tahun-ajaran-table" class="table table-bordered table-striped">
                         <thead>
                             <tr>
-                                <th style="width: 5%">#</th>
+                                <th style="width: 5%">No</th>
+                                <th>Status</th>
                                 <th>Nama Tahun Ajaran</th>
                                 <th style="width: 20%">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($data as $index => $item)
-                            <tr>
-                                <td>{{ $index + 1 }}</td>
-                                <td>{{ $item->nama_tahun_ajaran }}</td>
-                                <td>
-                                    <a href="{{ route('tahun_ajaran.edit', $item->id) }}" class="btn btn-warning btn-sm">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
-                                    <button class="btn btn-danger btn-sm btn-delete" data-id="{{ $item->id }}">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                    <form id="delete-form-{{ $item->id }}" action="{{ route('tahun_ajaran.destroy', $item->id) }}" method="POST" style="display: none;">
-                                        @csrf
-                                        @method('DELETE')
-                                    </form>
-                                </td>
-                            </tr>
+                                <tr>
+                                    <td>{{ $loop->iteration }}</td>
+                                    <td>aktif</td>
+                                    <td>{{ $item->nama_tahun_ajaran }}</td>
+                                    <td>
+                                        <a href="{{ route('tahun_ajaran.edit', $item->id) }}" class="btn btn-warning btn-sm">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <button class="btn btn-danger btn-sm btn-delete" data-id="{{ $item->id }}">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                        <form id="delete-form-{{ $item->id }}" action="{{ route('tahun_ajaran.destroy', $item->id) }}" method="POST" style="display: none;">
+                                            @csrf
+                                            @method('DELETE')
+                                        </form>
+                                    </td>
+                                </tr>
                             @endforeach
                         </tbody>
                     </table>
