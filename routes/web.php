@@ -24,13 +24,13 @@ Route::get('/', function () {
 });
 
 Auth::routes([
-    'register' => false,
+    'register' => true,
     'reset' => false,
     'verify' => false
 ]);
 
 // ==============================
-// 🔎 Autocomplete
+// Autocomplete
 // ==============================
 Route::prefix('autocomplete')->group(function () {
     Route::get('/dudi', [Auto_completeController::class, 'autoCompleteDudi']);
@@ -43,7 +43,7 @@ Route::prefix('autocomplete')->group(function () {
 });
 
 // ==============================
-// 🏠 Dashboard & Umum
+// Dashboard & Umum
 // ==============================
 Route::get('/home/dashboard', [HomeController::class, 'index'])->name('home.dashboard');
 Route::get('/home/profil', [HomeController::class, 'profil'])->name('home.profil');
@@ -53,7 +53,7 @@ Route::get('/home/peserta/request_dudi', [PersertaController::class, 'request_du
 Route::post('/home/peserta/store_request_dudi', [PersertaController::class, 'store_request_dudi'])->name('peserta.store_request_dudi');
 Route::get('/home/logbook/cetak_rekap', [LogbookController::class, 'cetak_rekap'])->name('logbook.cetak.rekap');
 // ==============================
-// 📚 Master Data
+// Master Data
 // ==============================
 Route::resource('/home/tahun_ajaran', Tahun_ajaranController::class);
 Route::resource('/home/kelas', KelasController::class);
@@ -68,20 +68,20 @@ Route::resource('/home/pengaturan', PengaturanController::class)->only('index', 
 Route::resource('/home/logbook', LogbookController::class);
 Route::post('/home/logbook/store_siswa', [LogbookController::class, 'store_siswa'])->name('logbook.store_siswa');
 // ==============================
-// 📤 Import Data
+// Import Data
 // ==============================
 Route::post('/home/import_dudi', [DudiController::class, 'import'])->name('dudi.import');
 Route::post('/home/import_guru', [GuruController::class, 'import'])->name('guru.import');
 Route::post('/home/import_peserta', [PersertaController::class, 'import'])->name('peserta.import');
 
 // ==============================
-// 🔐 User Management
+// User Management
 // ==============================
 Route::post('/home/users/delete-multiple', [UserController::class, 'deleteMultiple'])->name('users.deleteMultiple');
 Route::put('/home/users/{id}/reset-password', [UserController::class, 'resetPassword'])->name('users.resetPassword');
 
 // ==============================
-// 📄 Surat / Dokumen
+// Surat / Dokumen
 // ==============================
 Route::get('/home/surat', [SuratController::class, 'index'])->name('home.surat');
 Route::get('/home/kop_surat/{id}', [SuratController::class, 'cetakKopSurat'])->name('surat.kop_surat');
@@ -98,7 +98,7 @@ Route::get('/home/esertifikat/cetak_depan_massal', [EsertifikatController::class
 Route::get('/home/esertifikat/cetak_belakang_massal', [EsertifikatController::class, 'cetak_belakang_massal'])->name('cetak.esertifikat_belakang.massal');
 
 // ==============================
-// 📄 Nilai
+// Nilai
 // ==============================
 Route::get('/home/nilai_pkl', [Nilai_pklController::class, 'index'])->name('nilai_pkl.index');
 Route::post('/home/nilai_pkl/store', [Nilai_pklController::class, 'store'])->name('nilai_pkl.store');

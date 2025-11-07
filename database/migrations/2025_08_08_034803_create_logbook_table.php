@@ -16,8 +16,8 @@ return new class extends Migration
             $table->foreignId('peserta_pkl_id')->constrained('peserta_pkl')->onDelete('cascade');
             $table->date('tanggal')->nullable();
             $table->time('jam')->nullable();
-            $table->string('foto_bukti')->nullable();
-            $table->string('keterangan')->nullable();
+            $table->string('foto_bukti', 120)->nullable();
+            $table->text('keterangan')->nullable();
             $table->timestamps();
         });
     }

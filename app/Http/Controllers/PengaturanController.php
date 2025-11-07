@@ -31,21 +31,22 @@ class PengaturanController extends Controller
 
     public function update(Request $request, $id)
     {
-        $this->authorize('admin');
+        $this->authorize('isAdmin');
+
         $validated = $request->validate([
-            'nama_sekolah' => 'nullable|string|max:255',
-            'alamat_sekolah' => 'nullable|string|max:255',
-            'no_telp_sekolah' => 'nullable|string|max:255',
-            'kepala_sekolah' => 'nullable|string|max:255',
-            'ketua_pkl' => 'nullable|string|max:255',
-            'sekretaris_pkl' => 'nullable|string|max:255',
-            'tanggal_mulai_pkl' => 'nullable|date',
-            'tanggal_selesai_pkl' => 'nullable|date',
-            'nomor_surat_permohonan' => 'nullable|string|max:255',
-            'nomor_surat_pengantar' => 'nullable|string|max:255',
+            'nama_sekolah'        => 'nullable|string|max:150',
+            'alamat_sekolah'      => 'nullable|string',
+            'no_telp_sekolah'     => 'nullable|string|max:25',
+            'kepala_sekolah'      => 'nullable|string|max:100',
+            'ketua_pkl'           => 'nullable|string|max:100',
+            'sekretaris_pkl'      => 'nullable|string|max:100',
+            'tanggal_mulai_pkl'   => 'nullable|date',
+            'tanggal_selesai_pkl' => 'nullable|date|after_or_equal:tanggal_mulai_pkl',
         ]);
+
         $pengaturan = Pengaturan::findOrFail($id);
         $pengaturan->update($validated);
+
         return redirect()->route('pengaturan.index')->with('success', 'Pengaturan berhasil diperbarui');
     }
 }

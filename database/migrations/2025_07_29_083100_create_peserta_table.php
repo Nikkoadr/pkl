@@ -16,8 +16,8 @@ return new class extends Migration
             $table->foreignId('tahun_ajaran_id')->constrained('tahun_ajaran')->onDelete('cascade');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('kelas_id')->nullable()->constrained('kelas')->onDelete('cascade');
-            $table->string('nis')->nullable();
-            $table->string('nisn')->nullable();
+            $table->string('nis', 15)->nullable();
+            $table->string('nisn', 15)->nullable();
             $table->timestamps();
         });
     }

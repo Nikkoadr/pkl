@@ -54,16 +54,6 @@
                         <input type="date" class="form-control" name="tanggal_selesai_pkl" value="{{ old('tanggal_selesai_pkl', $pengaturan->tanggal_selesai_pkl) }}">
                     </div>
 
-                    <div class="form-group">
-                        <label>Nomor Surat Permohonan</label>
-                        <input type="text" class="form-control" name="nomor_surat_permohonan" value="{{ old('nomor_surat_permohonan', $pengaturan->nomor_surat_permohonan) }}">
-                    </div>
-
-                    <div class="form-group">
-                        <label>Nomor Surat Pengantar</label>
-                        <input type="text" class="form-control" name="nomor_surat_pengantar" value="{{ old('nomor_surat_pengantar', $pengaturan->nomor_surat_pengantar) }}">
-                    </div>
-
                 </div>
 
                 <div class="card-footer">

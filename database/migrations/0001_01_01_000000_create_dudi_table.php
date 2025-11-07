@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('dudi', function (Blueprint $table) {
             $table->id();
-            $table->string('nama_dudi')->nullable();
-            $table->string('alamat_dudi')->nullable();
-            $table->string('no_telp_dudi')->nullable();
-            $table->string('jabatan_pimpinan')->nullable();
-            $table->string('nomor_kepegawaian')->nullable();
-            $table->string('nama_pimpinan_dudi')->nullable();
+            $table->string('nama_dudi', 100)->nullable();
+            $table->text('alamat_dudi')->nullable();
+            $table->string('no_telp_dudi', 25)->nullable();
+            $table->string('jabatan_pimpinan', 50)->nullable();
+            $table->string('nomor_kepegawaian', 50)->nullable();
+            $table->string('nama_pimpinan_dudi', 100)->nullable();
             $table->integer('kuota')->nullable();
             $table->timestamps();
         });

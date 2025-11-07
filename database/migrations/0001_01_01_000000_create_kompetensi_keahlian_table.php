@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('kompetensi_keahlian', function (Blueprint $table) {
             $table->id();
-            $table->string('nama_kompetensi')->unique();
-            $table->string('deskripsi')->nullable();
+            $table->string('nama_kompetensi', 100)->unique();
+            $table->text('deskripsi')->nullable();
             $table->timestamps();
         });
     }

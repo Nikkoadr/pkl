@@ -10,7 +10,6 @@ use App\Models\User;
 use App\Models\Peserta;
 use App\Models\Peserta_pkl;
 use App\Models\Kompetensi_keahlian;
-use App\Models\Kaprodi;
 
 class Auto_completeController extends Controller
 {

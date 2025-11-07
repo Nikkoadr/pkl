@@ -13,16 +13,14 @@ return new class extends Migration
     {
         Schema::create('pengaturan', function (Blueprint $table) {
             $table->id();
-            $table->string('nama_sekolah')->nullable();
-            $table->string('alamat_sekolah')->nullable();
-            $table->string('no_telp_sekolah')->nullable();
-            $table->string('kepala_sekolah')->nullable();
-            $table->string('ketua_pkl')->nullable();
-            $table->string('sekretaris_pkl')->nullable();
+            $table->string('nama_sekolah', 150)->nullable();
+            $table->text('alamat_sekolah')->nullable();
+            $table->string('no_telp_sekolah', 25)->nullable();
+            $table->string('kepala_sekolah', 100)->nullable();
+            $table->string('ketua_pkl', 100)->nullable();
+            $table->string('sekretaris_pkl', 100)->nullable();
             $table->date('tanggal_mulai_pkl')->nullable();
             $table->date('tanggal_selesai_pkl')->nullable();
-            $table->string('nomor_surat_permohonan')->nullable();
-            $table->string('nomor_surat_pengantar')->nullable();
             $table->timestamps();
         });
     }
