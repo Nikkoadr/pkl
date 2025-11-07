@@ -13,7 +13,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\Peserta_pklExport;
 use Illuminate\Support\Carbon;
 
-class Peserta_pklController extends Controller
+class PesertaPklController extends Controller
 {
 
     /**

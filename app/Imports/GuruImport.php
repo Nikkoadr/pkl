@@ -13,7 +13,7 @@ class GuruImport implements ToModel, WithHeadingRow
     public function model(array $row)
     {
         $user = User::create([
-            'role_id' => $row['role_id'],
+            'role_id' => 3,
             'nama' => $row['nama'],
             'email' => $row['email'],
             'password' => Hash::make($row['password']),

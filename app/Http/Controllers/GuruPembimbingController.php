@@ -8,7 +8,7 @@ use App\Models\Guru;
 use App\Models\Dudi;
 use Illuminate\Support\Facades\Gate;
 
-class Guru_pembimbingController extends Controller
+class GuruPembimbingController extends Controller
 {
     /**
      * Create a new controller instance.

@@ -5,18 +5,18 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\DudiController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\Guru_pembimbingController;
+use App\Http\Controllers\GuruPembimbingController;
 use App\Http\Controllers\GuruController;
 use App\Http\Controllers\PersertaController;
-use App\Http\Controllers\Peserta_pklController;
+use App\Http\Controllers\PesertaPklController;
 use App\Http\Controllers\SuratController;
 use App\Http\Controllers\EsertifikatController;
 use App\Http\Controllers\PengaturanController;
-use App\Http\Controllers\Auto_completeController;
+use App\Http\Controllers\AutoCompleteController;
 use App\Http\Controllers\Tahun_ajaranController;
 use App\Http\Controllers\KelasController;
 use App\Http\Controllers\LogbookController;
-use App\Http\Controllers\Nilai_pklController;
+use App\Http\Controllers\NilaiPklController;
 use App\Http\Controllers\KaprodiController;
 
 Route::get('/', function () {
@@ -33,13 +33,13 @@ Auth::routes([
 // Autocomplete
 // ==============================
 Route::prefix('autocomplete')->group(function () {
-    Route::get('/dudi', [Auto_completeController::class, 'autoCompleteDudi']);
-    Route::get('/users', [Auto_completeController::class, 'autoCompleteUser']);
-    Route::get('/guru', [Auto_completeController::class, 'autoCompleteGuru']);
-    Route::get('/guru_pembimbing', [Auto_completeController::class, 'autoCompleteGuruPembimbing']);
-    Route::get('/peserta', [Auto_completeController::class, 'autoCompletePeserta']);
-    Route::get('/peserta_pkl', [Auto_completeController::class, 'autoCompletePesertaPKL']);
-    Route::get('/kompetensi', [Auto_completeController::class, 'autoCompleteKompetensi']);
+    Route::get('/dudi', [AutoCompleteController::class, 'autoCompleteDudi']);
+    Route::get('/users', [AutoCompleteController::class, 'autoCompleteUser']);
+    Route::get('/guru', [AutoCompleteController::class, 'autoCompleteGuru']);
+    Route::get('/guru_pembimbing', [AutoCompleteController::class, 'autoCompleteGuruPembimbing']);
+    Route::get('/peserta', [AutoCompleteController::class, 'autoCompletePeserta']);
+    Route::get('/peserta_pkl', [AutoCompleteController::class, 'autoCompletePesertaPKL']);
+    Route::get('/kompetensi', [AutoCompleteController::class, 'autoCompleteKompetensi']);
 });
 
 // ==============================
@@ -48,7 +48,7 @@ Route::prefix('autocomplete')->group(function () {
 Route::get('/home/dashboard', [HomeController::class, 'index'])->name('home.dashboard');
 Route::get('/home/profil', [HomeController::class, 'profil'])->name('home.profil');
 Route::put('/home/profil/update', [HomeController::class, 'update_profil'])->name('home.profil.update');
-Route::get('/home/peserta_pkl/export', [Peserta_pklController::class, 'export'])->name('peserta_pkl.export');
+Route::get('/home/peserta_pkl/export', [PesertaPklController::class, 'export'])->name('peserta_pkl.export');
 Route::get('/home/peserta/request_dudi', [PersertaController::class, 'request_dudi'])->name('peserta.request_dudi');
 Route::post('/home/peserta/store_request_dudi', [PersertaController::class, 'store_request_dudi'])->name('peserta.store_request_dudi');
 Route::get('/home/logbook/cetak_rekap', [LogbookController::class, 'cetak_rekap'])->name('logbook.cetak.rekap');
@@ -62,8 +62,8 @@ Route::resource('/home/users', UserController::class);
 Route::resource('/home/dudi', DudiController::class);
 Route::resource('/home/guru', GuruController::class);
 Route::resource('/home/peserta', PersertaController::class);
-Route::resource('/home/guru_pembimbing', Guru_pembimbingController::class);
-Route::resource('/home/peserta_pkl', Peserta_pklController::class);
+Route::resource('/home/guru_pembimbing', GuruPembimbingController::class);
+Route::resource('/home/peserta_pkl', PesertaPklController::class);
 Route::resource('/home/pengaturan', PengaturanController::class)->only('index', 'update');
 Route::resource('/home/logbook', LogbookController::class);
 Route::post('/home/logbook/store_siswa', [LogbookController::class, 'store_siswa'])->name('logbook.store_siswa');
@@ -100,10 +100,10 @@ Route::get('/home/esertifikat/cetak_belakang_massal', [EsertifikatController::cl
 // ==============================
 // Nilai
 // ==============================
-Route::get('/home/nilai_pkl', [Nilai_pklController::class, 'index'])->name('nilai_pkl.index');
-Route::post('/home/nilai_pkl/store', [Nilai_pklController::class, 'store'])->name('nilai_pkl.store');
-Route::post('/home/nilai_pkl/store_peserta', [Nilai_pklController::class, 'store_peserta'])->name('nilai_pkl.store_peserta');
-Route::get('/home/nilai_pkl/{id}/edit/', [Nilai_pklController::class, 'edit'])->name('nilai_pkl.edit');
-Route::put('/home/nilai_pkl/{id}/update/', [Nilai_pklController::class, 'update'])->name('nilai_pkl.update');
-Route::put('/home/nilai_pkl/{id}/update_peserta/', [Nilai_pklController::class, 'update_siswa'])->name('nilai_pkl.update_siswa');
-Route::delete('/home/nilai_pkl/{id}/destroy/', [Nilai_pklController::class, 'destroy'])->name('nilai_pkl.destroy');
+Route::get('/home/nilai_pkl', [NilaiPklController::class, 'index'])->name('nilai_pkl.index');
+Route::post('/home/nilai_pkl/store', [NilaiPklController::class, 'store'])->name('nilai_pkl.store');
+Route::post('/home/nilai_pkl/store_peserta', [NilaiPklController::class, 'store_peserta'])->name('nilai_pkl.store_peserta');
+Route::get('/home/nilai_pkl/{id}/edit/', [NilaiPklController::class, 'edit'])->name('nilai_pkl.edit');
+Route::put('/home/nilai_pkl/{id}/update/', [NilaiPklController::class, 'update'])->name('nilai_pkl.update');
+Route::put('/home/nilai_pkl/{id}/update_peserta/', [NilaiPklController::class, 'update_siswa'])->name('nilai_pkl.update_siswa');
+Route::delete('/home/nilai_pkl/{id}/destroy/', [NilaiPklController::class, 'destroy'])->name('nilai_pkl.destroy');

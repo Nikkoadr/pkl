@@ -11,7 +11,7 @@ use App\Models\Peserta;
 use App\Models\Peserta_pkl;
 use App\Models\Kompetensi_keahlian;
 
-class Auto_completeController extends Controller
+class AutoCompleteController extends Controller
 {
     public function autoCompleteDudi(Request $request)
     {

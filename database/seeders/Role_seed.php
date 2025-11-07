@@ -20,7 +20,7 @@ class Role_seed extends Seeder
             'nama_role' => 'Kaprodi',
         ]);
         Role::create([
-            'nama_role' => 'Guru Pembimbing',
+            'nama_role' => 'Guru',
         ]);
         Role::create([
             'nama_role' => 'Peserta',

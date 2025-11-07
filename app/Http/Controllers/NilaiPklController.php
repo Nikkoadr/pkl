@@ -13,7 +13,7 @@ use App\Models\Kaprodi;
 use App\Models\Guru;
 use App\Models\Guru_pembimbing;
 
-class Nilai_pklController extends Controller
+class NilaiPklController extends Controller
 {
     /**
      * Create a new controller instance.
