@@ -25,6 +25,14 @@ class Tahun_ajaranController extends Controller
 
     public function store(Request $request)
     {
+        if (Tahun_ajaran::where('nama_tahun_ajaran', $request->nama_tahun_ajaran)->exists()) {
+            return redirect()->back()->with('error', 'Tahun ajaran sudah ada.');
+        }
+
+        if (Tahun_ajaran::where('status', 'aktif')->exists()) {
+            return redirect()->back()->with('error', 'Hanya boleh ada satu tahun ajaran aktif.');
+        }
+
         $request->validate([
             'nama_tahun_ajaran' => 'required|unique:tahun_ajaran,nama_tahun_ajaran',
         ]);
