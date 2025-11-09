@@ -36,7 +36,6 @@ class NilaiPklController extends Controller
         $user = Auth::user();
 
         if (Gate::allows('admin')) {
-            // Admin → semua data
             $nilai_pkl = Nilai_pkl::with('peserta_pkl.peserta.user', 'peserta_pkl.dudi')->get();
             return view('home.nilai_pkl.index', compact('nilai_pkl'));
         } elseif (Gate::allows('prodi')) {
@@ -53,7 +52,7 @@ class NilaiPklController extends Controller
                 ->get();
 
             return view('home.nilai_pkl.index', compact('nilai_pkl'));
-        } elseif (Gate::allows('guru_pembimbing')) {
+        } elseif (Gate::allows('guru')) {
             $guru = Guru::where('user_id', $user->id)->first();
 
             if (!$guru) {
@@ -77,7 +76,6 @@ class NilaiPklController extends Controller
             })->first();
 
             if (!$pesertaPkl) {
-                // lempar balik ke dashboard dengan peringatan
                 return redirect()->route('home.dashboard')->with('error', 'Anda belum terdaftar mengikuti PKL.');
             }
 

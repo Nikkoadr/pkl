@@ -90,7 +90,6 @@ class PersertaController extends Controller
             'tanggal_lahir' => 'required|date',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|confirmed|min:6',
-
             'nis' => 'required|string|max:20|unique:peserta,nis',
             'nisn' => 'required|string|max:20|unique:peserta,nisn',
             'kelas_id' => 'required|exists:kelas,id',
@@ -157,7 +156,6 @@ class PersertaController extends Controller
             'kelas_id' => 'required|exists:kelas,id',
             'tahun_ajaran_id' => 'required|exists:tahun_ajaran,id',
         ]);
-        // Update User
         $peserta->user->update([
             'nama' => $request->nama,
             'jenis_kelamin' => $request->jenis_kelamin,
@@ -165,7 +163,6 @@ class PersertaController extends Controller
             'tanggal_lahir' => $request->tanggal_lahir,
         ]);
 
-        // Update Peserta
         $peserta->update([
             'nis' => $request->nis,
             'nisn' => $request->nisn,

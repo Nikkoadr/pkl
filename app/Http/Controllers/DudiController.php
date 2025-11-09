@@ -28,7 +28,7 @@ class DudiController extends Controller
 
     public function index()
     {
-        if (Gate::allows('admin') || Gate::allows('prodi') || Gate::allows('guru_pembimbing')) {
+        if (Gate::allows('admin') || Gate::allows('prodi') || Gate::allows('guru')) {
             $dudi = Dudi::all();
             return view('home.dudi.index', compact('dudi'));
         }

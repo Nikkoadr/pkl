@@ -23,14 +23,12 @@ class LogbookController extends Controller
 
     public function index()
     {
-        // ADMIN → semua logbook
         if (Gate::allows('admin')) {
             $logbook = Logbook::with([
                 'peserta_pkl.peserta.user',
                 'peserta_pkl.dudi'
             ])->latest()->get();
 
-            // PRODI → sesuai kompetensi keahlian kaprodi
         } elseif (Gate::allows('prodi')) {
             $user = Auth::user();
             $kaprodi = Kaprodi::where('user_id', $user->id)->first();
@@ -50,8 +48,7 @@ class LogbookController extends Controller
                 ->latest()
                 ->get();
 
-            // GURU PEMBIMBING → logbook peserta di DUDI yang dibimbing
-        } elseif (Gate::allows('guru_pembimbing')) {
+        } elseif (Gate::allows('guru')) {
             $user = Auth::user();
             $guru = Guru::where('user_id', $user->id)->first();
 
@@ -72,7 +69,6 @@ class LogbookController extends Controller
                 ->latest()
                 ->get();
 
-            // PESERTA → cek dulu apakah sudah ikut PKL
         } elseif (Gate::allows('peserta')) {
             $peserta = Peserta::where('user_id', Auth::id())->first();
 
@@ -88,7 +84,6 @@ class LogbookController extends Controller
                     ->with('error', 'Anda belum mengikuti PKL.');
             }
 
-            // Sudah ikut PKL → tampilkan logbooknya
             $logbook = Logbook::with([
                 'peserta_pkl.peserta.user',
                 'peserta_pkl.dudi'
@@ -97,7 +92,6 @@ class LogbookController extends Controller
                 ->latest()
                 ->get();
 
-            // ROLE lain → kosong
         } else {
             $logbook = collect();
         }
@@ -204,8 +198,6 @@ class LogbookController extends Controller
         return redirect()->back()->with('success', 'Logbook berhasil ditambahkan.');
     }
 
-
-
     public function edit($id)
     {
         $logbook = Logbook::with(['peserta_pkl.peserta.user', 'peserta_pkl.dudi'])->findOrFail($id);
@@ -240,13 +232,11 @@ class LogbookController extends Controller
     {
         $user = Auth::user();
 
-        // Pastikan hanya peserta PKL yang boleh akses
         if (!Gate::allows('peserta')) {
             return redirect()->route('home.dashboard')
                 ->with('error', 'Akses ditolak. Hanya peserta yang dapat mengunduh rekap logbook.');
         }
 
-        // Ambil data peserta
         $peserta = Peserta::where('user_id', $user->id)->first();
 
         if (!$peserta) {
@@ -254,7 +244,6 @@ class LogbookController extends Controller
                 ->with('error', 'Anda tidak terdaftar sebagai Peserta.');
         }
 
-        // Ambil data PKL peserta
         $peserta_pkl = Peserta_pkl::with('dudi')
             ->where('peserta_id', $peserta->id)
             ->first();
@@ -264,12 +253,10 @@ class LogbookController extends Controller
                 ->with('error', 'Anda belum mengikuti PKL.');
         }
 
-        // Ambil logbook peserta PKL
         $logbooks = Logbook::where('peserta_pkl_id', $peserta_pkl->id)
             ->orderBy('tanggal', 'asc')
             ->get();
 
-        // Ambil rentang tanggal (pastikan tanggal mulai & selesai ada di tabel peserta_pkl)
         $tanggal_mulai = Pengaturan::first()->tanggal_mulai_pkl;
         $tanggal_selesai = Pengaturan::first()->tanggal_selesai_pkl;
 

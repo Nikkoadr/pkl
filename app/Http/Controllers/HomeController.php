@@ -39,22 +39,22 @@ class HomeController extends Controller
     public function index()
     {
         if (Gate::allows('admin')) {
+
             $jumlahDudi = Dudi::count();
             $jumlahPeserta = User::where('role_id', 4)->count();
 
-            // Statistik per kompetensi keahlian (berdasarkan peserta_pkl)
             $kompetensiStats = Kompetensi_keahlian::withCount([
-                // Peserta yang sudah punya relasi ke peserta_pkl
                 'peserta as sudah_terserap' => function ($q) {
                     $q->whereHas('peserta_pkl');
                 },
-                // Peserta yang belum punya relasi ke peserta_pkl
                 'peserta as belum_terserap' => function ($q) {
                     $q->whereDoesntHave('peserta_pkl');
                 }
             ])->get();
+
             return view('home.dashboard.admin.index', compact('jumlahDudi', 'jumlahPeserta', 'kompetensiStats'));
         } elseif (Gate::allows('prodi')) {
+
             $user = Auth::user();
             $kaprodi = Kaprodi::where('user_id', $user->id)->first();
 
@@ -62,26 +62,38 @@ class HomeController extends Controller
                 abort(403, 'Anda tidak terdaftar sebagai Kaprodi');
             }
 
-            // Hitung semua peserta di prodi tsb
             $totalPeserta = Peserta::whereHas('kelas', function ($q) use ($kaprodi) {
                 $q->where('kompetensi_keahlian_id', $kaprodi->kompetensi_keahlian_id);
             })->count();
 
-            // Hitung peserta terserap (sudah ada di peserta_pkl)
             $tersarap = Peserta_pkl::whereHas('peserta.kelas', function ($q) use ($kaprodi) {
                 $q->where('kompetensi_keahlian_id', $kaprodi->kompetensi_keahlian_id);
             })->count();
 
-            // Hitung belum terserap
             $belum = $totalPeserta - $tersarap;
 
             return view('home.dashboard.prodi.index', compact('totalPeserta', 'tersarap', 'belum'));
-        } elseif (Gate::allows('guru_pembimbing')) {
-            $user = Auth::user();
-            $namaDudi = $user->peserta?->peserta_pkl?->dudi?->nama_dudi;
+        } elseif (Gate::allows('guru')) {
 
-            return view('home.dashboard.peserta.index', compact('namaDudi'));
+            $user = Auth::user();
+            $guru = $user->guru;
+
+            if ($guru) {
+
+                // ambil semua dudi yang dibimbing
+                $pembimbing = $guru->guru_pembimbing()->with('dudi')->get();
+
+                // ambil koleksi dudi nya
+                $dudis = $pembimbing->pluck('dudi')->filter()->values();
+
+                if ($dudis->isNotEmpty()) {
+                    return view('home.dashboard.guru_pembimbing.index', compact('dudis'));
+                }
+            }
+
+            return view('home.dashboard.guru.index');
         } elseif (Gate::allows('peserta')) {
+
             $user = Auth::user();
             $namaDudi = $user->peserta?->peserta_pkl?->dudi?->nama_dudi;
 
@@ -90,7 +102,6 @@ class HomeController extends Controller
 
         abort(403, 'Unauthorized');
     }
-
 
     public function profil()
     {

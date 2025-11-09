@@ -62,7 +62,7 @@ class SuratController extends Controller
             return view('home.surat.index', compact('dudiList'));
         }
 
-        if (Gate::allows('guru_pembimbing')) {
+        if (Gate::allows('guru')) {
             $user = Auth::user();
 
             // ambil guru dari user

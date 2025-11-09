@@ -60,4 +60,8 @@ class User extends Authenticatable
     {
         return $this->hasOne(Peserta::class);
     }
+    public function guru()
+    {
+        return $this->hasOne(Guru::class);
+    }
 }
