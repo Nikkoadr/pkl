@@ -46,6 +46,7 @@
                                 <th>Nomor Kepegawaian</th>
                                 <th>Pimpinan</th>
                                 <th>Kuota</th>
+                                <th>Kompetensi Keahlian</th>
                                 <th data-orderable="false" class="text-center">Aksi</th>
                             </tr>
                         </thead>
@@ -59,6 +60,7 @@
                                 <td>{{ $item->nomor_kepegawaian }}</td>
                                 <td>{{ $item->nama_pimpinan_dudi }}</td>
                                 <td>{{ $item->kuota }}</td>
+                                <td>{{ $item->kompetensi_keahlian->nama_kompetensi }}</td>
                                 <td class="text-center">
                                         <a href="{{ route('surat.permohonan', $item->id) }}" class="btn btn-info btn-sm" target="_blank">
                                             <i class="fas fa-file-alt"></i>

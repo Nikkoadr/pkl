@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Dudi;
 use App\Imports\DudiImport;
+use App\Models\Kompetensi_keahlian;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Gate;
 
@@ -29,7 +30,7 @@ class DudiController extends Controller
     public function index()
     {
         if (Gate::allows('admin') || Gate::allows('prodi') || Gate::allows('guru')) {
-            $dudi = Dudi::all();
+            $dudi = Dudi::with('kompetensi_keahlian')->get();
             return view('home.dudi.index', compact('dudi'));
         }
     }

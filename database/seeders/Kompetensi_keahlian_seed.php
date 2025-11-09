@@ -2,8 +2,6 @@
 
 namespace Database\Seeders;
 
-use GuzzleHttp\Promise\Create;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\Kompetensi_keahlian;
 
@@ -37,7 +35,7 @@ class Kompetensi_keahlian_seed extends Seeder
             'deskripsi' => 'Program studi yang fokus pada perbaikan dan perawatan sepeda motor.',
         ]);
         Kompetensi_keahlian::create([
-            'nama_kompetensi' =>'Layanan Penunjang Kefarmasian Klinis dan Komunitas (LPK3)',
+            'nama_kompetensi' => 'Layanan Penunjang Kefarmasian Klinis dan Komunitas (LPK3)',
             'deskripsi' => 'Program studi yang fokus pada layanan kefarmasian di klinik dan komunitas.',
         ]);
     }

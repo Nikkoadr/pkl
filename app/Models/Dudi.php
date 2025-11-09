@@ -15,10 +15,17 @@ class Dudi extends Model
         'no_telp_dudi',
         'nama_pimpinan_dudi',
         'kuota',
+        'jabatan_pimpinan',
+        'kompetensi_id',
     ];
 
     public function peserta_pkl()
     {
         return $this->hasMany(Peserta_pkl::class);
+    }
+
+    public function kompetensi_keahlian()
+    {
+        return $this->belongsTo(Kompetensi_keahlian::class, 'kompetensi_id');
     }
 }
