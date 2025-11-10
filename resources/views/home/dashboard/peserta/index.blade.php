@@ -28,7 +28,7 @@
     <div class="container-fluid">
 
         {{-- Data Diri Peserta --}}
-        <div class="card card-primary">
+        <div class="card">
             <div class="card-header">
                 <h3 class="card-title">Data Diri Peserta</h3>
             </div>

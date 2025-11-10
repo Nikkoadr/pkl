@@ -160,6 +160,20 @@
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
+                        <div class="form-group col-md-6">
+                            <label>
+                                Kompetensi Keahlian <span class="text-danger">*</span>
+                            </label>
+                            <select name="kompetensi_id" class="form-control @error('kompetensi_id') is-invalid @enderror" required>
+                                <option value="" disabled selected>-- Pilih Kompetensi Keahlian --</option>
+                                @foreach($kompetensi as $komp)
+                                    <option value="{{ $komp->id }}">{{ $komp->nama_kompetensi }}</option>
+                                @endforeach
+                            </select>
+                            @error('kompetensi_id')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
                     </div>
 
                     <small class="text-muted">

@@ -53,7 +53,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="card shadow">
-                        <div class="card-header bg-gradient-primary text-white">
+                        <div class="card-header">
                             <h3 class="card-title">Grafik Statistik Peserta per Kompetensi</h3>
                         </div>
                         <div class="card-body">
@@ -67,12 +67,9 @@
             <div class="row">
                 <div class="col-12">
                     <div class="card shadow">
-                        <div class="card-header bg-gradient-navy text-white">
-                            <h3 class="card-title">Detail Statistik Peserta</h3>
-                        </div>
                         <div class="card-body table-responsive p-0">
                             <table class="table table-bordered table-hover table-striped">
-                                <thead class="bg-dark text-white">
+                                <thead class="">
                                     <tr>
                                         <th>Kompetensi Keahlian</th>
                                         <th>Sudah Terserap di DUDI</th>

@@ -73,6 +73,20 @@
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
+                        <div class="form-group col-md-6">
+                            <label>Kompetensi Keahlian <span class="text-danger">*</span></label>
+                            <select name="kompetensi_id" class="form-control @error('kompetensi_id') is-invalid @enderror" required>
+                                <option value="">-- Pilih Kompetensi Keahlian --</option>
+                                @foreach($kompetensi as $item)
+                                    <option value="{{ $item->id }}" {{ old('kompetensi_id', $data->kompetensi_id) == $item->id ? 'selected' : '' }}>
+                                        {{ $item->nama_kompetensi }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @error('kompetensi_id')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
                     </div>
                     <div class="form-group col-md-12">
                         <small class="text-muted">
