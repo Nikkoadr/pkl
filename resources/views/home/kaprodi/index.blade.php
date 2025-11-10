@@ -58,7 +58,7 @@
                             @foreach($kaprodi as $item)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $item->user->nama ?? '-' }}</td>
+                                <td>{{ $item->guru->user->nama ?? '-' }}</td>
                                 <td>{{ $item->kompetensi_keahlian->nama_kompetensi ?? '-' }}</td>
                                 <td class="text-center">
                                     <a href="{{ route('kaprodi.edit', $item->id) }}" class="btn btn-warning btn-sm">
@@ -94,12 +94,12 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="nama">Nama</label>
-                        <input type="text" class="form-control @error('user_id') is-invalid @enderror" 
-                            name="nama" id="nama" value="{{ old('nama') }}" 
+                        <label for="nama_guru">Nama</label>
+                        <input type="text" class="form-control @error('guru_id') is-invalid @enderror" 
+                            name="nama_guru" id="nama_guru" value="{{ old('nama_guru') }}" 
                             placeholder="Ketik nama...">
-                        <input type="hidden" name="user_id" id="user_id" value="{{ old('user_id') }}">
-                        @error('user_id')
+                        <input type="hidden" name="guru_id" id="guru_id" value="{{ old('guru_id') }}">
+                        @error('guru_id')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
@@ -160,12 +160,12 @@
 
     // Autocomplete modal
     $('#modalTambah').on('shown.bs.modal', function () {
-        $('#nama').autocomplete({
-            source: "/autocomplete/users",
+        $('#nama_guru').autocomplete({
+            source: "/autocomplete/guru",
             minLength: 2,
             select: function(event, ui) {
-                $('#nama').val(ui.item.label);
-                $('#user_id').val(ui.item.id);
+                $('#nama_guru').val(ui.item.label);
+                $('#guru_id').val(ui.item.id);
                 return false;
             }
         });

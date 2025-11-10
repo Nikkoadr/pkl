@@ -44,7 +44,7 @@ class SuratController extends Controller
             $user = Auth::user();
 
             // Ambil kompetensi keahlian dari kaprodi
-            $kaprodi = Kaprodi::where('user_id', $user->id)->first();
+            $kaprodi = Kaprodi::where('guru_id', $user->guru->id)->first();
             if (!$kaprodi) {
                 abort(403, 'Anda tidak terdaftar sebagai Kaprodi');
             }

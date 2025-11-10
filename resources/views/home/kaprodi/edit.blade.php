@@ -18,11 +18,11 @@
 
                     {{-- Autocomplete User --}}
                     <div class="form-group">
-                        <label for="nama">Nama User</label>
-                        <input type="text" id="nama" class="form-control autocomplete-user"
-                            value="{{ $kaprodi->user->nama ?? '' }}">
-                        <input type="hidden" name="user_id" id="user_id" value="{{ $kaprodi->user_id }}">
-                        @error('user_id')
+                        <label for="nama_guru">Nama User</label>
+                        <input type="text" id="nama_guru" class="form-control"
+                            value="{{ $kaprodi->guru->user->nama ?? '' }}">
+                        <input type="hidden" name="guru_id" id="guru_id" value="{{ $kaprodi->guru_id }}">
+                        @error('guru_id')
                             <div class="text-danger small">{{ $message }}</div>
                         @enderror
                     </div>
@@ -58,12 +58,12 @@
 <script>
     
     $(function() {
-        $(".autocomplete-user").autocomplete({
-            source: "/autocomplete/users",
+        $("#nama_guru").autocomplete({
+            source: "/autocomplete/guru",
             minLength: 2,
             select: function(event, ui) {
-                $("#nama").val(ui.item.label);
-                $("#user_id").val(ui.item.id);
+                $("#nama_guru").val(ui.item.label);
+                $("#guru_id").val(ui.item.id);
                 return false;
             }
         });

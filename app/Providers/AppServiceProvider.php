@@ -24,11 +24,11 @@ class AppServiceProvider extends ServiceProvider
         Gate::define('admin', function (User $user) {
             return $user->role_id == '1';
         });
-        Gate::define('prodi', function (User $user) {
-            return $user->role_id == '2';
-        });
         Gate::define('guru', function (User $user) {
             return $user->role_id == '3';
+        });
+        Gate::define('prodi', function (User $user) {
+            return $user->guru && $user->guru->kaprodi()->exists();
         });
         Gate::define('guru_pembimbing', function (User $user) {
             return $user->guru && $user->guru->guru_pembimbing()->exists();

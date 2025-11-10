@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Kaprodi;
 use App\Models\Guru;
 use App\Models\Guru_pembimbing;
+use App\Models\Peserta;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\Peserta_pklExport;
 use Illuminate\Support\Carbon;
@@ -41,25 +42,32 @@ class PesertaPklController extends Controller
         if (Gate::allows('prodi')) {
             $user = Auth::user();
 
-            $kaprodi = Kaprodi::where('user_id', $user->id)->first();
+            $guru = $user->guru;
+            $kaprodi = Kaprodi::where('guru_id', $guru->id)->first();
+
             if (!$kaprodi) {
                 abort(403, 'Anda tidak terdaftar sebagai Kaprodi');
             }
 
-            $peserta_pkl = Peserta_pkl::with(['dudi', 'peserta.user', 'peserta.kelas.kompetensi'])
-                ->whereHas('peserta.kelas', function ($q) use ($kaprodi) {
-                    $q->where('kompetensi_keahlian_id', $kaprodi->kompetensi_keahlian_id);
-                })
-                ->get();
+            $peserta_pkl = Peserta_pkl::with([
+                'dudi',
+                'peserta.user',
+                'peserta.kelas.kompetensi'
+            ])->whereHas('peserta.kelas', function ($q) use ($kaprodi) {
+                $q->where('kompetensi_keahlian_id', $kaprodi->kompetensi_keahlian_id);
+            })->get();
+
             return view('home.peserta_pkl.index', compact('peserta_pkl'));
         }
+
+
 
         if (Gate::allows('guru_pembimbing')) {
             $user = Auth::user();
 
             $guru = Guru::where('user_id', $user->id)->first();
             if (!$guru) {
-                abort(403, 'Anda tidak terdaftar sebagai Guru');
+                abort(403, 'Anda tidak terdaftar sebagai Guru Pembimbing');
             }
 
             $dudi_ids = Guru_pembimbing::where('guru_id', $guru->id)->pluck('dudi_id');

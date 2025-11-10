@@ -53,39 +53,32 @@ class HomeController extends Controller
             ])->get();
 
             return view('home.dashboard.admin.index', compact('jumlahDudi', 'jumlahPeserta', 'kompetensiStats'));
-        } elseif (Gate::allows('prodi')) {
-
-            $user = Auth::user();
-            $kaprodi = Kaprodi::where('user_id', $user->id)->first();
-
-            if (!$kaprodi) {
-                abort(403, 'Anda tidak terdaftar sebagai Kaprodi');
-            }
-
-            $totalPeserta = Peserta::whereHas('kelas', function ($q) use ($kaprodi) {
-                $q->where('kompetensi_keahlian_id', $kaprodi->kompetensi_keahlian_id);
-            })->count();
-
-            $tersarap = Peserta_pkl::whereHas('peserta.kelas', function ($q) use ($kaprodi) {
-                $q->where('kompetensi_keahlian_id', $kaprodi->kompetensi_keahlian_id);
-            })->count();
-
-            $belum = $totalPeserta - $tersarap;
-
-            return view('home.dashboard.prodi.index', compact('totalPeserta', 'tersarap', 'belum'));
         } elseif (Gate::allows('guru')) {
 
             $user = Auth::user();
             $guru = $user->guru;
 
+            // cek kaprodi
+            if ($guru && $guru->kaprodi) {
+                $kaprodi = $guru->kaprodi;
+
+                $totalPeserta = Peserta::whereHas('kelas', function ($q) use ($kaprodi) {
+                    $q->where('kompetensi_keahlian_id', $kaprodi->kompetensi_keahlian_id);
+                })->count();
+
+                $tersarap = Peserta_pkl::whereHas('peserta.kelas', function ($q) use ($kaprodi) {
+                    $q->where('kompetensi_keahlian_id', $kaprodi->kompetensi_keahlian_id);
+                })->count();
+
+                $belum = $totalPeserta - $tersarap;
+
+                return view('home.dashboard.prodi.index', compact('totalPeserta', 'tersarap', 'belum'));
+            }
+
+            // cek guru pembimbing
             if ($guru) {
-
-                // ambil semua dudi yang dibimbing
                 $pembimbing = $guru->guru_pembimbing()->with('dudi')->get();
-
-                // ambil koleksi dudi nya
                 $dudis = $pembimbing->pluck('dudi')->filter()->values();
-
                 if ($dudis->isNotEmpty()) {
                     return view('home.dashboard.guru_pembimbing.index', compact('dudis'));
                 }

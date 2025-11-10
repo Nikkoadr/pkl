@@ -15,6 +15,11 @@ class Kaprodi extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function guru()
+    {
+        return $this->belongsTo(Guru::class);
+    }
+
     public function kompetensi_keahlian()
     {
         return $this->belongsTo(Kompetensi_keahlian::class, 'kompetensi_keahlian_id');

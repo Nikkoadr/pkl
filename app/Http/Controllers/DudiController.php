@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Dudi;
 use App\Imports\DudiImport;
-use App\Models\Kompetensi_keahlian;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Kaprodi;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Gate;
 
@@ -29,9 +30,21 @@ class DudiController extends Controller
 
     public function index()
     {
-        if (Gate::allows('admin') || Gate::allows('prodi') || Gate::allows('guru')) {
+        if (Gate::allows('admin')) {
             $dudi = Dudi::with('kompetensi_keahlian')->get();
             return view('home.dudi.index', compact('dudi'));
+        } elseif (Gate::allows('prodi')) {
+            $user = Auth::user();
+            $kaprodi = Kaprodi::where('guru_id', $user->guru->id)->first();
+
+            if (!$kaprodi) {
+                abort(403, 'Anda tidak terdaftar sebagai Kaprodi');
+            }
+
+            $dudi = Dudi::where('kompetensi_id', $kaprodi->kompetensi_keahlian_id)->get();
+            return view('home.dudi.index', compact('dudi'));
+        } else {
+            abort(403, 'Anda tidak memiliki akses ke halaman ini.');
         }
     }
 

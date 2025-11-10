@@ -28,8 +28,8 @@
                         </a>
                     </li>
                     @can('admin')
-                        <li class="nav-item {{ request()->is('home/tahun_ajaran','home/dudi','home/users','home/kelas','home/kaprodi') ? 'menu-open' : '' }}">
-                            <a href="#" class="nav-link {{ request()->is('home/tahun_ajaran','home/dudi','home/users','home/kelas','home/kaprodi') ? 'active' : '' }}">
+                        <li class="nav-item {{ request()->is('home/tahun_ajaran','home/dudi','home/users','home/kelas') ? 'menu-open' : '' }}">
+                            <a href="#" class="nav-link {{ request()->is('home/tahun_ajaran','home/dudi','home/users','home/kelas') ? 'active' : '' }}">
                                 <i class="nav-icon fa-solid fa-database"></i>
                                 <p>
                                     Master Data
@@ -50,12 +50,6 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="/home/kaprodi" class="nav-link {{ request()->is('home/kaprodi') ? 'active' : '' }}">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Kaprodi</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
                                     <a href="/home/dudi" class="nav-link {{ request()->is('home/dudi') ? 'active' : '' }}">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>DU/DI</p>
@@ -69,8 +63,8 @@
                                 </li>
                             </ul>
                         </li>
-                        <li class="nav-item {{ request()->is('home/guru','home/guru_pembimbing') ? 'menu-open' : '' }}">
-                        <a href="#" class="nav-link {{ request()->is('home/guru','home/guru_pembimbing') ? 'active' : '' }}">
+                        <li class="nav-item {{ request()->is('home/guru','home/guru_pembimbing','home/kaprodi') ? 'menu-open' : '' }}">
+                        <a href="#" class="nav-link {{ request()->is('home/guru','home/guru_pembimbing','home/kaprodi') ? 'active' : '' }}">
                             <i class="nav-icon fa-solid fa-chalkboard-teacher"></i>
                             <p>
                                 Guru
@@ -82,6 +76,12 @@
                                 <a href="/home/guru" class="nav-link {{ request()->is('home/guru') ? 'active' : '' }}">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Guru</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/home/kaprodi" class="nav-link {{ request()->is('home/kaprodi') ? 'active' : '' }}">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Kaprodi</p>
                                 </a>
                             </li>
                             <li class="nav-item">

@@ -31,7 +31,7 @@ class LogbookController extends Controller
 
         } elseif (Gate::allows('prodi')) {
             $user = Auth::user();
-            $kaprodi = Kaprodi::where('user_id', $user->id)->first();
+            $kaprodi = Kaprodi::where('guru_id', $user->guru->id)->first();
 
             if (!$kaprodi) {
                 return redirect()->route('home.dashboard')

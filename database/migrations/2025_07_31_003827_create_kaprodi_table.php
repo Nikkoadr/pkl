@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('kaprodi', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users');
+            $table->foreignId('guru_id')->constrained('guru')->onDelete('cascade');
             $table->foreignId('kompetensi_keahlian_id')->constrained('kompetensi_keahlian')->onDelete('cascade');
             $table->text('keterangan')->nullable();
             $table->timestamps();

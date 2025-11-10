@@ -7,6 +7,7 @@ use App\Models\Peserta_pkl;
 use App\Models\Pengaturan;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Kaprodi;
 
 class EsertifikatController extends Controller
 {
@@ -38,7 +39,7 @@ class EsertifikatController extends Controller
         } elseif (Gate::allows('prodi')) {
             // Prodi → peserta PKL sesuai kompetensi keahlian kaprodinya
             $user = Auth::user();
-            $kaprodi = \App\Models\Kaprodi::where('user_id', $user->id)->first();
+            $kaprodi = Kaprodi::where('guru_id', $user->guru->id)->first();
 
             if (!$kaprodi) {
                 abort(403, 'Anda tidak terdaftar sebagai Kaprodi');

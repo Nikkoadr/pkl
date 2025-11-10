@@ -34,11 +34,11 @@
                         <h3 class="card-title mb-0">Daftar Logbook</h3>
                     </div>
                     <div class="col-md-6 text-right">
-                        @can('admin')
-                    <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalTambah">
-                        <i class="fas fa-plus"></i> Tambah Nilai
-                    </button>
-                        @endcan
+                    @canany(['admin','prodi','guru_pembimbing'])
+                        <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalTambah">
+                            <i class="fas fa-plus"></i> Tambah Nilai
+                        </button>
+                    @endcanany
                     </div>
                 </div>
             </div>
@@ -69,7 +69,7 @@
                             <td>{{ $nilai->nilai_kemajuan_kerja }}</td>
                             <td>{{ $nilai->nilai_kualitas_kerja }}</td>
                             <td>{{ $nilai->nilai_inisiatif_kreatifitas }}</td>
-                            <td>{{ $nilai->nilai_prilaku }}</td>
+                            <td>{{ $nilai->nilai_perilaku }}</td>
                             <td>
                                     @if($nilai->foto_bukti_nilai_pkl)
                                     <a href="{{ asset('storage/bukti_nilai_pkl/'.$nilai->foto_bukti_nilai_pkl) }}" target="_blank">
@@ -98,6 +98,7 @@
     </section>
 </div>
 <!-- Modal Tambah -->
+@canany(['admin','prodi','guru_pembimbing'])
 <div class="modal fade" id="modalTambah" tabindex="-1" role="dialog" aria-labelledby="modalTambahLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <form action="{{ route('nilai_pkl.store') }}" method="POST" enctype="multipart/form-data">
@@ -139,7 +140,7 @@
 
                     <div class="form-group">
                         <label>Nilai Perilaku</label>
-                        <input type="number" name="nilai_prilaku" class="form-control" required min="0" max="100">
+                        <input type="number" name="nilai_perilaku" class="form-control" required min="0" max="100">
                     </div>
                         <div class="form-group">
                             <label for="foto_bukti_nilai_pkl">Foto Bukti Nilai</label>
@@ -171,7 +172,7 @@
         </form>
     </div>
 </div>
-
+@endcanany
 @endsection
 
 @section('scripts')

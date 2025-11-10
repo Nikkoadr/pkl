@@ -27,7 +27,7 @@ class KaprodiController extends Controller
     public function index()
     {
         $this->authorize('admin');
-        $kaprodi = Kaprodi::with('user', 'kompetensi_keahlian')->get();
+        $kaprodi = Kaprodi::with('guru.user', 'kompetensi_keahlian')->get();
         return view('home.kaprodi.index', compact('kaprodi'));
     }
 
@@ -42,12 +42,12 @@ class KaprodiController extends Controller
         $this->authorize('admin');
 
         $validated = $request->validate([
-            'user_id' => 'required|exists:users,id',
+            'guru_id' => 'required|exists:guru,id',
             'kompetensi_keahlian_id' => 'required|exists:kompetensi_keahlian,id',
         ]);
 
         Kaprodi::create([
-            'user_id' => $validated['user_id'],
+            'guru_id' => $validated['guru_id'],
             'kompetensi_keahlian_id' => $validated['kompetensi_keahlian_id'],
         ]);
 
@@ -68,12 +68,12 @@ class KaprodiController extends Controller
         $this->authorize('admin');
 
         $validated = $request->validate([
-            'user_id' => 'required|exists:users,id',
+            'guru_id' => 'required|exists:guru,id',
             'kompetensi_keahlian_id' => 'required|exists:kompetensi_keahlian,id',
         ]);
 
         $kaprodi->update([
-            'user_id' => $validated['user_id'],
+            'guru_id' => $validated['guru_id'],
             'kompetensi_keahlian_id' => $validated['kompetensi_keahlian_id'],
         ]);
 

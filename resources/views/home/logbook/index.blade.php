@@ -37,11 +37,11 @@
                             <h3 class="card-title mb-0">Daftar Logbook</h3>
                         </div>
                         <div class="col-md-6 text-right">
-                        @can('admin')
+                        @canany(['admin','prodi','guru_pembimbing'])
                             <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalTambah">
                                 <i class="fas fa-plus"></i> Tambah Logbook
                             </button>
-                        @endcan
+                        @endcanany
                         @can('peserta')
                             <a href="{{ route('logbook.create') }}" class="btn btn-primary btn-sm"><i class="fas fa-plus"></i> Tambah Logbook</a>
                             <a href="{{ route('logbook.cetak.rekap') }}" class="btn btn-success btn-sm"><i class="fas fa-print"></i> Cetak Rekap</a>
@@ -106,7 +106,7 @@
 </div>
 
 {{-- Modal Tambah --}}
-@can('admin')
+@canany(['admin','prodi','guru_pembimbing'])
 <div class="modal fade" id="modalTambah" tabindex="-1" role="dialog" aria-labelledby="modalTambahLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <form action="{{ route('logbook.store') }}" method="POST" enctype="multipart/form-data" id="formTambahLogbook">
@@ -177,7 +177,7 @@
         </form>
     </div>
 </div>
-@endcan
+@endcanany
 @endsection
 
 @section('scripts')

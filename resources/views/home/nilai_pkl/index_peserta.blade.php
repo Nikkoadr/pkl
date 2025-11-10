@@ -54,8 +54,8 @@
 
                     <div class="form-group">
                         <label>Nilai Perilaku</label>
-                        <input type="number" name="nilai_prilaku" value="{{ old('nilai_prilaku', $nilai_pkl->nilai_prilaku) }}" class="form-control @error('nilai_prilaku') is-invalid @enderror">
-                        @error('nilai_prilaku')
+                        <input type="number" name="nilai_perilaku" value="{{ old('nilai_perilaku', $nilai_pkl->nilai_perilaku) }}" class="form-control @error('nilai_perilaku') is-invalid @enderror">
+                        @error('nilai_perilaku')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
