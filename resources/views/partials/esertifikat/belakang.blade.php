@@ -29,7 +29,7 @@
 <body>
     @php
         $nilai = $peserta_pkl->nilai_pkl->first();
-        $rata_sikap = ($nilai->nilai_disiplin_kerja + $nilai->nilai_kemajuan_kerja + $nilai->nilai_kualitas_kerja + $nilai->nilai_inisiatif_kreatifitas + $nilai->nilai_prilaku) / 5;
+        $rata_sikap = ($nilai->nilai_disiplin_kerja + $nilai->nilai_kemajuan_kerja + $nilai->nilai_kualitas_kerja + $nilai->nilai_inisiatif_kreatifitas + $nilai->nilai_perilaku) / 5;
         $nilai_akhir = ($rata_sikap + $nilai->nilai_sidang_pkl) / 2;
     @endphp
     @if (!function_exists('predikat'))
@@ -175,7 +175,7 @@
             </table>
 
             <div class="signature" style="text-align: center; margin-top: 0;">
-                {{ $peserta_pkl->dudi->jabatan_pimpinan ?? 'Kepala / Teknisi / Mekanik,' }},<br />
+                {{ $peserta_pkl->dudi->jabatan_pimpinan ?? 'Kepala / Teknisi / Mekanik,' }}<br />
                 {{ $peserta_pkl->dudi->nama_dudi }}<br /><br /><br /><br /><br />
                 {!! $peserta_pkl->dudi->nama_pimpinan_dudi 
                     ? '<strong>' . e($peserta_pkl->dudi->nama_pimpinan_dudi) . '</strong>' 

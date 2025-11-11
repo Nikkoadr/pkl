@@ -87,6 +87,10 @@ Route::get('/home/esertifikat/cetak_belakang/{id}', [EsertifikatController::clas
 Route::get('/home/esertifikat/cetak_depan_massal', [EsertifikatController::class, 'cetak_depan_massal'])->name('cetak.esertifikat_depan.massal');
 Route::get('/home/esertifikat/cetak_belakang_massal', [EsertifikatController::class, 'cetak_belakang_massal'])->name('cetak.esertifikat_belakang.massal');
 
+// Generate Sertifikat
+Route::post('/nilai_pkl/generate_massal', [EsertifikatController::class, 'generate_massal'])->name('esertifikat.generate_massal');
+Route::post('/nilai_pkl/generate/{id}', [EsertifikatController::class, 'generate'])->name('esertifikat.generate');
+
 // Nilai
 Route::get('/home/nilai_pkl', [NilaiPklController::class, 'index'])->name('nilai_pkl.index');
 Route::post('/home/nilai_pkl/store', [NilaiPklController::class, 'store'])->name('nilai_pkl.store');

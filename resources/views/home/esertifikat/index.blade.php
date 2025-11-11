@@ -75,7 +75,7 @@
                                         <td>
                                             @if($p->nilai_pkl && $p->nilai_pkl->count() > 0)
                                                 {{ number_format($p->nilai_pkl->avg(function($n){
-                                                    return ($n->nilai_disiplin_kerja + $n->nilai_kemajuan_kerja + $n->nilai_kualitas_kerja + $n->nilai_inisiatif_kreatifitas + $n->nilai_prilaku) / 5;
+                                                    return ($n->nilai_disiplin_kerja + $n->nilai_kemajuan_kerja + $n->nilai_kualitas_kerja + $n->nilai_inisiatif_kreatifitas + $n->nilai_perilaku) / 5;
                                                 }), 2) }}
                                             @else
                                                 -
