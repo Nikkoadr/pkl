@@ -25,12 +25,16 @@
                             <h3 class="card-title mb-0">Daftar DUDI</h3>
                         </div>
                         <div class="col-md-6 text-right">
+                            @can('admin')
                             <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalImport">
                                 <i class="fas fa-file-import"></i> Import Excel
                             </button>
+                            @endcan
+                            @canany(['admin', 'prodi'])
                             <button class="btn btn-success btn-sm" data-toggle="modal" data-target="#modalTambah">
                                 <i class="fas fa-plus"></i> Tambah DUDI
                             </button>
+                            @endcanany
                         </div>
                     </div>
                 </div>
@@ -85,7 +89,7 @@
         </div>
     </section>
 </div>
-
+@canany(['admin', 'prodi'])
 <!-- Modal Tambah -->
 <div class="modal fade" id="modalTambah" tabindex="-1" role="dialog" aria-labelledby="modalTambahLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl" role="document">
@@ -164,13 +168,13 @@
                             <label>
                                 Kompetensi Keahlian <span class="text-danger">*</span>
                             </label>
-                            <select name="kompetensi_id" class="form-control @error('kompetensi_id') is-invalid @enderror" required>
+                            <select name="kompetensi_keahlian_id" class="form-control @error('kompetensi_keahlian_id') is-invalid @enderror" required>
                                 <option value="" disabled selected>-- Pilih Kompetensi Keahlian --</option>
-                                @foreach($kompetensi as $komp)
+                                @foreach($kompetensi_keahlian as $komp)
                                     <option value="{{ $komp->id }}">{{ $komp->nama_kompetensi }}</option>
                                 @endforeach
                             </select>
-                            @error('kompetensi_id')
+                            @error('kompetensi_keahlian_id')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
@@ -189,8 +193,8 @@
         </form>
     </div>
 </div>
-
-
+@endcanany
+@can('admin')
 <!-- Modal Import -->
 <div class="modal fade" id="modalImport" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
@@ -220,6 +224,8 @@
         </form>
     </div>
 </div>
+@endcan
+
 @endsection
 
 @section('scripts')

@@ -22,7 +22,7 @@ class DudiImport implements ToModel, WithHeadingRow
             'nomor_kepegawaian' => $row['nomor_kepegawaian'],
             'nama_pimpinan_dudi' => $row['nama_pimpinan_dudi'],
             'kuota' => $row['kuota'],
-            'kompetensi_id' => $kompetensi_keahlian->id,
+            'kompetensi_keahlian_id' => $kompetensi_keahlian->id,
         ]);
     }
 }

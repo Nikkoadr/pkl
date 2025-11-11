@@ -16,7 +16,7 @@ class Dudi extends Model
         'nama_pimpinan_dudi',
         'kuota',
         'jabatan_pimpinan',
-        'kompetensi_id',
+        'kompetensi_keahlian_id',
     ];
 
     public function peserta_pkl()
@@ -26,6 +26,6 @@ class Dudi extends Model
 
     public function kompetensi_keahlian()
     {
-        return $this->belongsTo(Kompetensi_keahlian::class, 'kompetensi_id');
+        return $this->belongsTo(Kompetensi_keahlian::class, 'kompetensi_keahlian_id');
     }
 }

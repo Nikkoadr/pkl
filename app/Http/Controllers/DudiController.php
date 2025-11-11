@@ -34,8 +34,8 @@ class DudiController extends Controller
     {
         if (Gate::allows('admin')) {
             $dudi = Dudi::all();
-            $kompetensi = Kompetensi_keahlian::all();
-            return view('home.dudi.index', compact('dudi', 'kompetensi'));
+            $kompetensi_keahlian = Kompetensi_keahlian::all();
+            return view('home.dudi.index', compact('dudi', 'kompetensi_keahlian'));
         } elseif (Gate::allows('prodi')) {
             $user = Auth::user();
             $kaprodi = Kaprodi::where('guru_id', $user->guru->id)->first();
@@ -44,11 +44,11 @@ class DudiController extends Controller
                 abort(403, 'Anda tidak terdaftar sebagai Kaprodi');
             }
 
-            $kompetensi = Kompetensi_keahlian::where('id', $kaprodi->kompetensi_keahlian_id)->get();
+            $kompetensi_keahlian = Kompetensi_keahlian::where('id', $kaprodi->kompetensi_keahlian_id)->get();
 
-            $dudi = Dudi::where('kompetensi_id', $kaprodi->kompetensi_keahlian_id)->get();
+            $dudi = Dudi::where('kompetensi_keahlian_id', $kaprodi->kompetensi_keahlian_id)->get();
 
-            return view('home.dudi.index', compact('dudi', 'kompetensi'));
+            return view('home.dudi.index', compact('dudi', 'kompetensi_keahlian'));
         } elseif (Gate::allows('guru_pembimbing')) {
             $user = Auth::user();
 
@@ -58,10 +58,10 @@ class DudiController extends Controller
             $dudi = Dudi::whereIn('id', $dudi_ids)
                 ->with('kompetensi_keahlian')
                 ->get();
+            $guru_pembimbing = Guru_pembimbing::where('guru_id', $user->guru->id)->first();
+            $kompetensi_keahlian = Kompetensi_keahlian::where('id', $guru_pembimbing->kompetensi_keahlian_id)->get();
 
-            $kompetensi = Kompetensi_keahlian::all();
-
-            return view('home.dudi.index', compact('dudi', 'kompetensi'));
+            return view('home.dudi.index', compact('dudi', 'kompetensi_keahlian'));
         } else {
             abort(403, 'Anda tidak memiliki akses ke halaman ini.');
         }
@@ -77,7 +77,7 @@ class DudiController extends Controller
             'nomor_kepegawaian' => 'nullable|string|max:50',
             'nama_pimpinan_dudi' => 'nullable|string|max:255',
             'kuota' => 'required|string|max:255',
-            'kompetensi_id' => 'required|exists:kompetensi_keahlian,id',
+            'kompetensi_keahlian_id' => 'required|exists:kompetensi_keahlian,id',
         ]);
         Dudi::create(
             $request->all()
@@ -101,7 +101,7 @@ class DudiController extends Controller
         $data = Dudi::findOrFail($id);
 
         if (Gate::allows('admin')) {
-            $kompetensi = Kompetensi_keahlian::all();
+            $kompetensi_keahlian = Kompetensi_keahlian::all();
         } elseif (Gate::allows('prodi')) {
 
             $user = Auth::user();
@@ -111,18 +111,22 @@ class DudiController extends Controller
                 abort(403, 'Anda tidak terdaftar sebagai Kaprodi');
             }
 
-            $kompetensi = Kompetensi_keahlian::where('id', $kaprodi->kompetensi_keahlian_id)->get();
+            $kompetensi_keahlian = Kompetensi_keahlian::where('id', $kaprodi->kompetensi_keahlian_id)->get();
+        } elseif (Gate::allows('guru_pembimbing')) {
+            $user = Auth::user();
 
-            if ($data->kompetensi_id != $kaprodi->kompetensi_keahlian_id) {
-                abort(403, 'Anda tidak memiliki akses untuk edit data DUDI ini.');
+            $dudi_ids = Guru_pembimbing::where('guru_id', $user->guru->id)
+                ->pluck('dudi_id');
+
+            if (!$dudi_ids->contains($data->id)) {
+                abort(403, 'Anda tidak memiliki akses untuk mengedit DUDI ini.');
             }
+            $kompetensi_keahlian = Kompetensi_keahlian::where('id', $data->kompetensi_keahlian_id)->get();
         } else {
             abort(403, 'Anda tidak memiliki akses ke halaman ini.');
         }
-
-        return view('home.dudi.edit', compact('data', 'kompetensi'));
+        return view('home.dudi.edit', compact('data', 'kompetensi_keahlian'));
     }
-
 
     public function update(Request $request, $id)
     {
@@ -134,7 +138,7 @@ class DudiController extends Controller
             'nomor_kepegawaian' => 'nullable|string|max:50',
             'nama_pimpinan_dudi' => 'nullable|string|max:255',
             'kuota' => 'nullable|string|max:255',
-            'kompetensi_id' => 'required|exists:kompetensi_keahlian,id',
+            'kompetensi_keahlian_id' => 'required|exists:kompetensi_keahlian,id',
         ]);
         Dudi::where('id', $id)->update($validated);
         return redirect()->route('dudi.index')->with('success', 'Data berhasil diupdate');

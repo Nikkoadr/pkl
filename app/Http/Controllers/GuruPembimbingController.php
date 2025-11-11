@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Guru_pembimbing;
 use App\Models\Guru;
 use App\Models\Dudi;
+use App\Models\Kompetensi_keahlian;
 use Illuminate\Support\Facades\Gate;
 
 class GuruPembimbingController extends Controller
@@ -28,10 +29,11 @@ class GuruPembimbingController extends Controller
     public function index()
     {
         if (Gate::allows('admin') || Gate::allows('prodi')) {
-            $pembimbing = Guru_pembimbing::with('guru.user', 'dudi')->get();
+            $pembimbing = Guru_pembimbing::with('guru.user', 'kompetensi_keahlian', 'dudi')->get();
             $guru = Guru::with('user')->get();
+            $kompetensi = Kompetensi_keahlian::all();
             $dudiList = Dudi::all();
-            return view('home.guru_pembimbing.index', compact('pembimbing', 'guru', 'dudiList'));
+            return view('home.guru_pembimbing.index', compact('pembimbing', 'guru', 'kompetensi', 'dudiList'));
         }
     }
 
@@ -39,6 +41,7 @@ class GuruPembimbingController extends Controller
     {
         $request->validate([
             'guru_id' => 'required|exists:users,id',
+            'kompetensi_keahlian_id' => 'required|exists:kompetensi_keahlian,id',
             'dudi_id' => 'required|array',
             'dudi_id.*' => 'exists:dudi,id',
         ]);
@@ -58,6 +61,7 @@ class GuruPembimbingController extends Controller
         foreach ($request->dudi_id as $dudiId) {
             Guru_pembimbing::firstOrCreate([
                 'guru_id' => $request->guru_id,
+                'kompetensi_keahlian_id' => $request->kompetensi_keahlian_id,
                 'dudi_id' => $dudiId,
             ]);
         }
@@ -69,19 +73,21 @@ class GuruPembimbingController extends Controller
     public function edit($id)
     {
         $data = Guru_pembimbing::with(['guru.user', 'dudi'])->findOrFail($id);
-        return view('home.guru_pembimbing.edit', compact('data'));
+        $kompetensi = Kompetensi_keahlian::all();
+        return view('home.guru_pembimbing.edit', compact('data', 'kompetensi'));
     }
 
     public function update(Request $request, $id)
     {
         $request->validate([
             'guru_id' => 'required|exists:guru,id',
+            'kompetensi_keahlian_id' => 'required|exists:kompetensi_keahlian,id',
             'dudi_id' => 'required|exists:dudi,id',
         ]);
-
         $data = Guru_pembimbing::findOrFail($id);
         $data->update([
             'guru_id' => $request->guru_id,
+            'kompetensi_keahlian_id' => $request->kompetensi_keahlian_id,
             'dudi_id' => $request->dudi_id,
         ]);
 

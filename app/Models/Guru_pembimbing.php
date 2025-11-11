@@ -22,4 +22,8 @@ class Guru_pembimbing extends Model
     {
         return $this->belongsTo(User::class);
     }
+    public function kompetensi_keahlian()
+    {
+        return $this->belongsTo(Kompetensi_keahlian::class);
+    }
 }

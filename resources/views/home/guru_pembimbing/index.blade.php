@@ -48,6 +48,7 @@
                             <tr>
                                 <th>No</th>
                                 <th>Nama Guru</th>
+                                <th>Kompetensi Keahlian</th>
                                 <th>DUDI</th>
                                 <th class="text-center">Aksi</th>
                             </tr>
@@ -57,6 +58,7 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $item->guru->user->nama }}</td>
+                                <td>{{ $item->kompetensi_keahlian->nama_kompetensi }}</td>
                                 <td>{{ $item->dudi->nama_dudi }}</td>
                                 <td class="text-center">
                                     <a href="{{ route('guru_pembimbing.edit', $item->id) }}" class="btn btn-primary btn-sm">
@@ -97,6 +99,15 @@
                         <label for="nama_guru">Nama Guru</label>
                         <input type="text" class="form-control" name="nama_guru" id="nama_guru" placeholder="Ketik nama guru...">
                         <input type="hidden" name="guru_id" id="guru_id">
+                    </div>
+                    <div class="form-group">
+                        <label for="kompetensi_keahlian_id">Kompetensi Keahlian</label>
+                        <select name="kompetensi_keahlian_id" id="kompetensi_keahlian_id" class="form-control">
+                            <option value="" disabled selected>-- Pilih Kompetensi Keahlian --</option>
+                            @foreach ($kompetensi as $komp)
+                                <option value="{{ $komp->id }}">{{ $komp->nama_kompetensi }}</option>
+                            @endforeach
+                        </select>
                     </div>
 
                     <!-- Daftar DUDI -->

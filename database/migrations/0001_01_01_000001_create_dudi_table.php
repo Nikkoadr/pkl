@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('dudi', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('kompetensi_id')->constrained('kompetensi_keahlian')->onDelete('cascade');
+            $table->foreignId('kompetensi_keahlian_id')->constrained('kompetensi_keahlian')->onDelete('cascade');
             $table->string('nama_dudi', 50)->nullable();
             $table->text('alamat_dudi')->nullable();
             $table->string('no_telp_dudi', 25)->nullable();

@@ -20,10 +20,27 @@
 
                         <div class="form-group">
                             <label for="nama_guru">Nama Guru</label>
-                            <input type="text" class="form-control" id="nama_guru" value="{{ $data->guru->user->nama }}">
+                            <input type="text" class="form-control @error('guru_id') is-invalid @enderror" id="nama_guru" value="{{ $data->guru->user->nama }}">
                             <input type="hidden" name="guru_id" id="guru_id" value="{{ $data->guru_id }}">
+                            @error('guru_id')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
+                        <div class="form-group">
+                            <label for="kompetensi_keahlian">Kompetensi Keahlian <span class="text-danger">*</span></label>
+                            <select name="kompetensi_keahlian_id" id="kompetensi_keahlian" class="form-control @error('kompetensi_keahlian_id') is-invalid @enderror" required>
+                                <option value="{{ $data->kompetensi_keahlian->id }}" selected>{{ $data->kompetensi_keahlian->nama_kompetensi }}</option>
 
+                                @foreach($kompetensi as $komp)
+                                    @if($komp->id != $data->kompetensi_keahlian_id)
+                                        <option value="{{ $komp->id }}">{{ $komp->nama_kompetensi }}</option>
+                                    @endif
+                                @endforeach
+                            </select>
+                            @error('kompetensi_keahlian_id')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
                         <div class="form-group">
                             <label for="nama_dudi">Nama DUDI</label>
                             <input type="text" class="form-control" id="nama_dudi" value="{{ $data->dudi->nama_dudi }}">
