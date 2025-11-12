@@ -44,57 +44,44 @@
                                 <tr>
                                     <th><input type="checkbox" id="selectAll"></th>
                                     <th>No</th>
-                                    <th>NIS</th>
+                                    <th>Nomor Sertifikat</th>
                                     <th>NISN</th>
                                     <th>Nama Peserta</th>
-                                    <th>Tanggal Lahir</th>
+                                    <th>Kelas</th>
                                     <th>Konsentrasi Keahlian</th>
                                     <th>Nama DUDI</th>
-                                    <th>Nilai Rata-rata</th>
+                                    <th>Rata-rata Sikap</th>
                                     <th>Nilai Sidang</th>
+                                    <th>Nilai Akhir</th>
                                     <th data-orderable="false" class="text-center">Cetak E-Sertifikat</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($peserta as $index => $p)
+                                @foreach($esertifikat as $p)
+                                    @php
+                                        $peserta = $p->peserta_pkl->peserta ?? null;
+                                        $user = $peserta->user ?? null;
+                                        $kelas = $peserta->kelas ?? null;
+                                    @endphp
                                     <tr>
                                         <td><input type="checkbox" class="check-peserta" value="{{ $p->id }}"></td>
-                                        <td>{{ $index + 1 }}</td>
-                                        <td>{{ $p->peserta->nis ?? '-' }}</td>
-                                        <td>{{ $p->peserta->nisn ?? '-' }}</td>
-                                        <td>{{ $p->peserta->user->nama ?? '-' }}</td>
-                                        <td>{{ $p->peserta->user->tempat_lahir ?? '-' }},
-                                            {{ $p->peserta->user->tanggal_lahir 
-                                                    ? \Carbon\Carbon::parse($p->peserta->user->tanggal_lahir)
-                                                        ->locale('id')
-                                                        ->translatedFormat('d F Y') 
-                                                    : '-' 
-                                                }} </td>
-                                        <td>{{ $p->peserta->kelas->kompetensi->nama_kompetensi ?? '-' }}</td>
-                                        <td>{{ $p->dudi->nama_dudi ?? '-' }}</td>
-                                        <td>
-                                            @if($p->nilai_pkl && $p->nilai_pkl->count() > 0)
-                                                {{ number_format($p->nilai_pkl->avg(function($n){
-                                                    return ($n->nilai_disiplin_kerja + $n->nilai_kemajuan_kerja + $n->nilai_kualitas_kerja + $n->nilai_inisiatif_kreatifitas + $n->nilai_perilaku) / 5;
-                                                }), 2) }}
-                                            @else
-                                                -
-                                            @endif
-                                        </td>
-                                        <td>
-                                            @if($p->nilai_pkl && $p->nilai_pkl->count() > 0)
-                                                {{ $p->nilai_pkl->avg('nilai_sidang_pkl') }}
-                                            @else
-                                                -
-                                            @endif
-                                        </td>
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ $p->nomor_sertifikat ?? '-' }}</td>
+                                        <td>{{ $peserta->nisn ?? '-' }}</td>
+                                        <td>{{ $user->nama ?? '-' }}</td>
+                                        <td>{{ $kelas->nama_kelas ?? '-' }}</td>
+                                        <td>{{ $kelas->kompetensi->nama_kompetensi ?? '-' }}</td>
+                                        <td>{{ $p->peserta_pkl->dudi->nama_dudi ?? '-' }}</td>
+                                        <td>{{ $p->rata_rata_sikap ?? '-' }}</td>
+                                        <td>{{ $p->nilai_sidang_pkl ?? '-' }}</td>
+                                        <td>{{ $p->nilai_akhir ?? '-' }}</td>
                                         <td class="text-center">
                                             <a href="{{ route('cetak.esertifikat_depan', $p->id) }}" 
-                                            class="btn btn-info btn-sm m-1" target="_blank">
+                                                class="btn btn-info btn-sm m-1" target="_blank">
                                                 <i class="fas fa-file-alt"></i> Depan
                                             </a>
                                             <a href="{{ route('cetak.esertifikat_belakang', $p->id) }}" 
-                                            class="btn btn-success btn-sm" target="_blank">
+                                                class="btn btn-success btn-sm" target="_blank">
                                                 <i class="fas fa-envelope-open-text"></i> Belakang
                                             </a>
                                         </td>
@@ -114,7 +101,7 @@
     <div class="modal-dialog modal-xl" style="max-width: 90%;">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Preview Esertifikat</h5>
+                <h5 class="modal-title">Preview E-Sertifikat</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Tutup">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -162,28 +149,6 @@ $(function () {
             return;
         }
 
-        let pesertaTanpaNilai = [];
-        $('.check-peserta:checked').each(function () {
-            let row = $(this).closest('tr');
-            let nilaiRata = row.find('td').eq(8).text().trim(); 
-            let nilaiSidang = row.find('td').eq(9).text().trim();
-
-            if (nilaiRata === '-' || nilaiSidang === '-') {
-                let namaPeserta = row.find('td').eq(4).text().trim();
-                pesertaTanpaNilai.push(namaPeserta);
-            }
-        });
-
-        if (pesertaTanpaNilai.length > 0) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Tidak Bisa Mencetak',
-                html: 'Peserta berikut belum memiliki nilai:<br><b>' + pesertaTanpaNilai.join(', ') + '</b>',
-                confirmButtonText: 'OK'
-            });
-            return;
-        }
-
         $('#iframeContainer').empty();
         const url = `/home/esertifikat/${esertifikatType}?ids=${selectedIds.join(',')}`;
         $('#iframeContainer').append(`
@@ -201,31 +166,32 @@ $(function () {
     });
 });
 </script>
+
 @if (session('success'))
 <script>
-    Swal.fire({
-        toast: true,
-        position: 'top-end',
-        icon: 'success',
-        title: @json(session('success')),
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true
-    });
+Swal.fire({
+    toast: true,
+    position: 'top-end',
+    icon: 'success',
+    title: @json(session('success')),
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true
+});
 </script>
 @endif
 
 @if (session('error'))
 <script>
-    Swal.fire({
-        toast: true,
-        position: 'top-end',
-        icon: 'error',
-        title: @json(session('error')),
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true
-    });
+Swal.fire({
+    toast: true,
+    position: 'top-end',
+    icon: 'error',
+    title: @json(session('error')),
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true
+});
 </script>
 @endif
 @endsection

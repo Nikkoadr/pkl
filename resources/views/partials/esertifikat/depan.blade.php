@@ -155,28 +155,32 @@
 </head>
 <body>
 <div class="page">
-
     {{-- Nomor Sertifikat --}}
     <div class="nomor">
-        Nomor : {{ '086.' . str_pad($peserta->id, 3, '0', STR_PAD_LEFT) . '/KET/III.4/AU/F/' . date('Y') }}
+        Nomor : {{ $esertifikat->nomor_sertifikat ?? ('086.' . str_pad($esertifikat->id, 3, '0', STR_PAD_LEFT) . '/KET/III.4/AU/F/' . date('Y')) }}
     </div>
 
     {{-- Judul --}}
     <div class="judul">Sertifikat ini diberikan Kepada :</div>
 
     {{-- Nama Peserta --}}
-    <div class="nama">{{ strtoupper($peserta->peserta->user->nama) }}</div>
+    <div class="nama">{{ strtoupper($esertifikat->peserta_pkl->peserta->user->nama) }}</div>
 
     {{-- Jurusan --}}
-    <div class="jurusan">( {{ strtoupper($peserta->peserta->kelas->kompetensi->nama_kompetensi ?? '-') }} )</div>
+    <div class="jurusan">
+        ( {{ strtoupper($esertifikat->peserta_pkl->peserta->kelas->kompetensi->nama_kompetensi ?? '-') }} )
+    </div>
 
     {{-- Isi Sertifikat --}}
     <div class="isi">
         Yang telah menyelesaikan <br>
         <b>PRAKTIK KERJA LAPANGAN (PKL)</b><br>
-        <i>di <b>{{ strtoupper($peserta->dudi->nama_dudi ?? '-') }}</b></i><br>
-        <i>dari tanggal {{ \Carbon\Carbon::parse($pengaturan->tanggal_mulai_pkl)->locale('id')->translatedFormat('d F Y') }} 
-        sampai dengan tanggal {{ \Carbon\Carbon::parse($pengaturan->tanggal_selesai_pkl)->locale('id')->translatedFormat('d F Y') }}</i>
+        <i>di <b>{{ strtoupper($esertifikat->peserta_pkl->dudi->nama_dudi ?? '-') }}</b></i><br>
+        <i>dari tanggal 
+            {{ \Carbon\Carbon::parse($pengaturan->tanggal_mulai_pkl)->locale('id')->translatedFormat('d F Y') }} 
+            sampai dengan 
+            {{ \Carbon\Carbon::parse($pengaturan->tanggal_selesai_pkl)->locale('id')->translatedFormat('d F Y') }}
+        </i>
     </div>
 
     {{-- Tanggal --}}
@@ -192,12 +196,12 @@
         Kepala SMK Muhammadiyah <br> Kandanghaur,<br>
         <div class="nama-ttd">{{ $pengaturan->kepala_sekolah }}</div>
     </div>
-
 </div>
 <script>
     window.onload = function () {
         window.print();
     };
 </script>
+
 </body>
 </html>

@@ -22,6 +22,6 @@ class Peserta_pkl extends Model
 
     public function nilai_pkl()
     {
-        return $this->hasMany(Nilai_pkl::class);
+        return $this->hasOne(Nilai_pkl::class);
     }
 }

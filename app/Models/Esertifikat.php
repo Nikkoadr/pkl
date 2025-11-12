@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Esertifikat extends Model
 {
+    protected $table = 'esertifikat';
+
     protected $fillable = [
         'nilai_pkl_id',
         'peserta_pkl_id',
@@ -21,5 +23,9 @@ class Esertifikat extends Model
     public function nilai_pkl()
     {
         return $this->belongsTo(Nilai_pkl::class);
+    }
+    public function peserta_pkl()
+    {
+        return $this->belongsTo(Peserta_pkl::class);
     }
 }

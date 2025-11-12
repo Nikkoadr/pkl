@@ -8,9 +8,8 @@ use App\Models\Pengaturan;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Kaprodi;
-use App\Models\Nilai_pkl;
 use App\Models\Esertifikat;
-use Illuminate\Support\Facades\DB;
+use App\Models\Nilai_pkl;
 
 class EsertifikatController extends Controller
 {
@@ -34,45 +33,31 @@ class EsertifikatController extends Controller
     {
         $nilai = Nilai_pkl::with('peserta_pkl.peserta.user')->findOrFail($id);
 
-        if (!$this->isComplete($nilai)) {
+        // Cek kelengkapan nilai langsung di sini
+        if (
+            $nilai->nilai_disiplin_kerja === null ||
+            $nilai->nilai_kemajuan_kerja === null ||
+            $nilai->nilai_kualitas_kerja === null ||
+            $nilai->nilai_inisiatif_kreatifitas === null ||
+            $nilai->nilai_perilaku === null ||
+            $nilai->nilai_sidang_pkl === null
+        ) {
             return back()->with('error', 'Tidak dapat membuat e-sertifikat. Nilai belum lengkap.');
         }
 
-        // Cek apakah sudah ada sertifikat
         if ($nilai->esertifikat) {
             return back()->with('error', 'E-sertifikat sudah pernah digenerate untuk peserta ini.');
         }
 
-        try {
-            DB::transaction(function () use ($nilai) {
-                // Buat sertifikat
-                $esertifikat = $nilai->esertifikat()->create([
-                    'peserta_pkl_id' => $nilai->peserta_pkl_id,
-                    'nomor_sertifikat' => $this->generateNomor(),
-                    'tanggal_diterbitkan' => now(),
-                ]);
+        $nilai->esertifikat()->create([
+            'peserta_pkl_id' => $nilai->peserta_pkl_id,
+            'nomor_sertifikat' => $this->generateNomor(),
+            'tanggal_diterbitkan' => now(),
+        ]);
 
-                // Simpan detail nilainya
-                $esertifikat->detail()->create([
-                    'nilai_disiplin_kerja' => $nilai->nilai_disiplin_kerja,
-                    'nilai_kemajuan_kerja' => $nilai->nilai_kemajuan_kerja,
-                    'nilai_kualitas_kerja' => $nilai->nilai_kualitas_kerja,
-                    'nilai_inisiatif_kreatifitas' => $nilai->nilai_inisiatif_kreatifitas,
-                    'nilai_perilaku' => $nilai->nilai_perilaku,
-                    'nilai_sidang_pkl' => $nilai->nilai_sidang_pkl,
-                    'komentar' => $nilai->komentar,
-                ]);
-            });
-
-            return back()->with('success', 'E-sertifikat berhasil digenerate.');
-        } catch (\Throwable $e) {
-            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
-        }
+        return back()->with('success', 'E-sertifikat berhasil digenerate.');
     }
 
-    /**
-     * Generate massal e-sertifikat
-     */
     public function generate_massal(Request $request)
     {
         $ids = $request->input('selected_ids', []);
@@ -83,80 +68,59 @@ class EsertifikatController extends Controller
         $berhasil = 0;
         $gagal = 0;
 
-        try {
-            DB::transaction(function () use ($ids, &$berhasil, &$gagal) {
-                $dataNilai = Nilai_pkl::with('peserta_pkl.peserta.user', 'esertifikat')
-                    ->whereIn('id', $ids)
-                    ->get();
+        $dataNilai = Nilai_pkl::with('peserta_pkl.peserta.user', 'esertifikat')
+            ->whereIn('id', $ids)
+            ->get();
 
-                foreach ($dataNilai as $nilai) {
-                    // Lewati jika belum lengkap atau sudah punya sertifikat
-                    if (!$this->isComplete($nilai) || $nilai->esertifikat) {
-                        $gagal++;
-                        continue;
-                    }
+        foreach ($dataNilai as $nilai) {
 
-                    // Generate sertifikat dan detail
-                    $esertifikat = $nilai->esertifikat()->create([
-                        'peserta_pkl_id' => $nilai->peserta_pkl_id,
-                        'nomor_sertifikat' => $this->generateNomor(),
-                        'tanggal_diterbitkan' => now(),
-                    ]);
+            $lengkap = !(
+                $nilai->nilai_disiplin_kerja === null ||
+                $nilai->nilai_kemajuan_kerja === null ||
+                $nilai->nilai_kualitas_kerja === null ||
+                $nilai->nilai_inisiatif_kreatifitas === null ||
+                $nilai->nilai_perilaku === null ||
+                $nilai->nilai_sidang_pkl === null
+            );
 
-                    $esertifikat->detail()->create([
-                        'nilai_disiplin_kerja' => $nilai->nilai_disiplin_kerja,
-                        'nilai_kemajuan_kerja' => $nilai->nilai_kemajuan_kerja,
-                        'nilai_kualitas_kerja' => $nilai->nilai_kualitas_kerja,
-                        'nilai_inisiatif_kreatifitas' => $nilai->nilai_inisiatif_kreatifitas,
-                        'nilai_perilaku' => $nilai->nilai_perilaku,
-                        'nilai_sidang_pkl' => $nilai->nilai_sidang_pkl,
-                        'komentar' => $nilai->komentar,
-                    ]);
+            if (!$lengkap || $nilai->esertifikat) {
+                $gagal++;
+                continue;
+            }
 
-                    $berhasil++;
-                }
-            });
+            $nilai->esertifikat()->create([
+                'peserta_pkl_id' => $nilai->peserta_pkl_id,
+                'nomor_sertifikat' => $this->generateNomor(),
+                'tanggal_diterbitkan' => now(),
+            ]);
 
-            return back()->with('success', "E-sertifikat berhasil dibuat: {$berhasil}, gagal: {$gagal}");
-        } catch (\Throwable $e) {
-            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+            $berhasil++;
         }
+
+        return back()->with('success', "E-sertifikat berhasil dibuat: {$berhasil}, gagal: {$gagal}");
     }
 
-    /**
-     * Cek kelengkapan nilai
-     */
-    private function isComplete($nilai)
-    {
-        return $nilai->nilai_disiplin_kerja !== null &&
-            $nilai->nilai_kemajuan_kerja !== null &&
-            $nilai->nilai_kualitas_kerja !== null &&
-            $nilai->nilai_inisiatif_kreatifitas !== null &&
-            $nilai->nilai_perilaku !== null &&
-            $nilai->nilai_sidang_pkl !== null;
-    }
 
-    /**
-     * Generate nomor sertifikat unik
-     */
     private function generateNomor()
     {
-        $count = Esertifikat::count() + 1;
-        return 'EPKL-' . date('Y') . '-' . str_pad($count, 4, '0', STR_PAD_LEFT);
+        $tahun = date('Y');
+
+        $count = Esertifikat::whereYear('tanggal_diterbitkan', $tahun)->count() + 1;
+
+        return '086.' . str_pad($count, 3, '0', STR_PAD_LEFT)
+            . '/KET/III.4/AU/F/' . $tahun;
     }
 
     public function index()
     {
         if (Gate::allows('admin')) {
-            // Admin → semua peserta PKL
-            $peserta = Peserta_pkl::with([
-                'peserta.user',
-                'peserta.kelas.kompetensi',
-                'dudi',
-                'nilai_pkl'
+            $esertifikat = Esertifikat::with([
+                'peserta_pkl.peserta.user',
+                'peserta_pkl.peserta.kelas.kompetensi',
+                'peserta_pkl.dudi',
+                'peserta_pkl.nilai_pkl',
             ])->get();
         } elseif (Gate::allows('prodi')) {
-            // Prodi → peserta PKL sesuai kompetensi keahlian kaprodinya
             $user = Auth::user();
             $kaprodi = Kaprodi::where('guru_id', $user->guru->id)->first();
 
@@ -164,108 +128,174 @@ class EsertifikatController extends Controller
                 abort(403, 'Anda tidak terdaftar sebagai Kaprodi');
             }
 
-            $peserta = Peserta_pkl::whereHas('peserta.kelas', function ($q) use ($kaprodi) {
+            $esertifikat = Esertifikat::whereHas('peserta_pkl.peserta.kelas', function ($q) use ($kaprodi) {
                 $q->where('kompetensi_keahlian_id', $kaprodi->kompetensi_keahlian_id);
             })
                 ->with([
-                    'peserta.user',
-                    'peserta.kelas.kompetensi',
-                    'dudi',
-                    'nilai_pkl'
-                ])
-                ->get();
+                    'peserta_pkl.peserta.user',
+                    'peserta_pkl.peserta.kelas.kompetensi',
+                    'peserta_pkl.dudi',
+                    'peserta_pkl.nilai_pkl',
+                ])->get();
         } else {
             abort(403);
         }
 
-        return view('home.esertifikat.index', compact('peserta'));
-    }
+        $esertifikat->each(function ($item) {
+            $nilai = $item->peserta_pkl->nilai_pkl->first();
 
+            if ($nilai) {
+                $rata_sikap = (
+                    $nilai->nilai_disiplin_kerja +
+                    $nilai->nilai_kemajuan_kerja +
+                    $nilai->nilai_kualitas_kerja +
+                    $nilai->nilai_inisiatif_kreatifitas +
+                    $nilai->nilai_perilaku
+                ) / 5;
+
+                $nilai_sidang = $nilai->nilai_sidang_pkl;
+
+                $nilai_akhir = ($rata_sikap + $nilai_sidang) / 2;
+
+                $item->rata_rata_sikap = round($rata_sikap, 2);
+                $item->nilai_sidang_pkl = $nilai_sidang;
+                $item->nilai_akhir = round($nilai_akhir, 2);
+            } else {
+                $item->rata_rata_sikap = null;
+                $item->nilai_sidang_pkl = null;
+                $item->nilai_akhir = null;
+            }
+        });
+
+        return view('home.esertifikat.index', compact('esertifikat'));
+    }
 
     public function cetak_depan($id)
     {
-        $peserta = Peserta_pkl::with([
-            'peserta.user',
-            'peserta.kelas.kompetensi',
-            'dudi'
+        $esertifikat = Esertifikat::with([
+            'peserta_pkl.peserta.user',
+            'peserta_pkl.peserta.kelas.kompetensi',
+            'peserta_pkl.dudi',
+        ])->findOrFail($id);
+
+        $pengaturan = Pengaturan::latest()->first();
+
+        return view('partials.esertifikat.depan', compact('esertifikat', 'pengaturan'));
+    }
+
+public function cetak_belakang($id)
+{
+    $esertifikat = Esertifikat::with([
+        'peserta_pkl.peserta.user',
+        'peserta_pkl.peserta.kelas.kompetensi',
+        'peserta_pkl.dudi',
+        'peserta_pkl.nilai_pkl'
+    ])->findOrFail($id);
+
+    $pengaturan = Pengaturan::latest()->first();
+
+    $nilai = $esertifikat->peserta_pkl->nilai_pkl;
+
+    if ($nilai) {
+        $rata_rata = round((
+            $nilai->nilai_disiplin_kerja +
+            $nilai->nilai_kemajuan_kerja +
+            $nilai->nilai_kualitas_kerja +
+            $nilai->nilai_inisiatif_kreatifitas +
+            $nilai->nilai_perilaku
+        ) / 5, 2);
+
+        $nilai_sidang = $nilai->nilai_sidang_pkl;
+        $nilai_akhir = round(($rata_rata + $nilai_sidang) / 2, 2);
+
+        $esertifikat->rata_rata = $rata_rata;
+        $esertifikat->nilai_sidang_pkl = $nilai_sidang;
+        $esertifikat->nilai_akhir = $nilai_akhir;
+    } else {
+        $esertifikat->rata_rata = null;
+        $esertifikat->nilai_sidang_pkl = null;
+        $esertifikat->nilai_akhir = null;
+    }
+
+    return view('partials.esertifikat.belakang', compact('esertifikat', 'pengaturan'));
+}
+
+public function cetak_depan_massal(Request $request)
+{
+    $ids = explode(',', $request->input('ids'));
+
+    $data = [];
+    $pengaturan = Pengaturan::latest()->first();
+
+    foreach ($ids as $id) {
+        $esertifikat = Esertifikat::with([
+            'peserta_pkl.peserta.user',
+            'peserta_pkl.peserta.kelas.kompetensi',
+            'peserta_pkl.dudi',
         ])->find($id);
-        $pengaturan = Pengaturan::latest()->first();
-        return view('partials.esertifikat.depan', compact('peserta', 'pengaturan'));
+
+        if ($esertifikat) {
+            $data[] = $esertifikat;
+        }
     }
 
-    public function cetak_belakang($id)
-    {
-        $peserta_pkl = Peserta_pkl::with([
-            'peserta.user',
-            'peserta.kelas.kompetensi',
-            'dudi',
-            'nilai_pkl'
+    return view('partials.esertifikat.depan_massal', compact('data', 'pengaturan'));
+}
+
+public function cetak_belakang_massal(Request $request)
+{
+    $ids = explode(',', $request->input('ids'));
+
+    $data = [];
+    $pengaturan = Pengaturan::latest()->first();
+    $pesertaTanpaNilai = [];
+
+    foreach ($ids as $id) {
+        $esertifikat = Esertifikat::with([
+            'peserta_pkl.peserta.user',
+            'peserta_pkl.peserta.kelas.kompetensi',
+            'peserta_pkl.dudi',
+            'peserta_pkl.nilai_pkl'
         ])->find($id);
 
-        if (!$peserta_pkl->nilai_pkl || $peserta_pkl->nilai_pkl->isEmpty()) {
-            return redirect()->back()->with('error', 'Nilai PKL belum diisi untuk peserta ini.');
-        }
+        if ($esertifikat) {
+            $nilai = $esertifikat->peserta_pkl->nilai_pkl;
 
-        $pengaturan = Pengaturan::latest()->first();
-        return view('partials.esertifikat.belakang', compact('peserta_pkl', 'pengaturan'));
-    }
-
-    public function cetak_depan_massal(Request $request)
-    {
-        $ids = explode(',', $request->input('ids'));
-
-        $data = [];
-
-        $pengaturan = Pengaturan::latest()->first();
-
-        foreach ($ids as $id) {
-            $peserta = Peserta_pkl::with([
-                'peserta.user',
-                'peserta.kelas.kompetensi',
-                'dudi'
-            ])->find($id);
-
-            if ($peserta) {
-                $data[] = $peserta;
+            if (!$nilai) {
+                $pesertaTanpaNilai[] = $esertifikat->peserta_pkl->peserta->user->name ?? 'Peserta ID: ' . $id;
+                continue;
             }
-        }
 
-        return view('partials.esertifikat.depan_massal', compact('data', 'pengaturan'));
+            // Hitung nilai rata-rata dan nilai akhir
+            $rata_rata = round(((
+                $nilai->nilai_disiplin_kerja +
+                $nilai->nilai_kemajuan_kerja +
+                $nilai->nilai_kualitas_kerja +
+                $nilai->nilai_inisiatif_kreatifitas +
+                $nilai->nilai_perilaku
+            ) / 5), 2);
+
+            $nilai_sidang = $nilai->nilai_sidang_pkl;
+            $nilai_akhir = round(($rata_rata + $nilai_sidang) / 2, 2);
+
+            // Tambahkan ke model sementara (tidak disimpan ke DB)
+            $esertifikat->rata_rata = $rata_rata;
+            $esertifikat->nilai_sidang_pkl = $nilai_sidang;
+            $esertifikat->nilai_akhir = $nilai_akhir;
+
+            $data[] = $esertifikat;
+        }
     }
-    public function cetak_belakang_massal(Request $request)
-    {
-        $ids = explode(',', $request->input('ids'));
 
-        $data = [];
-
-        $pengaturan = Pengaturan::latest()->first();
-
-        $pesertaTanpaNilai = [];
-
-        foreach ($ids as $id) {
-            $peserta_pkl = Peserta_pkl::with([
-                'peserta.user',
-                'peserta.kelas.kompetensi',
-                'dudi',
-                'nilai_pkl'
-            ])->find($id);
-
-            if ($peserta_pkl) {
-                if (!$peserta_pkl->nilai_pkl || $peserta_pkl->nilai_pkl->isEmpty()) {
-                    $pesertaTanpaNilai[] = $peserta_pkl->peserta->user->name ?? 'Peserta ID: ' . $id;
-                } else {
-                    $data[] = $peserta_pkl;
-                }
-            }
-        }
-
-        if (!empty($pesertaTanpaNilai)) {
-            return redirect()->back()->with(
-                'error',
-                'Peserta berikut belum memiliki nilai: ' . implode(', ', $pesertaTanpaNilai)
-            );
-        }
-
-        return view('partials.esertifikat.belakang_massal', compact('data', 'pengaturan'));
+    if (!empty($pesertaTanpaNilai)) {
+        return redirect()->back()->with(
+            'error',
+            'Peserta berikut belum memiliki nilai: ' . implode(', ', $pesertaTanpaNilai)
+        );
     }
+
+    return view('partials.esertifikat.belakang_massal', compact('data', 'pengaturan'));
+}
+
+
 }

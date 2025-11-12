@@ -2,14 +2,14 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8" />
-    <title>Sertifikat PKL Massal</title>
+    <title>Sertifikat PKL Massal (Depan)</title>
 </head>
 <body>
-    @foreach ($data as $peserta)
-            @include('partials.esertifikat.depan', [
-                'peserta' => $peserta,
-                'pengaturan' => $pengaturan
-            ])
+    @foreach ($data as $esertifikat)
+        @include('partials.esertifikat.depan', [
+            'esertifikat' => $esertifikat,
+            'pengaturan' => $pengaturan
+        ])
     @endforeach
 </body>
 </html>
