@@ -12,8 +12,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Kaprodi;
-use Maatwebsite\Excel\Facades\Excel;
-use App\Imports\PesertaImport;
+use App\Jobs\ImportPesertaJob;
 use App\Models\Dudi;
 
 class PersertaController extends Controller
@@ -125,14 +124,16 @@ class PersertaController extends Controller
 
     public function import(Request $request)
     {
-        $request->validate([
-            'file' => 'required|mimes:xlsx,xls,csv'
-        ]);
+        $file = $request->file('file');
 
-        Excel::import(new PesertaImport, $request->file('file'));
+        $filename = 'peserta_' . time() . '.' . $file->getClientOriginalExtension();
+        $path = $file->storeAs('imports', $filename, 'public');
 
-        return redirect()->back()->with('success', 'Import Peserta Berhasil!');
+        ImportPesertaJob::dispatch($path);
+
+        return back()->with('success', 'Proses import sedang dijalankan di background.');
     }
+
     public function edit($id)
     {
         $peserta = Peserta::with(['user', 'peserta_pkl.dudi'])->findOrFail($id);

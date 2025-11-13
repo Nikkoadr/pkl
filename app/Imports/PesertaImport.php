@@ -2,13 +2,10 @@
 
 namespace App\Imports;
 
-use App\Models\User;
-use App\Models\Peserta;
+use App\Models\{User, Peserta, Kelas, Tahun_ajaran};
 use Illuminate\Support\Facades\Hash;
-use Maatwebsite\Excel\Concerns\ToModel;
-use Maatwebsite\Excel\Concerns\WithHeadingRow;
-use App\Models\Kelas;
-use App\Models\Tahun_ajaran;
+use Maatwebsite\Excel\Concerns\{ToModel, WithHeadingRow};
+use Exception;
 
 class PesertaImport implements ToModel, WithHeadingRow
 {
@@ -18,11 +15,11 @@ class PesertaImport implements ToModel, WithHeadingRow
         $tahun_ajaran = Tahun_ajaran::where('nama_tahun_ajaran', $row['tahun_ajaran'])->first();
 
         if (!$kelas) {
-            throw new \Exception("Kelas {$row['kelas']} tidak ditemukan");
+            throw new Exception("Kelas {$row['kelas']} tidak ditemukan");
         }
 
         if (!$tahun_ajaran) {
-            throw new \Exception("Tahun Ajaran {$row['tahun_ajaran']} tidak ditemukan");
+            throw new Exception("Tahun Ajaran {$row['tahun_ajaran']} tidak ditemukan");
         }
 
         $user = User::create([
