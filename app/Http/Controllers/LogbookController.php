@@ -23,23 +23,33 @@ class LogbookController extends Controller
 
     public function index()
     {
-        if (Gate::allows('admin')) {
-            $logbook = Logbook::with([
-                'peserta_pkl.peserta.user',
-                'peserta_pkl.dudi'
-            ])->latest()->get();
+        $tahunAktif = tahunAktif(); // helper global
 
+        if (!$tahunAktif) {
+            return redirect()->route('home.dashboard')->with('error', 'Tidak ada tahun ajaran aktif.');
+        }
+
+        if (Gate::allows('admin')) {
+            $logbook = Logbook::whereHas('peserta_pkl.peserta', function ($q) use ($tahunAktif) {
+                $q->where('tahun_ajaran_id', $tahunAktif->id);
+            })
+                ->with([
+                    'peserta_pkl.peserta.user',
+                    'peserta_pkl.dudi'
+                ])
+                ->latest()
+                ->get();
         } elseif (Gate::allows('prodi')) {
             $user = Auth::user();
             $kaprodi = Kaprodi::where('guru_id', $user->guru->id)->first();
 
             if (!$kaprodi) {
-                return redirect()->route('home.dashboard')
-                    ->with('error', 'Anda tidak terdaftar sebagai Kaprodi.');
+                return redirect()->route('home.dashboard')->with('error', 'Anda tidak terdaftar sebagai Kaprodi.');
             }
 
-            $logbook = Logbook::whereHas('peserta_pkl.peserta.kelas', function ($q) use ($kaprodi) {
-                $q->where('kompetensi_keahlian_id', $kaprodi->kompetensi_keahlian_id);
+            $logbook = Logbook::whereHas('peserta_pkl.peserta.kelas', function ($q) use ($kaprodi, $tahunAktif) {
+                $q->where('kompetensi_keahlian_id', $kaprodi->kompetensi_keahlian_id)
+                    ->where('tahun_ajaran_id', $tahunAktif->id);
             })
                 ->with([
                     'peserta_pkl.peserta.user',
@@ -47,20 +57,21 @@ class LogbookController extends Controller
                 ])
                 ->latest()
                 ->get();
-
         } elseif (Gate::allows('guru')) {
             $user = Auth::user();
             $guru = Guru::where('user_id', $user->id)->first();
 
             if (!$guru) {
-                return redirect()->route('home.dashboard')
-                    ->with('error', 'Anda tidak terdaftar sebagai Guru.');
+                return redirect()->route('home.dashboard')->with('error', 'Anda tidak terdaftar sebagai Guru.');
             }
 
             $dudi_ids = Guru_pembimbing::where('guru_id', $guru->id)->pluck('dudi_id');
 
-            $logbook = Logbook::whereHas('peserta_pkl', function ($q) use ($dudi_ids) {
-                $q->whereIn('dudi_id', $dudi_ids);
+            $logbook = Logbook::whereHas('peserta_pkl', function ($q) use ($dudi_ids, $tahunAktif) {
+                $q->whereIn('dudi_id', $dudi_ids)
+                    ->whereHas('peserta', function ($qq) use ($tahunAktif) {
+                        $qq->where('tahun_ajaran_id', $tahunAktif->id);
+                    });
             })
                 ->with([
                     'peserta_pkl.peserta.user',
@@ -68,20 +79,19 @@ class LogbookController extends Controller
                 ])
                 ->latest()
                 ->get();
-
         } elseif (Gate::allows('peserta')) {
-            $peserta = Peserta::where('user_id', Auth::id())->first();
+            $peserta = Peserta::where('user_id', Auth::id())
+                ->where('tahun_ajaran_id', $tahunAktif->id)
+                ->first();
 
             if (!$peserta) {
-                return redirect()->route('home.dashboard')
-                    ->with('error', 'Anda belum terdaftar sebagai Peserta.');
+                return redirect()->route('home.dashboard')->with('error', 'Anda belum terdaftar sebagai Peserta di tahun ajaran aktif.');
             }
 
             $peserta_pkl = Peserta_pkl::where('peserta_id', $peserta->id)->first();
 
             if (!$peserta_pkl) {
-                return redirect()->route('home.dashboard')
-                    ->with('error', 'Anda belum mengikuti PKL.');
+                return redirect()->route('home.dashboard')->with('error', 'Anda belum mengikuti PKL di tahun ajaran aktif.');
             }
 
             $logbook = Logbook::with([
@@ -91,16 +101,16 @@ class LogbookController extends Controller
                 ->where('peserta_pkl_id', $peserta_pkl->id)
                 ->latest()
                 ->get();
-
         } else {
             $logbook = collect();
         }
 
-        $peserta = Peserta::all();
+        $peserta = Peserta::where('tahun_ajaran_id', $tahunAktif->id)->get();
         $dudi    = Dudi::all();
 
         return view('home.logbook.index', compact('logbook', 'peserta', 'dudi'));
     }
+
 
     public function create()
     {

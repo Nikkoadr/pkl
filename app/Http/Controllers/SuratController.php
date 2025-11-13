@@ -32,9 +32,21 @@ class SuratController extends Controller
      */
     public function index()
     {
+        $tahunAktif = tahunAktif(); // helper global, ambil tahun ajaran aktif
+
+        if (!$tahunAktif) {
+            return redirect()->route('home.dashboard')->with('error', 'Tidak ada tahun ajaran aktif.');
+        }
+
         if (Gate::allows('admin')) {
-            $dudiList = Dudi::has('peserta_pkl')
-                ->withCount('peserta_pkl')
+            $dudiList = Dudi::whereHas('peserta_pkl.peserta', function ($q) use ($tahunAktif) {
+                $q->where('tahun_ajaran_id', $tahunAktif->id);
+            })
+                ->withCount(['peserta_pkl as peserta_pkl_count' => function ($q) use ($tahunAktif) {
+                    $q->whereHas('peserta', function ($qq) use ($tahunAktif) {
+                        $qq->where('tahun_ajaran_id', $tahunAktif->id);
+                    });
+                }])
                 ->get();
 
             return view('home.surat.index', compact('dudiList'));
@@ -42,19 +54,20 @@ class SuratController extends Controller
 
         if (Gate::allows('prodi')) {
             $user = Auth::user();
-
-            // Ambil kompetensi keahlian dari kaprodi
             $kaprodi = Kaprodi::where('guru_id', $user->guru->id)->first();
+
             if (!$kaprodi) {
                 abort(403, 'Anda tidak terdaftar sebagai Kaprodi');
             }
 
-            $dudiList = Dudi::whereHas('peserta_pkl.peserta.kelas', function ($q) use ($kaprodi) {
-                $q->where('kompetensi_keahlian_id', $kaprodi->kompetensi_keahlian_id);
+            $dudiList = Dudi::whereHas('peserta_pkl.peserta.kelas', function ($q) use ($kaprodi, $tahunAktif) {
+                $q->where('kompetensi_keahlian_id', $kaprodi->kompetensi_keahlian_id)
+                    ->where('tahun_ajaran_id', $tahunAktif->id);
             })
-                ->withCount(['peserta_pkl' => function ($q) use ($kaprodi) {
-                    $q->whereHas('peserta.kelas', function ($qq) use ($kaprodi) {
-                        $qq->where('kompetensi_keahlian_id', $kaprodi->kompetensi_keahlian_id);
+                ->withCount(['peserta_pkl as peserta_pkl_count' => function ($q) use ($kaprodi, $tahunAktif) {
+                    $q->whereHas('peserta.kelas', function ($qq) use ($kaprodi, $tahunAktif) {
+                        $qq->where('kompetensi_keahlian_id', $kaprodi->kompetensi_keahlian_id)
+                            ->where('tahun_ajaran_id', $tahunAktif->id);
                     });
                 }])
                 ->get();
@@ -64,18 +77,20 @@ class SuratController extends Controller
 
         if (Gate::allows('guru')) {
             $user = Auth::user();
-
-            // ambil guru dari user
             $guru = Guru::where('user_id', $user->id)->first();
+
             if (!$guru) {
                 abort(403, 'Anda tidak terdaftar sebagai Guru');
             }
 
-            // ambil daftar dudi yang dibimbing guru
             $dudi_ids = Guru_pembimbing::where('guru_id', $guru->id)->pluck('dudi_id');
 
             $dudiList = Dudi::whereIn('id', $dudi_ids)
-                ->withCount('peserta_pkl')
+                ->withCount(['peserta_pkl as peserta_pkl_count' => function ($q) use ($tahunAktif) {
+                    $q->whereHas('peserta', function ($qq) use ($tahunAktif) {
+                        $qq->where('tahun_ajaran_id', $tahunAktif->id);
+                    });
+                }])
                 ->get();
 
             return view('home.surat.index', compact('dudiList'));
@@ -83,6 +98,7 @@ class SuratController extends Controller
 
         abort(403);
     }
+
 
     public function cetakKopSurat($dudi_id)
     {

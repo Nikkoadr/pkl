@@ -25,22 +25,26 @@ class Tahun_ajaranController extends Controller
 
     public function store(Request $request)
     {
-        if (Tahun_ajaran::where('nama_tahun_ajaran', $request->nama_tahun_ajaran)->exists()) {
-            return redirect()->back()->with('error', 'Tahun ajaran sudah ada.');
-        }
+        // Validasi input
+        $request->validate([
+            'nama_tahun_ajaran' => 'required|string|unique:tahun_ajaran,nama_tahun_ajaran',
+            'status' => 'required|in:aktif,nonaktif',
+        ]);
 
-        if (Tahun_ajaran::where('status', 'aktif')->exists()) {
+        // Jika yang akan dibuat aktif, pastikan tidak ada tahun ajaran lain yang aktif
+        if ($request->status === 'aktif' && Tahun_ajaran::where('status', 'aktif')->exists()) {
             return redirect()->back()->with('error', 'Hanya boleh ada satu tahun ajaran aktif.');
         }
 
-        $request->validate([
-            'nama_tahun_ajaran' => 'required|unique:tahun_ajaran,nama_tahun_ajaran',
+        // Buat tahun ajaran baru
+        Tahun_ajaran::create([
+            'nama_tahun_ajaran' => $request->nama_tahun_ajaran,
+            'status' => $request->status,
         ]);
-
-        Tahun_ajaran::create($request->all());
 
         return redirect()->route('tahun_ajaran.index')->with('success', 'Tahun ajaran berhasil ditambahkan.');
     }
+
 
     public function show(string $id)
     {
@@ -56,15 +60,23 @@ class Tahun_ajaranController extends Controller
 
     public function update(Request $request, string $id)
     {
+        $item = Tahun_ajaran::findOrFail($id);
+
         $request->validate([
             'nama_tahun_ajaran' => 'required|unique:tahun_ajaran,nama_tahun_ajaran,' . $id,
+            'status' => 'required|in:aktif,nonaktif',
         ]);
 
-        $item = Tahun_ajaran::findOrFail($id);
-        $item->update($request->all());
+        // Jika status diubah menjadi 'aktif', nonaktifkan tahun ajaran aktif lainnya
+        if ($request->status === 'aktif') {
+            Tahun_ajaran::where('status', 'aktif')->where('id', '!=', $id)->update(['status' => 'nonaktif']);
+        }
+
+        $item->update($request->only('nama_tahun_ajaran', 'status'));
 
         return redirect()->route('tahun_ajaran.index')->with('success', 'Tahun ajaran berhasil diperbarui.');
     }
+
 
     public function destroy(string $id)
     {

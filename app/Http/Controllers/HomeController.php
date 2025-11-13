@@ -114,7 +114,7 @@ class HomeController extends Controller
             'password'       => 'nullable|string|min:6|confirmed',
             'tempat_lahir'   => 'nullable|string|max:255',
             'tanggal_lahir'  => 'nullable|date',
-            'foto_profil'    => 'nullable|image|max:2048',
+            'foto_profil'    => 'nullable|image|max:5120',
         ];
 
         if ($user->peserta) {

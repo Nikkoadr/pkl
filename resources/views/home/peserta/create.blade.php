@@ -35,14 +35,14 @@
                                 <!-- NISN -->
                                 <div class="form-group">
                                     <label>NISN</label>
-                                    <input type="text" name="nisn" class="form-control @error('nisn') is-invalid @enderror" value="{{ old('nisn') }}" placeholder="NISN" required>
+                                    <input type="number" name="nisn" class="form-control @error('nisn') is-invalid @enderror" value="{{ old('nisn') }}" placeholder="NISN" required>
                                     @error('nisn')<div class="invalid-feedback">{{ $message }}</div>@enderror
                                 </div>
 
                                 <!-- NIS -->
                                 <div class="form-group">
                                     <label>NIS</label>
-                                    <input type="text" name="nis" class="form-control @error('nis') is-invalid @enderror" value="{{ old('nis') }}" placeholder="NIS" required>
+                                    <input type="number" name="nis" class="form-control @error('nis') is-invalid @enderror" value="{{ old('nis') }}" placeholder="NIS" required>
                                     @error('nis')<div class="invalid-feedback">{{ $message }}</div>@enderror
                                 </div>
 

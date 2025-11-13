@@ -35,43 +35,43 @@ class PersertaController extends Controller
      */
 
 
-    public function index(Request $request)
+    public function index()
     {
-        if (Gate::allows('admin')) {
-            $semua_tahun_ajaran = Tahun_ajaran::orderBy('id', 'desc')->get();
-            $tahun_terbaru = $semua_tahun_ajaran->first();
-            $tahun_ajaran_id = $request->tahun_ajaran_id ?? $tahun_terbaru->id;
+        $tahunAktif = tahunAktif();
 
+        if (!$tahunAktif) {
+            return redirect()->route('home.dashboard')
+                ->with('error', 'Tidak ada tahun ajaran aktif.');
+        }
+
+        if (Gate::allows('admin')) {
             $peserta = Peserta::with(['tahun_ajaran', 'kelas.kompetensi', 'user'])
-                ->where('tahun_ajaran_id', $tahun_ajaran_id)
+                ->where('tahun_ajaran_id', $tahunAktif->id)
                 ->get();
 
-            return view('home.peserta.index', compact('peserta', 'semua_tahun_ajaran'));
+            return view('home.peserta.index', compact('peserta', 'tahunAktif'));
         }
 
         if (Gate::allows('prodi')) {
             $user = Auth::user();
-
             $kaprodi = Kaprodi::where('guru_id', $user->guru->id)->first();
 
-            if (!$kaprodi) {
-                abort(403, 'Anda tidak terdaftar sebagai kaprodi');
-            }
-
-            $semua_tahun_ajaran = Tahun_ajaran::orderBy('id', 'desc')->get();
-            $tahun_terbaru = $semua_tahun_ajaran->first();
-            $tahun_ajaran_id = $request->tahun_ajaran_id ?? $tahun_terbaru->id;
+            if (!$kaprodi) abort(403, 'Anda tidak terdaftar sebagai kaprodi');
 
             $peserta = Peserta::with(['tahun_ajaran', 'kelas.kompetensi', 'user'])
-                ->where('tahun_ajaran_id', $tahun_ajaran_id)
+                ->where('tahun_ajaran_id', $tahunAktif->id)
                 ->whereHas('kelas', function ($q) use ($kaprodi) {
                     $q->where('kompetensi_keahlian_id', $kaprodi->kompetensi_keahlian_id);
                 })
                 ->get();
 
-            return view('home.peserta.index', compact('peserta', 'semua_tahun_ajaran'));
+            return view('home.peserta.index', compact('peserta', 'tahunAktif'));
         }
+
+        return redirect()->route('home.dashboard')
+            ->with('error', 'Anda tidak memiliki akses.');
     }
+
 
     public function create()
     {

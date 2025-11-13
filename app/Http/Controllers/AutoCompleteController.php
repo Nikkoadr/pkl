@@ -94,8 +94,10 @@ class AutoCompleteController extends Controller
     public function autoCompletePeserta(Request $request)
     {
         $term = $request->get('term');
+        $tahunAktif = tahunAktif();
 
         $peserta = Peserta::with('user')
+            ->where('tahun_ajaran_id', $tahunAktif->id)
             ->whereHas('user', function ($query) use ($term) {
                 $query->where('nama', 'like', '%' . $term . '%');
             })
@@ -110,13 +112,18 @@ class AutoCompleteController extends Controller
 
         return response()->json($results);
     }
+
     public function autoCompletePesertaPKL(Request $request)
     {
         $term = $request->get('term');
+        $tahunAktif = tahunAktif();
 
         $pesertaPKL = Peserta_pkl::with(['peserta.user'])
-            ->whereHas('peserta.user', function ($query) use ($term) {
-                $query->where('nama', 'like', '%' . $term . '%');
+            ->whereHas('peserta', function ($q) use ($term, $tahunAktif) {
+                $q->where('tahun_ajaran_id', $tahunAktif->id)
+                    ->whereHas('user', function ($query) use ($term) {
+                        $query->where('nama', 'like', '%' . $term . '%');
+                    });
             })
             ->get();
 

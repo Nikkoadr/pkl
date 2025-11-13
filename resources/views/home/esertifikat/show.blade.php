@@ -103,21 +103,6 @@
             font-style: italic;
         }
 
-        /* QR di sebelah kiri foto */
-        .qr {
-            position: absolute;
-            bottom: 40mm;
-            left: 30mm;
-            width: 30mm;
-            height: 30mm;
-            text-align: center;
-        }
-
-        .qr svg, .qr img {
-            width: 100%;
-            height: 100%;
-        }
-
         /* Foto peserta */
         .foto {
             position: absolute;
@@ -200,16 +185,21 @@
 
     {{-- Tanggal --}}
     <div class="tanggal">
-        Sertifikat ini diberikan pada tanggal {{ \Carbon\Carbon::now()->locale('id')->translatedFormat('j F Y') }}
-    </div>
-
-    {{-- QR Code di kiri foto --}}
-    <div class="qr">
-        {!! QrCode::size(150)->generate(url('esertifikat/scan/' . $esertifikat->id)) !!}
+        Sertifikat ini diberikan pada tanggal {{ \Carbon\Carbon::parse($esertifikat->tanggal_diterbitkan)->locale('id')->translatedFormat('d F Y') }}
     </div>
 
     {{-- Foto --}}
-    <div class="foto"></div>
+    <div class="foto">
+    @if($esertifikat->peserta_pkl->peserta->user->foto_profil)
+        <img src="{{ asset('storage/foto_profil/' . $esertifikat->peserta_pkl->peserta->user->foto_profil) }}"
+            alt="Foto Peserta"
+            style="width: 100%; height: 100%; object-fit: cover;">
+    @else
+        <img src="{{ asset('assets/dist/img/foto-default.jpeg') }}"
+            alt="Foto Default"
+            style="width: 100%; height: 100%; object-fit: cover;">
+    @endif
+</div>
 
     {{-- Tanda Tangan --}}
     <div class="ttd">
@@ -218,11 +208,5 @@
     </div>
 
 </div>
-
-<script>
-    window.onload = function () {
-        window.print();
-    };
-</script>
 </body>
 </html>

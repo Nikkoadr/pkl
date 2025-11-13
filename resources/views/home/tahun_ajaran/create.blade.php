@@ -2,7 +2,6 @@
 @section('title', 'Tambah Tahun Ajaran')
 
 @section('content')
-<!-- Content Wrapper -->
 <div class="content-wrapper">
 
     <!-- Header -->
@@ -26,8 +25,6 @@
     <!-- Main Content -->
     <section class="content">
         <div class="container-fluid">
-
-            <!-- Form Card -->
             <div class="card card-primary">
                 <div class="card-header">
                     <h3 class="card-title">Form Tambah Tahun Ajaran</h3>
@@ -35,6 +32,17 @@
                 <form action="{{ route('tahun_ajaran.store') }}" method="POST">
                     @csrf
                     <div class="card-body">
+                        <div class="form-group">
+                            <label for="status">Status</label>
+                            <select name="status" id="status" class="form-control @error('status') is-invalid @enderror" required>
+                                <option value="" disabled selected>Pilih Status</option>
+                                <option value="aktif" {{ old('status') == 'aktif' ? 'selected' : '' }}>Aktif</option>
+                                <option value="nonaktif" {{ old('status') == 'nonaktif' ? 'selected' : '' }}>Non-Aktif</option>
+                            </select>
+                            @error('status')
+                                <span class="invalid-feedback">{{ $message }}</span>
+                            @enderror
+                        </div>
                         <div class="form-group">
                             <label for="nama_tahun_ajaran">Nama Tahun Ajaran</label>
                             <input type="text" name="nama_tahun_ajaran" class="form-control @error('nama_tahun_ajaran') is-invalid @enderror" id="nama_tahun_ajaran" placeholder="Contoh: 2025/2026" value="{{ old('nama_tahun_ajaran') }}" required>
@@ -50,8 +58,57 @@
                     </div>
                 </form>
             </div>
-
         </div>
     </section>
 </div>
+@endsection
+
+@section('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Success toast
+        @if (session('success'))
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: 'success',
+                title: '{{ session('success') }}',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true
+            });
+        @endif
+
+        // Error toast
+        @if (session('error'))
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: 'error',
+                title: '{{ session('error') }}',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true
+            });
+        @endif
+
+        // Validation errors
+        @if ($errors->any())
+            let errorMessages = '';
+            @foreach ($errors->all() as $error)
+                errorMessages += '{{ $error }}<br>';
+            @endforeach
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: 'error',
+                title: 'Terjadi kesalahan!',
+                html: errorMessages,
+                showConfirmButton: true
+            });
+        @endif
+    });
+</script>
 @endsection

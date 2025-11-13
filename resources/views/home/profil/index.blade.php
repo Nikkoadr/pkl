@@ -28,13 +28,16 @@
                                 <img src="{{ auth()->user()->foto_profil ? asset('storage/foto_profil/' . auth()->user()->foto_profil) : asset('assets/dist/img/about.png') }}"
                                     class="img-fluid rounded" style="max-height: 220px; object-fit: cover;" alt="Foto Profil">
                             </div>
-                            <div class="form-group">
-                                <label for="foto_profil">Foto Profil</label>
-                                <div class="custom-file">
-                                    <input type="file" class="custom-file-input" id="foto_profil" name="foto_profil" accept="image/*">
-                                    <label class="custom-file-label" for="foto_profil">Pilih file</label>
-                                </div>
+                        <div class="form-group">
+                            <label for="foto_profil">Foto Profil</label>
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input @error('foto_profil') is-invalid @enderror" id="foto_profil" name="foto_profil" accept="image/*">
+                                <label class="custom-file-label" for="foto_profil">Pilih file</label>
+                                @error('foto_profil')
+                                    <span class="invalid-feedback d-block" role="alert">{{ $message }}</span>
+                                @enderror
                             </div>
+                        </div>
                         </div>
 
                         {{-- Data User --}}

@@ -24,18 +24,6 @@
                         <h3 class="card-title mb-2 mb-md-0">Daftar Peserta</h3>
                         
                         <div class="d-flex flex-column flex-md-row align-items-md-center gap-2">
-                            <form method="GET" class="form-inline mr-2">
-                                <div class="form-group mb-0">
-                                    <label for="tahun_ajaran_id" class="mr-2">Tahun Ajaran:</label>
-                                    <select name="tahun_ajaran_id" id="tahun_ajaran_id" class="form-control form-control-sm" onchange="this.form.submit()">
-                                        @foreach($semua_tahun_ajaran as $tahun)
-                                            <option value="{{ $tahun->id }}" {{ request('tahun_ajaran_id', $semua_tahun_ajaran->first()->id) == $tahun->id ? 'selected' : '' }}>
-                                                {{ $tahun->nama_tahun_ajaran }}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </form>
                             <button class="btn btn-sm btn-success mr-2" data-toggle="modal" data-target="#modalImport">
                                 <i class="fas fa-file-import"></i> Import Excel
                             </button>

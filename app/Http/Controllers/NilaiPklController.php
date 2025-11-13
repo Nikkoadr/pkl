@@ -12,6 +12,7 @@ use App\Models\Peserta_pkl;
 use App\Models\Kaprodi;
 use App\Models\Guru;
 use App\Models\Guru_pembimbing;
+use App\Models\Esertifikat;
 
 class NilaiPklController extends Controller
 {
@@ -34,9 +35,19 @@ class NilaiPklController extends Controller
     public function index()
     {
         $user = Auth::user();
+        $tahunAktif = tahunAktif(); // helper global
+
+        if (!$tahunAktif) {
+            return redirect()->route('home.dashboard')->with('error', 'Tidak ada tahun ajaran aktif.');
+        }
 
         if (Gate::allows('admin')) {
-            $nilai_pkl = Nilai_pkl::with('peserta_pkl.peserta.user', 'peserta_pkl.dudi')->get();
+            $nilai_pkl = Nilai_pkl::whereHas('peserta_pkl.peserta', function ($q) use ($tahunAktif) {
+                $q->where('tahun_ajaran_id', $tahunAktif->id);
+            })
+                ->with('peserta_pkl.peserta.user', 'peserta_pkl.dudi')
+                ->get();
+
             return view('home.nilai_pkl.index', compact('nilai_pkl'));
         } elseif (Gate::allows('prodi')) {
             $kaprodi = Kaprodi::where('guru_id', $user->guru->id)->first();
@@ -45,8 +56,9 @@ class NilaiPklController extends Controller
                 abort(403, 'Anda tidak terdaftar sebagai Kaprodi');
             }
 
-            $nilai_pkl = Nilai_pkl::whereHas('peserta_pkl.peserta.kelas', function ($q) use ($kaprodi) {
-                $q->where('kompetensi_keahlian_id', $kaprodi->kompetensi_keahlian_id);
+            $nilai_pkl = Nilai_pkl::whereHas('peserta_pkl.peserta.kelas', function ($q) use ($kaprodi, $tahunAktif) {
+                $q->where('kompetensi_keahlian_id', $kaprodi->kompetensi_keahlian_id)
+                    ->where('tahun_ajaran_id', $tahunAktif->id);
             })
                 ->with('peserta_pkl.peserta.user', 'peserta_pkl.dudi')
                 ->get();
@@ -61,33 +73,45 @@ class NilaiPklController extends Controller
 
             $dudi_ids = Guru_pembimbing::where('guru_id', $guru->id)->pluck('dudi_id');
 
-            $nilai_pkl = Nilai_pkl::whereHas('peserta_pkl', function ($q) use ($dudi_ids) {
-                $q->whereIn('dudi_id', $dudi_ids);
+            $nilai_pkl = Nilai_pkl::whereHas('peserta_pkl', function ($q) use ($dudi_ids, $tahunAktif) {
+                $q->whereIn('dudi_id', $dudi_ids)
+                    ->whereHas('peserta', function ($qq) use ($tahunAktif) {
+                        $qq->where('tahun_ajaran_id', $tahunAktif->id);
+                    });
             })
                 ->with('peserta_pkl.peserta.user', 'peserta_pkl.dudi')
                 ->get();
 
             return view('home.nilai_pkl.index', compact('nilai_pkl'));
         } elseif (Gate::allows('peserta')) {
-            $userId = $user->id;
+            $peserta = Peserta::where('user_id', $user->id)
+                ->where('tahun_ajaran_id', $tahunAktif->id)
+                ->first();
 
-            $pesertaPkl = Peserta_pkl::whereHas('peserta.user', function ($q) use ($userId) {
-                $q->where('id', $userId);
-            })->first();
+            if (!$peserta) {
+                return redirect()->route('home.dashboard')
+                    ->with('error', 'Anda belum terdaftar mengikuti PKL di tahun ajaran aktif.');
+            }
+
+            $pesertaPkl = Peserta_pkl::where('peserta_id', $peserta->id)->first();
 
             if (!$pesertaPkl) {
-                return redirect()->route('home.dashboard')->with('error', 'Anda belum terdaftar mengikuti PKL.');
+                return redirect()->route('home.dashboard')
+                    ->with('error', 'Anda belum mengikuti PKL di tahun ajaran aktif.');
             }
 
             $nilai_pkl = Nilai_pkl::where('peserta_pkl_id', $pesertaPkl->id)
                 ->with('peserta_pkl.peserta.user', 'peserta_pkl.dudi')
                 ->first() ?? new Nilai_pkl();
 
-            return view('home.nilai_pkl.index_peserta', compact('nilai_pkl'));
+            $esertifikat = Esertifikat::where('peserta_pkl_id', $pesertaPkl->id)->first();
+
+            return view('home.nilai_pkl.index_peserta', compact('nilai_pkl', 'esertifikat'));
         }
 
         abort(403);
     }
+
 
     public function store(Request $request)
     {

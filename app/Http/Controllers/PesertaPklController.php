@@ -34,38 +34,44 @@ class PesertaPklController extends Controller
      */
     public function index()
     {
+        $tahunAktif = tahunAktif(); // helper global, ambil tahun ajaran aktif
+
+        if (!$tahunAktif) {
+            return redirect()->route('home.dashboard')->with('error', 'Tidak ada tahun ajaran aktif.');
+        }
+
         if (Gate::allows('admin')) {
-            $peserta_pkl = Peserta_pkl::with(['dudi', 'peserta.user', 'peserta.kelas.kompetensi'])->get();
+            $peserta_pkl = Peserta_pkl::with(['dudi', 'peserta.user', 'peserta.kelas.kompetensi'])
+                ->whereHas('peserta', function ($q) use ($tahunAktif) {
+                    $q->where('tahun_ajaran_id', $tahunAktif->id);
+                })->get();
+
             return view('home.peserta_pkl.index', compact('peserta_pkl'));
         }
 
         if (Gate::allows('prodi')) {
             $user = Auth::user();
-
-            $guru = $user->guru;
-            $kaprodi = Kaprodi::where('guru_id', $guru->id)->first();
+            $kaprodi = Kaprodi::where('guru_id', $user->guru->id)->first();
 
             if (!$kaprodi) {
                 abort(403, 'Anda tidak terdaftar sebagai Kaprodi');
             }
 
-            $peserta_pkl = Peserta_pkl::with([
-                'dudi',
-                'peserta.user',
-                'peserta.kelas.kompetensi'
-            ])->whereHas('peserta.kelas', function ($q) use ($kaprodi) {
-                $q->where('kompetensi_keahlian_id', $kaprodi->kompetensi_keahlian_id);
-            })->get();
+            $peserta_pkl = Peserta_pkl::with(['dudi', 'peserta.user', 'peserta.kelas.kompetensi'])
+                ->whereHas('peserta', function ($q) use ($kaprodi, $tahunAktif) {
+                    $q->where('tahun_ajaran_id', $tahunAktif->id)
+                        ->whereHas('kelas', function ($q2) use ($kaprodi) {
+                            $q2->where('kompetensi_keahlian_id', $kaprodi->kompetensi_keahlian_id);
+                        });
+                })->get();
 
             return view('home.peserta_pkl.index', compact('peserta_pkl'));
         }
 
-
-
         if (Gate::allows('guru_pembimbing')) {
             $user = Auth::user();
-
             $guru = Guru::where('user_id', $user->id)->first();
+
             if (!$guru) {
                 abort(403, 'Anda tidak terdaftar sebagai Guru Pembimbing');
             }
@@ -74,10 +80,14 @@ class PesertaPklController extends Controller
 
             $peserta_pkl = Peserta_pkl::with(['dudi', 'peserta.user', 'peserta.kelas.kompetensi'])
                 ->whereIn('dudi_id', $dudi_ids)
-                ->get();
+                ->whereHas('peserta', function ($q) use ($tahunAktif) {
+                    $q->where('tahun_ajaran_id', $tahunAktif->id);
+                })->get();
 
             return view('home.peserta_pkl.index', compact('peserta_pkl'));
         }
+
+        return redirect()->route('home.dashboard')->with('error', 'Anda tidak memiliki akses.');
     }
 
 
