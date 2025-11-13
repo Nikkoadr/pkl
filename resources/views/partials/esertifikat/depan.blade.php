@@ -198,7 +198,7 @@
     </div>
 
     <div class="qr">
-        {!! QrCode::size(150)->generate(url('esertifikat/scan/' . $esertifikat->nomor_sertifikat)) !!}
+        {!! QrCode::size(150)->generate(url('esertifikat/scan/' . urlencode($esertifikat->nomor_sertifikat))) !!}
     </div>
 
     <div class="foto"></div>

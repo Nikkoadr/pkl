@@ -334,6 +334,8 @@ class EsertifikatController extends Controller
 
     public function scan($nomor_sertifikat)
     {
+        $nomor_sertifikat = urldecode($nomor_sertifikat);
+
         $esertifikat = Esertifikat::with([
             'peserta_pkl.peserta.user',
             'peserta_pkl.peserta.kelas.kompetensi',

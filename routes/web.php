@@ -85,7 +85,7 @@ Route::get('/home/pengantar-massal', [SuratController::class, 'cetakPengantarMas
 Route::get('/home/esertifikat', [EsertifikatController::class, 'index'])->name('home.esertifikat');
 Route::delete('/home/esertifikat/{id}', [EsertifikatController::class, 'destroy'])->name('home.esertifikat.destroy');
 Route::post('/home/esertifikat/destroy_massal', [EsertifikatController::class, 'destroy_massal'])->name('home.esertifikat.destroy_massal');
-Route::get('esertifikat/scan/{id}', [EsertifikatController::class, 'scan'])->name('esertifikat.scan');
+Route::get('esertifikat/scan/{nomor_sertifikat}', [EsertifikatController::class, 'scan'])->name('esertifikat.scan');
 
 Route::get('/home/esertifikat/cetak_depan/{id}', [EsertifikatController::class, 'cetak_depan'])->name('cetak.esertifikat_depan');
 Route::get('/home/esertifikat/cetak_belakang/{id}', [EsertifikatController::class, 'cetak_belakang'])->name('cetak.esertifikat_belakang');
