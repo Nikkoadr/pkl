@@ -170,23 +170,18 @@
 <body>
 <div class="page">
 
-    {{-- Nomor Sertifikat --}}
     <div class="nomor">
         Nomor : {{ $esertifikat->nomor_sertifikat ?? ('086.' . str_pad($esertifikat->id, 3, '0', STR_PAD_LEFT) . '/KET/III.4/AU/F/' . date('Y')) }}
     </div>
 
-    {{-- Judul --}}
     <div class="judul">Sertifikat ini diberikan Kepada :</div>
 
-    {{-- Nama Peserta --}}
     <div class="nama">{{ strtoupper($esertifikat->peserta_pkl->peserta->user->nama) }}</div>
 
-    {{-- Jurusan --}}
     <div class="jurusan">
         ( {{ strtoupper($esertifikat->peserta_pkl->peserta->kelas->kompetensi->nama_kompetensi ?? '-') }} )
     </div>
 
-    {{-- Isi Sertifikat --}}
     <div class="isi">
         Yang telah menyelesaikan <br>
         <b>PRAKTIK KERJA LAPANGAN (PKL)</b><br>
@@ -198,20 +193,16 @@
         </i>
     </div>
 
-    {{-- Tanggal --}}
     <div class="tanggal">
         Sertifikat ini diberikan pada tanggal {{ \Carbon\Carbon::now()->locale('id')->translatedFormat('j F Y') }}
     </div>
 
-    {{-- QR Code di kiri foto --}}
     <div class="qr">
-        {!! QrCode::size(150)->generate(url('esertifikat/scan/' . $esertifikat->id)) !!}
+        {!! QrCode::size(150)->generate(url('esertifikat/scan/' . $esertifikat->nomor_sertifikat)) !!}
     </div>
 
-    {{-- Foto --}}
     <div class="foto"></div>
 
-    {{-- Tanda Tangan --}}
     <div class="ttd">
         Kepala SMK Muhammadiyah <br> Kandanghaur,<br>
         <div class="nama-ttd">{{ $pengaturan->kepala_sekolah }}</div>

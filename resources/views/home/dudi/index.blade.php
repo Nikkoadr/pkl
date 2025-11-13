@@ -242,7 +242,11 @@
 <script src="{{ asset('assets/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="{{ asset('assets/plugins/bs-custom-file-input/bs-custom-file-input.min.js') }}"></script>
-
+<script>
+$(function () {
+    bsCustomFileInput.init();
+});
+</script>
 <script>
     $(function () {
         $("#tabelDUDI").DataTable({
@@ -273,11 +277,7 @@
         });
     });
 </script>
-<script>
-$(function () {
-    bsCustomFileInput.init();
-});
-</script>
+
 @if (session('success'))
 <script>
     Swal.fire({

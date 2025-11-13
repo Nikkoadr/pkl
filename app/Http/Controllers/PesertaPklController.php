@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Kaprodi;
 use App\Models\Guru;
 use App\Models\Guru_pembimbing;
-use App\Models\Peserta;
+use App\Imports\Peserta_pklImport;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\Peserta_pklExport;
 use Illuminate\Support\Carbon;
@@ -34,7 +34,7 @@ class PesertaPklController extends Controller
      */
     public function index()
     {
-        $tahunAktif = tahunAktif(); // helper global, ambil tahun ajaran aktif
+        $tahunAktif = tahunAktif();
 
         if (!$tahunAktif) {
             return redirect()->route('home.dashboard')->with('error', 'Tidak ada tahun ajaran aktif.');
@@ -155,5 +155,19 @@ class PesertaPklController extends Controller
         $peserta_pkl = Peserta_pkl::findOrFail($id);
         $peserta_pkl->delete();
         return redirect()->back()->with('success', 'Data berhasil dihapus');
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'import_peserta_pkl' => 'required|mimes:xls,xlsx,csv',
+        ]);
+
+        try {
+            Excel::import(new Peserta_pklImport, $request->file('import_peserta_pkl'));
+            return redirect()->back()->with('success', 'Data peserta PKL berhasil diimport.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat import: ' . $e->getMessage());
+        }
     }
 }

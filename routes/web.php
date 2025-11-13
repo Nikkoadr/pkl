@@ -62,6 +62,7 @@ Route::resource('/home/peserta_pkl', PesertaPklController::class);
 Route::resource('/home/pengaturan', PengaturanController::class)->only('index', 'update');
 Route::resource('/home/logbook', LogbookController::class);
 Route::post('/home/logbook/store_siswa', [LogbookController::class, 'store_siswa'])->name('logbook.store_siswa');
+Route::post('/home/peserta_pkl/import', [PesertaPklController::class, 'import'])->name('peserta_pkl.import');
 
 // Import Data
 Route::post('/home/import_dudi', [DudiController::class, 'import'])->name('dudi.import');

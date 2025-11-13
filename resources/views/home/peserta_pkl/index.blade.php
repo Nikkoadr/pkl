@@ -36,17 +36,47 @@
                         <div class="col-md-6 d-flex align-items-center">
                             <h3 class="card-title mb-0">Daftar Peserta PKL</h3>
                         </div>
-                        <div class="col-md-6 text-right">
-                            <a href="{{ route('peserta_pkl.export') }}" class="btn btn-success">
-                                <i class="fas fa-file-excel"></i> Export
-                            </a>
-                            <button class="btn btn-primary" data-toggle="modal" data-target="#modalTambah">
-                                <i class="fas fa-plus"></i> Tambah Peserta
-                            </button>
-                        </div>
+                            <div class="col-md-6 text-right">
+                                <a href="{{ route('peserta_pkl.export') }}" class="btn btn-success">
+                                    <i class="fas fa-file-excel"></i> Export
+                                </a>
+                                <button class="btn btn-primary" data-toggle="modal" data-target="#modalTambah">
+                                    <i class="fas fa-plus"></i> Tambah Peserta
+                                </button>
+                                <button class="btn btn-info" data-toggle="modal" data-target="#modalImport">
+                                    <i class="fas fa-file-import"></i> Import
+                                </button>
+                            </div>
                     </div>
                 </div>
-
+                    <div class="modal fade" id="modalImport">
+                        <div class="modal-dialog">
+                            <form action="{{ route('peserta_pkl.import') }}" method="POST" enctype="multipart/form-data">
+                                @csrf
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Import Data Peserta PKL</h5>
+                                        <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="form-group">
+                                            <label for="import_peserta_pkl">File input</label>
+                                            <div class="input-group">
+                                                <div class="custom-file">
+                                                    <input type="file" class="custom-file-input" id="import_peserta_pkl" name="import_peserta_pkl" required accept=".xlsx, .xls, .csv">
+                                                    <label class="custom-file-label" for="import_peserta_pkl">Choose file</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn btn-primary">Import</button>
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 <div class="card-body">
                     <table id="tabelPesertaPKL" class="table table-bordered table-striped">
                         <thead>
@@ -126,7 +156,12 @@
 <script src="{{ asset('assets/plugins/datatables-buttons/js/buttons.bootstrap4.min.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
-
+<script src="{{ asset('assets/plugins/bs-custom-file-input/bs-custom-file-input.min.js') }}"></script>
+<script>
+$(function () {
+    bsCustomFileInput.init();
+});
+</script>
 <script>
     $(function () {
         $("#tabelPesertaPKL").DataTable({

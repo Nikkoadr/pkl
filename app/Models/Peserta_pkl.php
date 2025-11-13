@@ -24,4 +24,9 @@ class Peserta_pkl extends Model
     {
         return $this->hasOne(Nilai_pkl::class);
     }
+
+    public function esertifikat()
+    {
+        return $this->hasOne(Esertifikat::class);
+    }
 }
