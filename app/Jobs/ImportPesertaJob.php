@@ -24,14 +24,12 @@ class ImportPesertaJob implements ShouldQueue
 
     public function handle()
     {
-        $filePath = 'public/' . $this->path;
+        $path = ltrim($this->path, '/');
 
-        // Jalankan import Excel
-        Excel::import(new PesertaImport, storage_path('app/' . $filePath));
+        Excel::import(new PesertaImport, storage_path('app/public/' . $path));
 
-        // Hapus file setelah selesai diimport
-        if (Storage::exists($filePath)) {
-            Storage::delete($filePath);
+        if (Storage::disk('public')->exists($path)) {
+            Storage::disk('public')->delete($path);
         }
     }
 }
