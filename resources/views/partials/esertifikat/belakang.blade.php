@@ -94,7 +94,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr><td class="center">1</td><td>Nilai rata-rata sikap</td><td class="center">{{ number_format($esertifikat->rata_sikap, 0) }}</td><td class="center">{{ predikat($esertifikat->rata_sikap) }}</td></tr>
+                <tr><td class="center">1</td><td>Nilai rata-rata sikap</td><td class="center">{{ number_format($esertifikat->rata_rata, 0) }}</td><td class="center">{{ predikat($esertifikat->rata_rata) }}</td></tr>
                 <tr><td class="center">2</td><td>Nilai sidang laporan PKL</td><td class="center">{{ $esertifikat->peserta_pkl->nilai_pkl->nilai_sidang_pkl }}</td><td class="center">{{ predikat($esertifikat->peserta_pkl->nilai_pkl->nilai_sidang_pkl) }}</td></tr>
                 <tr><td colspan="2" class="bold" style="text-align:right;">Nilai Akhir :</td><td colspan="2" class="center bold">{{ number_format($esertifikat->nilai_akhir, 0) }}</td></tr>
                 <tr><td colspan="2" class="bold" style="text-align:right;">Predikat :</td><td colspan="2" class="center bold">{{ predikat($esertifikat->nilai_akhir) }}</td></tr>
