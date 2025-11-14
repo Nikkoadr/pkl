@@ -6,112 +6,7 @@
 
     <!-- Font Nama -->
     <link href="https://fonts.googleapis.com/css2?family=Story+Script&display=swap" rel="stylesheet">
-
-    <style>
-        @page {
-            size: A4;
-            margin: 0;
-        }
-        body {
-            margin: 0;
-            padding: 40px 0;
-            background-color: #e0e0e0;
-            font-family: "Times New Roman", serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .page {
-            position: relative;
-            width: 210mm;
-            height: 297mm;
-            background: white url('{{ asset("assets/dist/img/sertifikat-bg.jpeg") }}') no-repeat center/cover;
-            box-shadow: 0 0 15px rgba(0,0,0,0.25);
-        }
-        .nomor {
-            position: absolute;
-            top: 110mm;
-            width: 100%;
-            text-align: center;
-            font-size: 18pt;
-            font-weight: bold;
-        }
-        .judul {
-            position: absolute;
-            top: 118mm;
-            width: 100%;
-            text-align: center;
-            font-size: 18pt;
-        }
-        .nama {
-            position: absolute;
-            top: 132mm;
-            width: 100%;
-            text-align: center;
-            font-size: 30pt;
-            font-family: 'Story Script';
-        }
-        .jurusan {
-            position: absolute;
-            top: 145mm;
-            width: 100%;
-            text-align: center;
-            font-size: 15pt;
-        }
-        .isi {
-            position: absolute;
-            top: 158mm;
-            width: 100%;
-            text-align: center;
-            font-size: 14pt;
-        }
-        .isi b {
-            font-size: 18pt;
-        }
-        .tanggal {
-            position: absolute;
-            top: 185mm;
-            width: 100%;
-            text-align: center;
-            font-size: 14pt;
-            font-style: italic;
-        }
-        .foto {
-            position: absolute;
-            bottom: 40mm;
-            left: 80mm;
-            width: 28mm;
-            height: 38mm;
-            border: 1px solid #000;
-            background-color: #fff;
-        }
-        .ttd {
-            position: absolute;
-            bottom: 40mm;
-            left: 130mm;
-            text-align: center;
-            font-size: 14pt;
-            line-height: 1.4;
-            width: 60mm;
-        }
-        .qr-ttd {
-            width: 28mm;
-            margin: 8px auto 0 auto;
-        }
-        .nama-ttd {
-            font-weight: bold;
-        }
-
-        @media print {
-            body {
-                background-color: white !important;
-                padding: 0;
-            }
-            .page {
-                box-shadow: none;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="{{ asset('assets/dist/css/styles_sertifikat.css') }}" />
 </head>
 <body>
 
@@ -169,10 +64,5 @@
     </div>
 
 </div>
-
-<script>
-    window.onload = () => window.print();
-</script>
-
 </body>
 </html>
