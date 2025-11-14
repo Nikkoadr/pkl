@@ -61,7 +61,7 @@
     text-align: center;
     font-size: 28pt;
     font-weight: bold;
-    font-family: 'times new roman';
+    font-family: 'Story Script';
 }
         .jurusan {
             position: absolute;
