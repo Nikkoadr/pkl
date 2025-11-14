@@ -41,6 +41,9 @@
                                         <a class="dropdown-item" href="#" id="btnPengantar">
                                             <i class="fas fa-paper-plane text-success"></i> Pengantar
                                         </a>
+                                        <a class="dropdown-item" href="#" id="btnPenarikan">
+                                            <i class="fas fa-sign-out-alt text-danger"></i> Penarikan
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -78,6 +81,9 @@
                                             </a>
                                             <a href="{{ route('surat.pengantar', $dudi->id) }}" class="btn btn-success btn-sm w-100" target="_blank">
                                                 <i class="fas fa-paper-plane"></i> Pengantar
+                                            </a>
+                                            <a href="{{ route('surat.penarikan', $dudi->id) }}" class="btn btn-danger btn-sm w-100" target="_blank">
+                                                <i class="fas fa-sign-out-alt"></i> Penarikan
                                             </a>
                                         </div>
                                     </td>
@@ -175,6 +181,9 @@ $(function () {
 
     $('#btnPengantar').on('click', function () {
         showModalWithIframes('pengantar-massal');
+    });
+    $('#btnPenarikan').on('click', function () {
+        showModalWithIframes('penarikan-massal');
     });
 });
 </script>

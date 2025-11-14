@@ -78,9 +78,11 @@ Route::get('/home/surat', [SuratController::class, 'index'])->name('home.surat')
 Route::get('/home/kop_surat/{id}', [SuratController::class, 'cetakKopSurat'])->name('surat.kop_surat');
 Route::get('/home/permohonan/{id}', [SuratController::class, 'cetakPermohonan'])->name('surat.permohonan');
 Route::get('/home/pengantar/{id}', [SuratController::class, 'cetakPengantar'])->name('surat.pengantar');
+Route::get('/home/penarikan/{id}', [SuratController::class, 'cetakPenarikan'])->name('surat.penarikan');
 Route::get('/home/kop-surat-massal', [SuratController::class, 'cetakKopSuratMassal'])->name('surat.kop_surat.massal');
 Route::get('/home/permohonan-massal', [SuratController::class, 'cetakPermohonanMassal'])->name('surat.permohonan.massal');
 Route::get('/home/pengantar-massal', [SuratController::class, 'cetakPengantarMassal'])->name('surat.pengantar.massal');
+Route::get('/home/penarikan-massal', [SuratController::class, 'cetakPenarikanMassal'])->name('surat.penarikan.massal');
 
 Route::get('/home/esertifikat', [EsertifikatController::class, 'index'])->name('home.esertifikat');
 Route::delete('/home/esertifikat/{id}', [EsertifikatController::class, 'destroy'])->name('home.esertifikat.destroy');

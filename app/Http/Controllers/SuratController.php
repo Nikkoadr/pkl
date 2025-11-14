@@ -116,8 +116,8 @@ class SuratController extends Controller
 
         $kompetensi = $firstPeserta?->kelas?->kompetensi?->nama_kompetensi ?? '—';
         $pengaturan = Pengaturan::latest()->first();
-        $tanggal_mulai = \Carbon\Carbon::parse($pengaturan->tanggal_mulai_pkl)->locale('id')->translatedFormat('j F Y');
-        $tanggal_selesai = \Carbon\Carbon::parse($pengaturan->tanggal_selesai_pkl)->locale('id')->translatedFormat('j F Y');
+        $tanggal_mulai = Carbon::parse($pengaturan->tanggal_mulai_pkl)->locale('id')->translatedFormat('j F Y');
+        $tanggal_selesai = Carbon::parse($pengaturan->tanggal_selesai_pkl)->locale('id')->translatedFormat('j F Y');
         $kepala_sekolah = $pengaturan->kepala_sekolah;
         $ketua_pkl = $pengaturan->ketua_pkl;
         $sekretaris_pkl = $pengaturan->sekretaris_pkl;
@@ -137,8 +137,8 @@ class SuratController extends Controller
         $jumlah_siswa = $peserta->count();
 
         $pengaturan = Pengaturan::latest()->first();
-        $tanggal_mulai = \Carbon\Carbon::parse($pengaturan->tanggal_mulai_pkl)->locale('id')->translatedFormat('j F Y');
-        $tanggal_selesai = \Carbon\Carbon::parse($pengaturan->tanggal_selesai_pkl)->locale('id')->translatedFormat('j F Y');
+        $tanggal_mulai = Carbon::parse($pengaturan->tanggal_mulai_pkl)->locale('id')->translatedFormat('j F Y');
+        $tanggal_selesai = Carbon::parse($pengaturan->tanggal_selesai_pkl)->locale('id')->translatedFormat('j F Y');
         $kepala_sekolah = $pengaturan->kepala_sekolah;
         $ketua_pkl = $pengaturan->ketua_pkl;
         $sekretaris_pkl = $pengaturan->sekretaris_pkl;
@@ -156,6 +156,20 @@ class SuratController extends Controller
             'ketua_pkl',
             'sekretaris_pkl'
         ));
+    }
+
+    public function cetakPenarikan($dudi_id)
+    {
+        $dudi = Dudi::findOrFail($dudi_id);
+
+        $kompetensi = $firstPeserta?->kelas?->kompetensi?->nama_kompetensi ?? '—';
+        $pengaturan = Pengaturan::latest()->first();
+        $tanggal_mulai = Carbon::parse($pengaturan->tanggal_mulai_pkl)->locale('id')->translatedFormat('j F Y');
+        $tanggal_selesai = Carbon::parse($pengaturan->tanggal_selesai_pkl)->locale('id')->translatedFormat('j F Y');
+        $kepala_sekolah = $pengaturan->kepala_sekolah;
+        $ketua_pkl = $pengaturan->ketua_pkl;
+        $sekretaris_pkl = $pengaturan->sekretaris_pkl;
+        return view('partials.docx.penarikan', compact('tanggal_mulai', 'tanggal_selesai', 'dudi', 'kepala_sekolah', 'ketua_pkl', 'sekretaris_pkl'));
     }
 
     public function cetakKopSuratMassal(Request $request)
@@ -178,8 +192,8 @@ class SuratController extends Controller
         $data = [];
 
         $pengaturan = Pengaturan::latest()->first();
-        $tanggal_mulai = \Carbon\Carbon::parse($pengaturan->tanggal_mulai_pkl)->locale('id')->translatedFormat('j F Y');
-        $tanggal_selesai = \Carbon\Carbon::parse($pengaturan->tanggal_selesai_pkl)->locale('id')->translatedFormat('j F Y');
+        $tanggal_mulai = Carbon::parse($pengaturan->tanggal_mulai_pkl)->locale('id')->translatedFormat('j F Y');
+        $tanggal_selesai = Carbon::parse($pengaturan->tanggal_selesai_pkl)->locale('id')->translatedFormat('j F Y');
         $kepala_sekolah = $pengaturan->kepala_sekolah;
         $ketua_pkl = $pengaturan->ketua_pkl;
         $sekretaris_pkl = $pengaturan->sekretaris_pkl;
@@ -218,8 +232,8 @@ class SuratController extends Controller
         $data = [];
 
         $pengaturan = Pengaturan::latest()->first();
-        $tanggal_mulai = \Carbon\Carbon::parse($pengaturan->tanggal_mulai_pkl)->locale('id')->translatedFormat('j F Y');
-        $tanggal_selesai = \Carbon\Carbon::parse($pengaturan->tanggal_selesai_pkl)->locale('id')->translatedFormat('j F Y');
+        $tanggal_mulai = Carbon::parse($pengaturan->tanggal_mulai_pkl)->locale('id')->translatedFormat('j F Y');
+        $tanggal_selesai = Carbon::parse($pengaturan->tanggal_selesai_pkl)->locale('id')->translatedFormat('j F Y');
         $kepala_sekolah = $pengaturan->kepala_sekolah;
         $ketua_pkl = $pengaturan->ketua_pkl;
         $sekretaris_pkl = $pengaturan->sekretaris_pkl;
@@ -251,5 +265,32 @@ class SuratController extends Controller
             ];
         }
         return view('partials.docx.cetak_masal_surat_pengantar', compact('data', 'tanggal_mulai', 'tanggal_selesai', 'kepala_sekolah', 'ketua_pkl', 'sekretaris_pkl'));
+    }
+
+    public function cetakPenarikanMassal(Request $request)
+    {
+        $ids = explode(',', $request->input('ids'));
+        $data = [];
+
+        $pengaturan = Pengaturan::latest()->first();
+        $tanggal_mulai = Carbon::parse($pengaturan->tanggal_mulai_pkl)->locale('id')->translatedFormat('j F Y');
+        $tanggal_selesai = Carbon::parse($pengaturan->tanggal_selesai_pkl)->locale('id')->translatedFormat('j F Y');
+        $kepala_sekolah = $pengaturan->kepala_sekolah;
+        $ketua_pkl = $pengaturan->ketua_pkl;
+        $sekretaris_pkl = $pengaturan->sekretaris_pkl;
+
+        foreach ($ids as $id) {
+            $dudi = Dudi::find($id);
+
+            if (!$dudi) {
+                continue;
+            }
+
+            $data[] = [
+                'dudi' => $dudi,
+            ];
+        }
+
+        return view('partials.docx.cetak_masal_surat_penarikan', compact('data', 'tanggal_mulai', 'tanggal_selesai', 'kepala_sekolah', 'ketua_pkl', 'sekretaris_pkl'));
     }
 }
