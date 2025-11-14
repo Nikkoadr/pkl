@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <title>Sertifikat PKL</title>
-    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Story+Script&display=swap" rel="stylesheet">
     <style>
         @page {
             size: A4;
@@ -61,7 +61,7 @@
     text-align: center;
     font-size: 28pt;
     font-weight: bold;
-    font-family: 'Great Vibes';
+    font-family: 'times new roman';
 }
         .jurusan {
             position: absolute;
