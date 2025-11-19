@@ -24,9 +24,11 @@
                         <h3 class="card-title mb-2 mb-md-0">Daftar Peserta</h3>
                         
                         <div class="d-flex flex-column flex-md-row align-items-md-center gap-2">
-                            <button class="btn btn-sm btn-success mr-2" data-toggle="modal" data-target="#modalImport">
-                                <i class="fas fa-file-import"></i> Import Excel
-                            </button>
+                            @can('admin')
+                                <button class="btn btn-sm btn-success mr-2" data-toggle="modal" data-target="#modalImport">
+                                    <i class="fas fa-file-import"></i> Import Excel
+                                </button>
+                            @endcan
                             <a href="{{ route('peserta.create') }}" class="btn btn-info btn-sm">
                                 <i class="fas fa-user-plus"></i> Tambah Peserta
                             </a>
@@ -80,6 +82,7 @@
     </section>
 </div>
 
+@can('admin')
 <div class="modal fade" id="modalImport" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <form action="{{ route('peserta.import') }}" method="POST" enctype="multipart/form-data">
@@ -108,6 +111,7 @@
         </form>
     </div>
 </div>
+@endcan
 @endsection
 
 @section('scripts')

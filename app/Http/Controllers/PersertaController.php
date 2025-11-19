@@ -71,12 +71,30 @@ class PersertaController extends Controller
             ->with('error', 'Anda tidak memiliki akses.');
     }
 
-
     public function create()
     {
-        $tahun_ajaran = Tahun_ajaran::orderBy('id', 'desc')->get();
-        $users = User::whereDoesntHave('peserta')->where('role_id', 3)->get();
-        $kelas = Kelas::all();
+        $userLogin = Auth::user();
+
+        // Ambil kompetensi keahlian kaprodi login
+        $kompetensiId = Kaprodi::whereHas('guru', function ($q) use ($userLogin) {
+            $q->where('user_id', $userLogin->id);
+        })->value('kompetensi_keahlian_id');
+
+        // Tahun ajaran aktif
+        $tahun_ajaran = Tahun_ajaran::where('status', 'aktif')->first();
+
+        // User peserta (role 3) yang belum punya peserta
+        $users = User::whereDoesntHave('peserta')
+            ->where('role_id', 3)
+            ->get();
+
+        // Jika login adalah Kaprodi → filter kelas sesuai kompetensi keahlian
+        if (Gate::allows('prodi')) {
+            $kelas = Kelas::where('kompetensi_keahlian_id', $kompetensiId)->get();
+        } else {
+            $kelas = Kelas::all();
+        }
+
         return view('home.peserta.create', compact('users', 'kelas', 'tahun_ajaran'));
     }
 

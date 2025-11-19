@@ -21,46 +21,45 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-6">
-                                <!-- Tahun Ajaran -->
+
+                                {{-- Tahun Ajaran Aktif --}}
                                 <div class="form-group">
                                     <label>Tahun Ajaran</label>
                                     <select name="tahun_ajaran_id" class="form-control @error('tahun_ajaran_id') is-invalid @enderror" required>
-                                        @foreach ($tahun_ajaran as $ta)
-                                            <option value="{{ $ta->id }}" {{ old('tahun_ajaran_id') == $ta->id ? 'selected' : '' }}>{{ $ta->nama_tahun_ajaran }}</option>
-                                        @endforeach
+                                        <option value="{{ $tahun_ajaran->id }}">{{ $tahun_ajaran->nama_tahun_ajaran }}</option>
                                     </select>
                                     @error('tahun_ajaran_id')<div class="invalid-feedback">{{ $message }}</div>@enderror
                                 </div>
 
-                                <!-- NISN -->
+                                {{-- NISN --}}
                                 <div class="form-group">
                                     <label>NISN</label>
                                     <input type="number" name="nisn" class="form-control @error('nisn') is-invalid @enderror" value="{{ old('nisn') }}" placeholder="NISN" required>
                                     @error('nisn')<div class="invalid-feedback">{{ $message }}</div>@enderror
                                 </div>
 
-                                <!-- NIS -->
+                                {{-- NIS --}}
                                 <div class="form-group">
                                     <label>NIS</label>
                                     <input type="number" name="nis" class="form-control @error('nis') is-invalid @enderror" value="{{ old('nis') }}" placeholder="NIS" required>
                                     @error('nis')<div class="invalid-feedback">{{ $message }}</div>@enderror
                                 </div>
 
-                                <!-- Nama Lengkap -->
+                                {{-- Nama Lengkap --}}
                                 <div class="form-group">
                                     <label>Nama Lengkap</label>
                                     <input type="text" name="nama" class="form-control @error('nama') is-invalid @enderror" value="{{ old('nama') }}" placeholder="Nama Lengkap" required>
                                     @error('nama')<div class="invalid-feedback">{{ $message }}</div>@enderror
                                 </div>
 
-                                <!-- Tempat Lahir -->
+                                {{-- Tempat Lahir --}}
                                 <div class="form-group">
                                     <label>Tempat Lahir</label>
                                     <input type="text" name="tempat_lahir" class="form-control @error('tempat_lahir') is-invalid @enderror" value="{{ old('tempat_lahir') }}" placeholder="Tempat Lahir">
                                     @error('tempat_lahir')<div class="invalid-feedback">{{ $message }}</div>@enderror
                                 </div>
 
-                                <!-- Tanggal Lahir -->
+                                {{-- Tanggal Lahir --}}
                                 <div class="form-group">
                                     <label>Tanggal Lahir</label>
                                     <input type="date" name="tanggal_lahir" class="form-control @error('tanggal_lahir') is-invalid @enderror" value="{{ old('tanggal_lahir') }}" required>
@@ -69,19 +68,22 @@
                             </div>
 
                             <div class="col-md-6">
-                                <!-- Kelas -->
+
+                                {{-- Kelas (Filtered by Prodi Login) --}}
                                 <div class="form-group">
                                     <label>Kelas</label>
                                     <select name="kelas_id" class="form-control @error('kelas_id') is-invalid @enderror" required>
                                         <option value="">-- Pilih Kelas --</option>
                                         @foreach ($kelas as $k)
-                                            <option value="{{ $k->id }}" {{ old('kelas_id') == $k->id ? 'selected' : '' }}>{{ $k->nama_kelas }}</option>
+                                            <option value="{{ $k->id }}" {{ old('kelas_id') == $k->id ? 'selected' : '' }}>
+                                                {{ $k->nama_kelas }}
+                                            </option>
                                         @endforeach
                                     </select>
                                     @error('kelas_id')<div class="invalid-feedback">{{ $message }}</div>@enderror
                                 </div>
 
-                                <!-- Jenis Kelamin -->
+                                {{-- Jenis Kelamin --}}
                                 <div class="form-group">
                                     <label>Jenis Kelamin</label>
                                     <select name="jenis_kelamin" class="form-control @error('jenis_kelamin') is-invalid @enderror" required>
@@ -92,7 +94,7 @@
                                     @error('jenis_kelamin')<div class="invalid-feedback">{{ $message }}</div>@enderror
                                 </div>
 
-                                <!-- Nama DUDI (Autocomplete) -->
+                                {{-- Nama DUDI - Autocomplete --}}
                                 <div class="form-group">
                                     <label>Nama DUDI</label>
                                     <input type="text" id="nama_dudi" class="form-control @error('dudi_id') is-invalid @enderror" placeholder="Nama DUDI" required>
@@ -100,13 +102,13 @@
                                     @error('dudi_id')<div class="invalid-feedback">{{ $message }}</div>@enderror
                                 </div>
 
-                                <!-- Alamat DUDI -->
+                                {{-- Alamat DUDI --}}
                                 <div class="form-group">
                                     <label>Alamat DUDI</label>
                                     <input type="text" name="alamat_dudi" id="alamat_dudi" class="form-control" placeholder="Alamat DUDI" readonly>
                                 </div>
 
-                                <!-- Pimpinan DUDI -->
+                                {{-- Pimpinan DUDI --}}
                                 <div class="form-group">
                                     <label>Nama Pimpinan DUDI</label>
                                     <input type="text" name="nama_pimpinan_dudi" id="nama_pimpinan_dudi" class="form-control" placeholder="Nama Pimpinan DUDI" readonly>
@@ -114,21 +116,21 @@
                             </div>
                         </div>
 
-                        <!-- Email -->
+                        {{-- Email --}}
                         <div class="form-group">
                             <label>Email</label>
                             <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email') }}" placeholder="Email" required>
                             @error('email')<div class="invalid-feedback">{{ $message }}</div>@enderror
                         </div>
 
-                        <!-- Password -->
+                        {{-- Password --}}
                         <div class="form-group">
                             <label>Password</label>
                             <input type="password" name="password" class="form-control @error('password') is-invalid @enderror" placeholder="Password" required>
                             @error('password')<div class="invalid-feedback">{{ $message }}</div>@enderror
                         </div>
 
-                        <!-- Konfirmasi Password -->
+                        {{-- Konfirmasi Password --}}
                         <div class="form-group">
                             <label>Konfirmasi Password</label>
                             <input type="password" name="password_confirmation" class="form-control" placeholder="Konfirmasi Password" required>
