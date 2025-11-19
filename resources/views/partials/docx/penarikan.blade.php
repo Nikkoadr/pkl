@@ -6,7 +6,6 @@
     <link rel="stylesheet" href="{{ asset('assets/dist/css/styles_docx.css') }}" />
   </head>
   <body>
-    <!-- Halaman 1 -->
     <div class="page">
       @include('partials.docx.head')
 

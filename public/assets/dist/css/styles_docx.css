@@ -66,6 +66,7 @@ body {
     margin-top: 40px;
     display: flex;
     justify-content: space-between;
+    white-space: nowrap !important;
     text-align: center;
 }
 
@@ -125,7 +126,6 @@ a {
         width: 100%;
         height: auto;
         margin: 0;
-        margin-right: 10px;
         padding: 0;
         box-shadow: none;
         page-break-after: always;
