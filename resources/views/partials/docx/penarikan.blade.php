@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <title>Surat Penarikan Peserta PKL</title>
-    <link rel="stylesheet" href="{{ asset('assets/dist/css/styles_docx.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/dist/css/styles_docx.css') }}?v={{ filemtime(public_path('assets/dist/css/styles_docx.css')) }}" />
   </head>
   <body>
     <div class="page">
