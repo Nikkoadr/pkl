@@ -19,6 +19,7 @@ use App\Http\Controllers\LogbookController;
 use App\Http\Controllers\NilaiPklController;
 use App\Http\Controllers\KaprodiController;
 
+
 Route::get('/', function () {
     return view('welcome');
 });

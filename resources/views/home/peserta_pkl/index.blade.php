@@ -84,6 +84,7 @@
                                 <th>No</th>
                                 <th>Nama DUDI</th>
                                 <th>Nama Peserta</th>
+                                <th>Kelas</th>
                                 <th data-orderable="false" class="text-center">Aksi</th>
                             </tr>
                         </thead>
@@ -93,6 +94,7 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $item->dudi->nama_dudi ?? '-' }}</td>
                                 <td>{{ $item->peserta->user->nama ?? '-' }}</td>
+                                <td>{{ $item->peserta->kelas->nama_kelas ?? '-' }}</td>
                                 <td class="text-center">
                                     <a href="{{ route('peserta_pkl.edit', $item->id) }}" class="btn btn-warning btn-sm">
                                         <i class="fas fa-edit"></i>

@@ -22,11 +22,14 @@ class Peserta_pklExport implements FromCollection, WithHeadings
             'peserta_pkl.dudi'
         ]);
 
-        $guru = $this->getCurrentGuru();
-        if (!$guru) return collect();
-
-
+        // ============================
+        // ROLE PRODI
+        // ============================
         if (Gate::allows('prodi')) {
+
+            $guru = $this->getCurrentGuru();
+            if (!$guru) return collect();
+
             $kaprodi = Kaprodi::where('guru_id', $guru->id)->first();
             if (!$kaprodi) return collect();
 
@@ -35,7 +38,14 @@ class Peserta_pklExport implements FromCollection, WithHeadings
             });
         }
 
+        // ============================
+        // ROLE GURU PEMBIMBING
+        // ============================
         if (Gate::allows('guru_pembimbing')) {
+
+            $guru = $this->getCurrentGuru();
+            if (!$guru) return collect();
+
             $dudi_ids = Guru_pembimbing::where('guru_id', $guru->id)->pluck('dudi_id');
 
             $query->whereHas('peserta_pkl', function ($q) use ($dudi_ids) {
@@ -46,18 +56,24 @@ class Peserta_pklExport implements FromCollection, WithHeadings
         return $query->get()->map(function ($peserta) {
 
             $dudi = optional($peserta->peserta_pkl)->dudi;
-            $dudiName = $dudi->nama_dudi ?? 'Belum memiliki DUDI';
 
             return [
-                'nis'           => "'" . ($peserta->nis ?? '-'),
-                'nisn'          => "'" . ($peserta->nisn ?? '-'),
-                'nama'          => optional($peserta->user)->nama ?? '-',
-                'tempat_lahir'  => optional($peserta->user)->tempat_lahir ?? '-',
-                'tanggal_lahir' => optional($peserta->user)->tanggal_lahir
+                'nis'               => "'" . ($peserta->nis ?? '-'),
+                'nisn'              => "'" . ($peserta->nisn ?? '-'),
+                'nama'              => optional($peserta->user)->nama ?? '-',
+                'tempat_lahir'      => optional($peserta->user)->tempat_lahir ?? '-',
+                'tanggal_lahir'     => optional($peserta->user)->tanggal_lahir
                     ? Carbon::parse($peserta->user->tanggal_lahir)->translatedFormat('d F Y')
                     : '-',
-                'kelas'         => optional($peserta->kelas)->nama_kelas ?? '-',
-                'dudi'          => $dudiName,
+                'kelas'             => optional($peserta->kelas)->nama_kelas ?? '-',
+
+                // ======= DATA DUDI LENGKAP =======
+                'nama_dudi'         => $dudi->nama_dudi ?? 'Belum memiliki DUDI',
+                'alamat_dudi'       => $dudi->alamat_dudi ?? '-',
+                'no_telp_dudi'      => "'" . ($dudi->no_telp_dudi ?? '-'),
+                'jabatan_pimpinan'  => $dudi->jabatan_pimpinan ?? '-',
+                'nomor_kepegawaian' => "'" . ($dudi->nomor_kepegawaian ?? '-'),
+                'nama_pimpinan_dudi' => $dudi->nama_pimpinan_dudi ?? '-',
             ];
         });
     }
@@ -76,7 +92,14 @@ class Peserta_pklExport implements FromCollection, WithHeadings
             'Tempat Lahir',
             'Tanggal Lahir',
             'Kelas',
-            'DUDI',
+
+            // ===== HEADING DUDI =====
+            'Nama DUDI',
+            'Alamat DUDI',
+            'No. Telp DUDI',
+            'Jabatan Pimpinan',
+            'Nomor Kepegawaian',
+            'Nama Pimpinan DUDI',
         ];
     }
 }
