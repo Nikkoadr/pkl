@@ -41,7 +41,7 @@
                                 <label for="foto_bukti">Foto Bukti</label>
                                 <div class="custom-file">
                                     <input type="file" name="foto_bukti" id="foto_bukti" 
-                                        class="custom-file-input @error('foto') is-invalid @enderror">
+                                        class="custom-file-input @error('foto') is-invalid @enderror" required>
                                     <label class="custom-file-label" for="foto">Pilih foto...</label>
                                     @error('foto')
                                         <div class="invalid-feedback d-block">{{ $message }}</div>
@@ -52,7 +52,7 @@
                             {{-- Keterangan --}}
                             <div class="form-group col-12">
                                 <label for="keterangan">Keterangan</label>
-                                <textarea name="keterangan" id="keterangan" rows="4" 
+                                <textarea name="keterangan" id="keterangan" required rows="4" 
                                     class="form-control @error('keterangan') is-invalid @enderror" 
                                     placeholder="Contoh: Menyelesaikan laporan harian">{{ old('keterangan') }}</textarea>
                                 @error('keterangan')

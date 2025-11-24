@@ -143,14 +143,14 @@
                         <div class="form-group col-md-12">
                             <label for="autocomplete_peserta_pkl">Nama Peserta</label>
                             <input type="text" id="autocomplete_peserta_pkl" class="form-control" placeholder="Ketik nama peserta...">
-                            <input type="hidden" name="peserta_pkl_id" id="peserta_pkl_id">
+                            <input type="hidden" name="peserta_pkl_id" id="peserta_pkl_id" required>
                         </div>
 
                         <!-- Foto Bukti -->
                         <div class="form-group col-md-12">
                             <label for="foto_bukti">Foto Bukti</label>
                             <div class="custom-file">
-                                <input type="file" name="foto_bukti" class="custom-file-input @error('foto_bukti') is-invalid @enderror" id="foto_bukti">
+                                <input type="file" name="foto_bukti" class="custom-file-input @error('foto_bukti') is-invalid @enderror" id="foto_bukti" required>
                                 <label class="custom-file-label" for="foto_bukti">Pilih file</label>
                                 @error('foto_bukti')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -161,7 +161,7 @@
                         <!-- Keterangan -->
                         <div class="form-group col-md-12">
                             <label for="keterangan">Keterangan</label>
-                            <textarea name="keterangan" class="form-control @error('keterangan') is-invalid @enderror" rows="3"></textarea>
+                            <textarea name="keterangan" class="form-control @error('keterangan') is-invalid @enderror" rows="3" required></textarea>
                             @error('keterangan')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror

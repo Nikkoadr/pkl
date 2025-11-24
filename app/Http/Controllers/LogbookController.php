@@ -23,7 +23,7 @@ class LogbookController extends Controller
 
     public function index()
     {
-        $tahunAktif = tahunAktif(); // helper global
+        $tahunAktif = tahunAktif();
 
         if (!$tahunAktif) {
             return redirect()->route('home.dashboard')->with('error', 'Tidak ada tahun ajaran aktif.');
@@ -111,7 +111,6 @@ class LogbookController extends Controller
         return view('home.logbook.index', compact('logbook', 'peserta', 'dudi'));
     }
 
-
     public function create()
     {
         $userId = Auth::id();
@@ -139,8 +138,8 @@ class LogbookController extends Controller
         }
 
         $request->validate([
-            'keterangan' => 'nullable|string|max:255',
-            'foto_bukti' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'keterangan' => 'required|string|max:255',
+            'foto_bukti' => 'required|image|mimes:jpeg,png,jpg,gif|max:5120',
         ]);
 
         $sudahAda = Logbook::where('peserta_pkl_id', $pesertaPkl->id)
@@ -177,8 +176,8 @@ class LogbookController extends Controller
             'peserta_pkl_id' => 'required|exists:peserta,id',
             'tanggal' => 'required|date',
             'jam' => 'required',
-            'keterangan' => 'nullable|string|max:255',
-            'foto_bukti' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'keterangan' => 'required|string|max:255',
+            'foto_bukti' => 'required|image|mimes:jpeg,png,jpg,gif|max:5120',
         ]);
 
         $sudahAda = Logbook::where('peserta_pkl_id', $request->peserta_pkl_id)
