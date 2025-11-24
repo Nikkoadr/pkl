@@ -16,50 +16,55 @@ class Peserta_pklExport implements FromCollection, WithHeadings
 {
     public function collection()
     {
-        $query = Peserta::with(['user', 'kelas.kompetensi', 'peserta_pkl.dudi']);
+        $query = Peserta::with([
+            'user',
+            'kelas.kompetensi',
+            'peserta_pkl.dudi'
+        ]);
+
+        $guru = $this->getCurrentGuru();
+        if (!$guru) return collect();
+
 
         if (Gate::allows('prodi')) {
-            $user = Auth::user();
-            $kaprodi = Kaprodi::where('user_id', $user->id)->first();
+            $kaprodi = Kaprodi::where('guru_id', $guru->id)->first();
+            if (!$kaprodi) return collect();
 
-            if ($kaprodi) {
-                $query->whereHas('kelas', function ($q) use ($kaprodi) {
-                    $q->where('kompetensi_keahlian_id', $kaprodi->kompetensi_keahlian_id);
-                });
-            } else {
-                return collect();
-            }
+            $query->whereHas('kelas', function ($q) use ($kaprodi) {
+                $q->where('kompetensi_keahlian_id', $kaprodi->kompetensi_keahlian_id);
+            });
         }
 
         if (Gate::allows('guru_pembimbing')) {
-            $user = Auth::user();
-            $guru = Guru::where('user_id', $user->id)->first();
+            $dudi_ids = Guru_pembimbing::where('guru_id', $guru->id)->pluck('dudi_id');
 
-            if ($guru) {
-                $dudi_ids = Guru_pembimbing::where('guru_id', $guru->id)->pluck('dudi_id');
-                $query->whereHas('peserta_pkl', function ($q) use ($dudi_ids) {
-                    $q->whereIn('dudi_id', $dudi_ids);
-                });
-            } else {
-                return collect();
-            }
+            $query->whereHas('peserta_pkl', function ($q) use ($dudi_ids) {
+                $q->whereIn('dudi_id', $dudi_ids);
+            });
         }
 
         return $query->get()->map(function ($peserta) {
-            $dudiName = $peserta->peserta_pkl->dudi->nama_dudi ?? 'Belum memiliki DUDI';
+
+            $dudi = optional($peserta->peserta_pkl)->dudi;
+            $dudiName = $dudi->nama_dudi ?? 'Belum memiliki DUDI';
 
             return [
                 'nis'           => "'" . ($peserta->nis ?? '-'),
                 'nisn'          => "'" . ($peserta->nisn ?? '-'),
-                'nama'          => $peserta->user->nama ?? '-',
-                'tempat_lahir'  => $peserta->user->tempat_lahir ?? '-',
-                'tanggal_lahir' => $peserta->user->tanggal_lahir
+                'nama'          => optional($peserta->user)->nama ?? '-',
+                'tempat_lahir'  => optional($peserta->user)->tempat_lahir ?? '-',
+                'tanggal_lahir' => optional($peserta->user)->tanggal_lahir
                     ? Carbon::parse($peserta->user->tanggal_lahir)->translatedFormat('d F Y')
                     : '-',
-                'kelas'         => $peserta->kelas->nama_kelas ?? '-',
+                'kelas'         => optional($peserta->kelas)->nama_kelas ?? '-',
                 'dudi'          => $dudiName,
             ];
         });
+    }
+
+    private function getCurrentGuru()
+    {
+        return Guru::where('user_id', Auth::id())->first();
     }
 
     public function headings(): array
