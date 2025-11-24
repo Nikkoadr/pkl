@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use App\Models\Kelas;
 use App\Models\Peserta_pkl;
-use App\Models\Kaprodi;
 use App\Models\Kompetensi_keahlian;
 use App\Models\Peserta;
 
