@@ -127,18 +127,30 @@ class SuratController extends Controller
 
     public function cetakPengantar($dudi_id)
     {
+        $tahunAktif = tahunAktif();
+
+        if (!$tahunAktif) {
+            return redirect()->route('home.dashboard')->with('error', 'Tidak ada tahun ajaran aktif.');
+        }
+
         $peserta = Peserta::with(['kelas.kompetensi', 'user'])
-            ->whereHas('peserta_pkl', fn($q) => $q->where('dudi_id', $dudi_id))
+            ->where('tahun_ajaran_id', $tahunAktif->id)  // FILTER TAHUN AKTIF
+            ->whereHas(
+                'peserta_pkl',
+                fn($q) =>
+                $q->where('dudi_id', $dudi_id)
+            )
             ->get();
+
         $firstPeserta = $peserta->first();
 
         $kompetensi = $firstPeserta?->kelas?->kompetensi?->nama_kompetensi ?? '—';
-
         $jumlah_siswa = $peserta->count();
 
         $pengaturan = Pengaturan::latest()->first();
         $tanggal_mulai = Carbon::parse($pengaturan->tanggal_mulai_pkl)->locale('id')->translatedFormat('j F Y');
         $tanggal_selesai = Carbon::parse($pengaturan->tanggal_selesai_pkl)->locale('id')->translatedFormat('j F Y');
+
         $kepala_sekolah = $pengaturan->kepala_sekolah;
         $ketua_pkl = $pengaturan->ketua_pkl;
         $sekretaris_pkl = $pengaturan->sekretaris_pkl;
@@ -157,6 +169,7 @@ class SuratController extends Controller
             'sekretaris_pkl'
         ));
     }
+
 
     public function cetakPenarikan($dudi_id)
     {

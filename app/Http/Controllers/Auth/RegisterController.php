@@ -18,35 +18,21 @@ class RegisterController extends Controller
 {
     use RegistersUsers;
 
-    /**
-     * Halaman setelah registrasi berhasil.
-     *
-     * @var string
-     */
     protected $redirectTo = '/home/dashboard';
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         $this->middleware('guest');
     }
 
-    /**
-     * Menampilkan form registrasi.
-     */
     public function showRegistrationForm()
     {
         $kelas = Kelas::all();
-        $tahun_ajaran = Tahun_ajaran::orderByDesc('id')->first();
+        $tahun_ajaran = Tahun_ajaran::where('status', 'aktif')->first();
 
         return view('auth.register', compact('kelas', 'tahun_ajaran'));
     }
 
-    /**
-     * Validasi input registrasi.
-     */
     protected function validator(array $data)
     {
         return Validator::make($data, [
@@ -68,12 +54,8 @@ class RegisterController extends Controller
         ]);
     }
 
-    /**
-     * Membuat user baru setelah validasi berhasil.
-     */
     protected function create(array $data)
     {
-        // 1. Cek kuota DUDI
         $dudi = Dudi::findOrFail($data['dudi_id']);
         $jumlah_peserta = Peserta_pkl::where('dudi_id', $dudi->id)->count();
 
@@ -81,7 +63,6 @@ class RegisterController extends Controller
             abort(redirect()->route('register')->with('error', 'Kuota DUDI sudah penuh.'));
         }
 
-        // 2. Cek duplikat kombinasi Nama + Tanggal Lahir
         $cekNamaTgl = User::where('nama', $data['nama'])
             ->where('tanggal_lahir', $data['tanggal_lahir'])
             ->first();
@@ -90,9 +71,8 @@ class RegisterController extends Controller
             abort(redirect()->route('register')->with('error', 'Peserta dengan nama dan tanggal lahir yang sama sudah terdaftar.'));
         }
 
-        // 3. Simpan user baru
         $user = User::create([
-            'role_id'       => 4, // role peserta
+            'role_id'       => 4,
             'nama'          => $data['nama'],
             'jenis_kelamin' => $data['jenis_kelamin'],
             'tempat_lahir'  => $data['tempat_lahir'],
@@ -101,7 +81,6 @@ class RegisterController extends Controller
             'password'      => Hash::make($data['password']),
         ]);
 
-        // 4. Simpan ke tabel peserta
         $peserta = Peserta::create([
             'user_id'         => $user->id,
             'nis'             => $data['nis'],
@@ -110,7 +89,6 @@ class RegisterController extends Controller
             'tahun_ajaran_id' => $data['tahun_ajaran_id'],
         ]);
 
-        // 5. Simpan ke tabel peserta_pkl
         Peserta_pkl::create([
             'dudi_id'    => $data['dudi_id'],
             'peserta_id' => $peserta->id,
