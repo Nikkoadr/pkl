@@ -66,7 +66,7 @@
                                 <td>{{ $item->kuota }}</td>
                                 <td>{{ $item->kompetensi_keahlian->nama_kompetensi }}</td>
                                 <td class="text-center">
-                                        <a href="{{ route('surat.permohonan', $item->id) }}" class="btn btn-info btn-sm" target="_blank">
+                                        <a href="{{ route('surat.booking', $item->id) }}" class="btn btn-info btn-sm" target="_blank">
                                             <i class="fas fa-file-alt"></i>
                                         </a>
                                     <a href="{{ route('dudi.edit', $item->id) }}" class="btn btn-primary btn-sm">

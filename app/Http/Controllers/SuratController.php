@@ -9,6 +9,7 @@ use App\Models\Pengaturan;
 use App\Models\Kaprodi;
 use App\Models\Guru;
 use App\Models\Guru_pembimbing;
+use App\Models\Kompetensi_keahlian;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Auth;
@@ -32,7 +33,7 @@ class SuratController extends Controller
      */
     public function index()
     {
-        $tahunAktif = tahunAktif(); // helper global, ambil tahun ajaran aktif
+        $tahunAktif = tahunAktif();
 
         if (!$tahunAktif) {
             return redirect()->route('home.dashboard')->with('error', 'Tidak ada tahun ajaran aktif.');
@@ -106,6 +107,18 @@ class SuratController extends Controller
         return view('partials.docx.kop_surat', compact('dudi'));
     }
 
+    public function cetakBooking($dudi_id)
+    {
+        $kompetensi = Dudi::findOrFail($dudi_id)->kompetensi_keahlian->nama_kompetensi;
+        $pengaturan = Pengaturan::latest()->first();
+        $tanggal_mulai = Carbon::parse($pengaturan->tanggal_mulai_pkl)->locale('id')->translatedFormat('j F Y');
+        $tanggal_selesai = Carbon::parse($pengaturan->tanggal_selesai_pkl)->locale('id')->translatedFormat('j F Y');
+        $kepala_sekolah = $pengaturan->kepala_sekolah;
+        $ketua_pkl = $pengaturan->ketua_pkl;
+        $sekretaris_pkl = $pengaturan->sekretaris_pkl;
+        $dudi = Dudi::findOrFail($dudi_id);
+        return view('partials.docx.booking', compact('kompetensi', 'tanggal_mulai', 'tanggal_selesai', 'dudi', 'kepala_sekolah', 'ketua_pkl', 'sekretaris_pkl'));
+    }
     public function cetakPermohonan($dudi_id)
     {
         $peserta = Peserta::with('kelas.kompetensi')
@@ -196,7 +209,30 @@ class SuratController extends Controller
             ];
         }
 
-        return view('partials.docx.cetak_masal_kop_surat', compact('data'));
+        return view('partials.docx.cetak_massal_kop_surat', compact('data'));
+    }
+    public function cetakBookingMassal(Request $request)
+    {
+        $ids = explode(',', $request->input('ids'));
+
+        $data = [];
+
+        $pengaturan = Pengaturan::latest()->first();
+        $kepala_sekolah = $pengaturan->kepala_sekolah;
+        $ketua_pkl = $pengaturan->ketua_pkl;
+        $sekretaris_pkl = $pengaturan->sekretaris_pkl;
+
+        foreach ($ids as $id) {
+            $dudi = Dudi::find($id);
+            $kompetensi = $dudi->kompetensi_keahlian->nama_kompetensi;
+
+            $data[] = [
+                'dudi' => $dudi,
+                'kompetensi' => $kompetensi,
+            ];
+        }
+
+        return view('partials.docx.cetak_massal_surat_booking', compact('data', 'kepala_sekolah', 'ketua_pkl', 'sekretaris_pkl'));
     }
     public function cetakPermohonanMassal(Request $request)
     {
@@ -236,7 +272,7 @@ class SuratController extends Controller
             ];
         }
 
-        return view('partials.docx.cetak_masal_surat_permohonan', compact('data', 'tanggal_mulai', 'tanggal_selesai', 'kepala_sekolah', 'ketua_pkl', 'sekretaris_pkl'));
+        return view('partials.docx.cetak_massal_surat_permohonan', compact('data', 'tanggal_mulai', 'tanggal_selesai', 'kepala_sekolah', 'ketua_pkl', 'sekretaris_pkl'));
     }
 
     public function cetakPengantarMassal(Request $request)
@@ -277,7 +313,7 @@ class SuratController extends Controller
                 'jumlah_siswa' => $jumlah_siswa,
             ];
         }
-        return view('partials.docx.cetak_masal_surat_pengantar', compact('data', 'tanggal_mulai', 'tanggal_selesai', 'kepala_sekolah', 'ketua_pkl', 'sekretaris_pkl'));
+        return view('partials.docx.cetak_massal_surat_pengantar', compact('data', 'tanggal_mulai', 'tanggal_selesai', 'kepala_sekolah', 'ketua_pkl', 'sekretaris_pkl'));
     }
 
     public function cetakPenarikanMassal(Request $request)
@@ -304,6 +340,6 @@ class SuratController extends Controller
             ];
         }
 
-        return view('partials.docx.cetak_masal_surat_penarikan', compact('data', 'tanggal_mulai', 'tanggal_selesai', 'kepala_sekolah', 'ketua_pkl', 'sekretaris_pkl'));
+        return view('partials.docx.cetak_massal_surat_penarikan', compact('data', 'tanggal_mulai', 'tanggal_selesai', 'kepala_sekolah', 'ketua_pkl', 'sekretaris_pkl'));
     }
 }

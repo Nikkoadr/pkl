@@ -69,9 +69,13 @@ body {
     width: 30%;
 }
 
-.signature.center {
+.signature-center-penarikan {
     width: 35%;
     margin-top: 100px;
+}
+.signature-center {
+    width: 35%;
+    margin-top: 40px;
 }
 .signature-date {
     white-space: nowrap;

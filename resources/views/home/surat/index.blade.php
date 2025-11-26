@@ -33,7 +33,10 @@
                                     </button>
                                     <div class="dropdown-menu dropdown-menu-right">
                                         <a class="dropdown-item" href="#" id="btnKopSurat">
-                                            <i class="fas fa-file-contract text-primary"></i> Kop Surat
+                                            <i class="fas fa-envelope text-primary"></i> Kop Surat
+                                        </a>
+                                        <a class="dropdown-item" href="#" id="btnBooking">
+                                            <i class="fas fa-signature text-info"></i> Booking
                                         </a>
                                         <a class="dropdown-item" href="#" id="btnPermohonan">
                                             <i class="fas fa-file-signature text-info"></i> Permohonan
@@ -74,7 +77,10 @@
                                     <td class="text-center">
                                         <div class="d-flex flex-column align-items-center gap-2">
                                             <a href="{{ route('surat.kop_surat', $dudi->id) }}" class="btn btn-primary btn-sm w-100" target="_blank">
-                                                <i class="fas fa-file-contract"></i> Kop Surat
+                                                <i class="fas fa-envelope"></i> Kop Surat
+                                            </a>
+                                            <a href="{{ route('surat.booking', $dudi->id) }}" class="btn btn-info btn-sm w-100" target="_blank">
+                                                <i class="fas fa-signature"></i> Booking
                                             </a>
                                             <a href="{{ route('surat.permohonan', $dudi->id) }}" class="btn btn-warning btn-sm w-100" target="_blank">
                                                 <i class="fas fa-file-signature"></i> Permohonan
@@ -175,6 +181,9 @@ $(function () {
         showModalWithIframes('kop-surat-massal');
     });
 
+    $('#btnBooking').on('click', function () {
+        showModalWithIframes('booking-massal');
+    });
     $('#btnPermohonan').on('click', function () {
         showModalWithIframes('permohonan-massal');
     });

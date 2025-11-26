@@ -101,7 +101,6 @@ class EsertifikatController extends Controller
 
                 $berhasil++;
             } catch (\Throwable $e) {
-                // Kalau ada error pada peserta tertentu, lanjut ke peserta berikutnya
                 $gagal++;
                 continue;
             }

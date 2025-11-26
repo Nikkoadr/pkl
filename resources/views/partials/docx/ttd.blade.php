@@ -9,7 +9,16 @@
         <strong>{{ $ketua_pkl }}</strong>
     </div>
 
-    <div class="signature center">
+@php
+    $isSurat = Route::is([
+        'surat.permohonan',
+        'surat.permohonan.massal',
+        'surat.pengantar',
+        'surat.pengantar.massal',
+    ]);
+@endphp
+
+<div class="{{ $isSurat ? 'signature-center' : 'signature-center-penarikan' }}">
         Mengetahui,<br />
         Kepala Sekolah<br />
         <img

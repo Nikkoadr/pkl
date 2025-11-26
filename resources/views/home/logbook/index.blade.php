@@ -67,7 +67,7 @@
                             @foreach($logbook as $log)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $log->tanggal }}</td>
+                                <td>{{ \Carbon\Carbon::parse($log->tanggal)->format('d-m-Y') }}</td>
                                 <td>{{ $log->jam }}</td>
                                 <td>{{ $log->peserta_pkl->peserta->user->nama ?? '-'}}</td>
                                 <td>{{ $log->peserta_pkl->dudi->nama_dudi ?? '-' }}</td>

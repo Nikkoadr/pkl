@@ -44,19 +44,22 @@
 
                     <div class="form-group">
                         <label for="foto_bukti_nilai_pkl">Foto Bukti Nilai PKL</label>
-                        <input type="file" name="foto_bukti_nilai_pkl" id="foto_bukti_nilai_pkl"
-                            class="form-control @error('foto_bukti_nilai_pkl') is-invalid @enderror">
+                        <div class="custom-file">
+                            <input type="file" name="foto_bukti_nilai_pkl" id="foto_bukti_nilai_pkl"
+                                class="custom-file-input @error('foto_bukti_nilai_pkl') is-invalid @enderror">
+                            <label class="custom-file-label" for="foto_bukti_nilai_pkl">Pilih file...</label>
 
-                        @error('foto_bukti_nilai_pkl')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
+                            @error('foto_bukti_nilai_pkl')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
 
                         @if ($nilai_pkl->foto_bukti_nilai_pkl)
                             <div class="mt-2">
                                 <a href="{{ asset('storage/bukti_nilai_pkl/'.$nilai_pkl->foto_bukti_nilai_pkl) }}" target="_blank">
                                     <img src="{{ asset('storage/bukti_nilai_pkl/'.$nilai_pkl->foto_bukti_nilai_pkl) }}"
-                                         alt="Bukti Nilai PKL"
-                                         class="img-thumbnail" style="max-width:150px;">
+                                        alt="Bukti Nilai PKL"
+                                        class="img-thumbnail" style="max-width:150px;">
                                 </a>
                             </div>
                         @endif
@@ -84,6 +87,12 @@
 
 @section('scripts')
 <script src="{{ asset('assets/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
+<script src="{{ asset('assets/plugins/bs-custom-file-input/bs-custom-file-input.min.js') }}"></script>
+<script>
+    $(document).ready(function () {
+        bsCustomFileInput.init();
+    });
+</script>
 
 @if (session('success'))
 <script>
