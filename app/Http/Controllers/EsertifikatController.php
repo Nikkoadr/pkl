@@ -33,21 +33,27 @@ class EsertifikatController extends Controller
     {
         $nilai_pkl = Nilai_pkl::with('peserta_pkl.peserta.user')->findOrFail($id);
 
-        if (
+        // 1. Cek kelengkapan nilai
+        $lengkap = !(
             $nilai_pkl->nilai_disiplin_kerja === null ||
             $nilai_pkl->nilai_kemajuan_kerja === null ||
             $nilai_pkl->nilai_kualitas_kerja === null ||
             $nilai_pkl->nilai_inisiatif_kreatifitas === null ||
             $nilai_pkl->nilai_perilaku === null ||
             $nilai_pkl->nilai_sidang_pkl === null
-        ) {
-            return back()->with('error', 'Tidak dapat membuat e-sertifikat. Nilai belum lengkap.');
+        );
+
+        if (!$lengkap) {
+            return back()->with('error', 'Tidak dapat membuat e-sertifikat. Nilai peserta belum lengkap.');
         }
 
-        if ($nilai_pkl->esertifikat) {
-            return back()->with('error', 'E-sertifikat sudah pernah digenerate untuk peserta ini.');
+        // 2. CEK apakah sertifikat sudah pernah digenerate
+        $sudahAda = Esertifikat::where('peserta_pkl_id', $nilai_pkl->peserta_pkl_id)->exists();
+        if ($sudahAda) {
+            return back()->with('error', 'Sertifikat peserta tersebut sudah pernah digenerate.');
         }
 
+        // 3. Insert sertifikat
         Esertifikat::create([
             'peserta_pkl_id' => $nilai_pkl->peserta_pkl_id,
             'nomor_sertifikat' => $this->generateNomor(),
@@ -60,39 +66,47 @@ class EsertifikatController extends Controller
     public function generate_massal(Request $request)
     {
         $ids = $request->input('selected_ids', []);
+
         if (empty($ids)) {
             return back()->with('error', 'Tidak ada data yang dipilih.');
         }
 
         $berhasil = 0;
         $gagal = 0;
+        $listGagal = [];
 
         $dataNilai = Nilai_pkl::with('peserta_pkl.peserta.user')
             ->whereIn('id', $ids)
             ->get();
 
         foreach ($dataNilai as $nilai) {
+
+            // --- CEK KELENGKAPAN NILAI ---
+            $lengkap = !(
+                $nilai->nilai_disiplin_kerja === null ||
+                $nilai->nilai_kemajuan_kerja === null ||
+                $nilai->nilai_kualitas_kerja === null ||
+                $nilai->nilai_inisiatif_kreatifitas === null ||
+                $nilai->nilai_perilaku === null ||
+                $nilai->nilai_sidang_pkl === null
+            );
+
+            if (!$lengkap) {
+                $gagal++;
+                $listGagal[] = $nilai->peserta_pkl->peserta->user->nama . " (nilai belum lengkap)";
+                continue;
+            }
+
+            // --- CEK SUDAH ADA SERTIFIKAT ---
+            $sudahAda = Esertifikat::where('peserta_pkl_id', $nilai->peserta_pkl_id)->exists();
+            if ($sudahAda) {
+                $gagal++;
+                $listGagal[] = $nilai->peserta_pkl->peserta->user->nama . " (sertifikat sudah ada)";
+                continue;
+            }
+
+            // --- PROSES BUAT ---
             try {
-                $lengkap = !(
-                    $nilai->nilai_disiplin_kerja === null ||
-                    $nilai->nilai_kemajuan_kerja === null ||
-                    $nilai->nilai_kualitas_kerja === null ||
-                    $nilai->nilai_inisiatif_kreatifitas === null ||
-                    $nilai->nilai_perilaku === null ||
-                    $nilai->nilai_sidang_pkl === null
-                );
-
-                if (!$lengkap) {
-                    $gagal++;
-                    continue;
-                }
-
-                $sudahAda = Esertifikat::where('peserta_pkl_id', $nilai->peserta_pkl_id)->exists();
-                if ($sudahAda) {
-                    $gagal++;
-                    continue;
-                }
-
                 Esertifikat::create([
                     'peserta_pkl_id' => $nilai->peserta_pkl_id,
                     'nomor_sertifikat' => $this->generateNomor(),
@@ -102,11 +116,17 @@ class EsertifikatController extends Controller
                 $berhasil++;
             } catch (\Throwable $e) {
                 $gagal++;
-                continue;
+                $listGagal[] = $nilai->peserta_pkl->peserta->user->nama . " (error sistem)";
             }
         }
 
-        return back()->with('success', "E-sertifikat berhasil dibuat: {$berhasil}, gagal: {$gagal}");
+        // FORMAT pesan gagal
+        $pesanGagal = "";
+        if (count($listGagal) > 0) {
+            $pesanGagal = "<br><br><strong>Daftar peserta gagal:</strong><br>- " . implode("<br>- ", $listGagal);
+        }
+
+        return back()->with('success', "E-sertifikat berhasil dibuat: {$berhasil}, gagal: {$gagal} {$pesanGagal}");
     }
 
     private function generateNomor()
@@ -328,7 +348,7 @@ class EsertifikatController extends Controller
     {
         $ids = $request->ids ?? [];
         Esertifikat::whereIn('id', $ids)->delete();
-        return response()->json(['message' => 'Sertifikat berhasil dihapus.']);
+        return redirect()->route('home.esertifikat')->with('success', 'E-sertifikat berhasil dihapus.');
     }
 
     public function scan($nomor_sertifikat)
