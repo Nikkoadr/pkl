@@ -234,7 +234,7 @@
 
             if (result.isConfirmed) {
                 $.ajax({
-                    url: "{{ route('esertifikat.destroy_massal') }}",
+                    url: "/home/esertifikat/destroy_massal",
                     method: "POST",
                     data: {
                         _token: "{{ csrf_token() }}",

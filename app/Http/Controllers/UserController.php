@@ -97,7 +97,7 @@ class UserController extends Controller
         return redirect()->route('users.index')->with('success', 'Data user berhasil dihapus.');
     }
 
-    public function deleteMultiple(Request $request)
+    public function destroy_massal(Request $request)
     {
         $ids = $request->input('ids', []);
 

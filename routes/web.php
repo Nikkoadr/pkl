@@ -71,7 +71,7 @@ Route::post('/home/import_guru', [GuruController::class, 'import'])->name('guru.
 Route::post('/home/import_peserta', [PersertaController::class, 'import'])->name('peserta.import');
 
 // User Management
-Route::post('/home/users/delete-multiple', [UserController::class, 'deleteMultiple'])->name('users.deleteMultiple');
+Route::post('/home/users/destroy_massal', [UserController::class, 'destroy_massal'])->name('users.destroy_massal');
 Route::put('/home/users/{id}/reset-password', [UserController::class, 'resetPassword'])->name('users.resetPassword');
 
 // Surat / Dokumen

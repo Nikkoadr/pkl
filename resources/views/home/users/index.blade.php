@@ -294,7 +294,7 @@
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: "{{ route('users.deleteMultiple') }}",
+                    url: "{{ route('users.destroy_massal') }}",
                     method: 'POST',
                     data: {
                         _token: '{{ csrf_token() }}',
