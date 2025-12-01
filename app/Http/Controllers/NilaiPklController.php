@@ -35,7 +35,7 @@ class NilaiPklController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $tahunAktif = tahunAktif(); // helper global
+        $tahunAktif = tahunAktif();
 
         if (!$tahunAktif) {
             return redirect()->route('home.dashboard')->with('error', 'Tidak ada tahun ajaran aktif.');
@@ -122,9 +122,9 @@ class NilaiPklController extends Controller
             'nilai_kualitas_kerja' => 'required|integer|min:0|max:100',
             'nilai_inisiatif_kreatifitas' => 'required|integer|min:0|max:100',
             'nilai_perilaku' => 'required|integer|min:0|max:100',
+            'foto_bukti_nilai_pkl' => 'required|image|mimes:jpeg,png,jpg,gif|max:5120',
             'nilai_sidang_pkl' => 'nullable|integer|min:0|max:100',
             'komentar' => 'nullable|string',
-            'foto_bukti_nilai_pkl' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120',
         ]);
 
         $data = $request->only([
@@ -157,9 +157,8 @@ class NilaiPklController extends Controller
             'nilai_kualitas_kerja' => 'required|integer|min:0|max:100',
             'nilai_inisiatif_kreatifitas' => 'required|integer|min:0|max:100',
             'nilai_perilaku' => 'required|integer|min:0|max:100',
-            'nilai_sidang_pkl' => 'nullable|integer|min:0|max:100',
+            'foto_bukti_nilai_pkl' => 'required|image|mimes:jpeg,png,jpg,gif|max:5120',
             'komentar' => 'nullable|string',
-            'foto_bukti_nilai_pkl' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120',
         ]);
 
         $peserta = Peserta::where('user_id', Auth::id())->first();
@@ -211,7 +210,7 @@ class NilaiPklController extends Controller
             'nilai_kualitas_kerja' => 'required|integer|min:0|max:100',
             'nilai_inisiatif_kreatifitas' => 'required|integer|min:0|max:100',
             'nilai_perilaku' => 'required|integer|min:0|max:100',
-            'foto_bukti_nilai_pkl' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120',
+            'foto_bukti_nilai_pkl' => 'required|image|mimes:jpeg,png,jpg,gif|max:5120',
             'nilai_sidang_pkl' => 'nullable|integer|min:0|max:100',
             'komentar' => 'nullable|string',
         ]);
@@ -251,7 +250,7 @@ class NilaiPklController extends Controller
             'nilai_kualitas_kerja' => 'required|integer|min:0|max:100',
             'nilai_inisiatif_kreatifitas' => 'required|integer|min:0|max:100',
             'nilai_perilaku' => 'required|integer|min:0|max:100',
-            'foto_bukti_nilai_pkl' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120',
+            'foto_bukti_nilai_pkl' => 'required|image|mimes:jpeg,png,jpg,gif|max:5120',
         ]);
 
         $nilai_pkl = Nilai_pkl::findOrFail($id);

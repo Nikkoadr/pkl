@@ -62,9 +62,9 @@
                     <div class="form-group">
                         <label>Nilai Inisiatif & Kreatifitas</label>
                         <input type="number" name="nilai_inisiatif_kreatifitas"
-                               value="{{ old('nilai_inisiatif_kreatifitas', $nilai_pkl->nilai_inisiatif_kreatifitas) }}"
-                               class="form-control @error('nilai_inisiatif_kreatifitas') is-invalid @enderror"
-                               {{ $readonly ? 'readonly' : '' }}>
+                            value="{{ old('nilai_inisiatif_kreatifitas', $nilai_pkl->nilai_inisiatif_kreatifitas) }}"
+                            class="form-control @error('nilai_inisiatif_kreatifitas') is-invalid @enderror"
+                            {{ $readonly ? 'readonly' : '' }}>
                         @error('nilai_inisiatif_kreatifitas')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror

@@ -39,7 +39,6 @@
                                 <i class="fas fa-plus"></i> Tambah Nilai
                             </button>
 
-                            {{-- Tombol generate sertifikat massal --}}
                             <form id="formGenerateSertifikat" action="{{ route('esertifikat.generate_massal') }}" method="POST" class="d-inline">
                                 @csrf
                                 <button type="submit" id="btnGenerateMassal" class="btn btn-success btn-sm" disabled>
@@ -66,7 +65,7 @@
                             <th>Foto Bukti</th>
                             <th>Sidang</th>
                             <th>Komentar</th>
-                            <th data-orderable="false" class="text-center">Aksi</th>
+                            <th class="text-center" data-orderable="false">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -85,7 +84,7 @@
                             <td>
                                 @if($nilai->foto_bukti_nilai_pkl)
                                     <a href="{{ asset('storage/bukti_nilai_pkl/'.$nilai->foto_bukti_nilai_pkl) }}" target="_blank">
-                                        <img src="{{ asset('storage/bukti_nilai_pkl/'.$nilai->foto_bukti_nilai_pkl) }}" alt="Foto" width="60">
+                                        <img src="{{ asset('storage/bukti_nilai_pkl/'.$nilai->foto_bukti_nilai_pkl) }}" width="60">
                                     </a>
                                 @else
                                     -
@@ -94,20 +93,24 @@
                             <td>{{ $nilai->nilai_sidang_pkl }}</td>
                             <td>{{ $nilai->komentar }}</td>
                             <td class="text-center">
-                                <a href="{{ route('nilai_pkl.edit', $nilai->id) }}" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>
+
+                                <a href="{{ route('nilai_pkl.edit', $nilai->id) }}" class="btn btn-warning btn-sm">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+
                                 <form action="{{ route('nilai_pkl.destroy', $nilai->id) }}" method="POST" class="d-inline form-delete">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-danger btn-hapus"><i class="fas fa-trash"></i></button>
+                                    <button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
                                 </form>
 
-                                {{-- Tombol generate sertifikat per individu --}}
                                 <form action="{{ route('esertifikat.generate', $nilai->id) }}" method="POST" class="d-inline">
                                     @csrf
-                                    <button type="submit" class="btn btn-success btn-sm">
+                                    <button class="btn btn-success btn-sm">
                                         <i class="fas fa-certificate"></i>
                                     </button>
                                 </form>
+
                             </td>
                         </tr>
                         @endforeach
@@ -118,24 +121,23 @@
     </section>
 </div>
 
-<!-- Modal Tambah -->
 @canany(['admin','prodi','guru_pembimbing'])
-<div class="modal fade" id="modalTambah" tabindex="-1" role="dialog" aria-labelledby="modalTambahLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
+<div class="modal fade" id="modalTambah">
+    <div class="modal-dialog modal-lg">
         <form action="{{ route('nilai_pkl.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="modal-content">
+
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modalTambahLabel">Tambah Nilai PKL</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Tutup">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <h5 class="modal-title">Tambah Nilai PKL</h5>
+                    <button class="close" data-dismiss="modal"><span>&times;</span></button>
                 </div>
+
                 <div class="modal-body">
 
                     <div class="form-group">
-                        <label for="autocomplete_peserta_pkl">Nama Peserta</label>
-                        <input type="text" id="autocomplete_peserta_pkl" class="form-control" placeholder="Ketik nama peserta..." autocomplete="off">
+                        <label>Nama Peserta</label>
+                        <input type="text" id="autocomplete_peserta_pkl" class="form-control" placeholder="Ketik nama..." autocomplete="off">
                         <input type="hidden" name="peserta_pkl_id" id="peserta_pkl_id">
                     </div>
 
@@ -165,13 +167,10 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="foto_bukti_nilai_pkl">Foto Bukti Nilai</label>
+                        <label>Foto Bukti Nilai</label>
                         <div class="custom-file">
-                            <input type="file" name="foto_bukti_nilai_pkl" class="custom-file-input @error('foto_bukti_nilai_pkl') is-invalid @enderror" id="foto_bukti_nilai_pkl">
-                            <label class="custom-file-label" for="foto_bukti">Pilih file</label>
-                            @error('foto_bukti_nilai_pkl')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
+                            <input type="file" name="foto_bukti_nilai_pkl" id="foto_bukti_nilai_pkl" class="custom-file-input">
+                            <label class="custom-file-label">Pilih file</label>
                         </div>
                     </div>
 
@@ -186,10 +185,12 @@
                     </div>
 
                 </div>
+
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                    <button type="submit" class="btn btn-primary">Simpan</button>
+                    <button class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                    <button class="btn btn-primary">Simpan</button>
                 </div>
+
             </div>
         </form>
     </div>
@@ -207,69 +208,73 @@
 <script src="{{ asset('assets/plugins/bs-custom-file-input/bs-custom-file-input.min.js') }}"></script>
 
 <script>
-    $(function () {
-        $('#datatable').DataTable();
+$(function () {
 
-        $('.form-delete').on('submit', function(e){
-            e.preventDefault();
-            Swal.fire({
-                title: 'Yakin ingin menghapus?',
-                text: "Data yang dihapus tidak bisa dikembalikan!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Ya, hapus!',
-                cancelButtonText: 'Batal'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    e.target.submit();
-                }
-            });
-        });
+    // Init DataTable
+    $('#datatable').DataTable();
 
-        $("#autocomplete_peserta_pkl").autocomplete({
-            source: "/autocomplete/peserta_pkl",
-            minLength: 2,
-            select: function(event, ui) {
-                $('#peserta_pkl_id').val(ui.item.peserta_pkl_id);
+    // Fix: Event delegation untuk konfirmasi delete agar aktif di semua halaman DataTables
+    $(document).on('submit', '.form-delete', function(e) {
+        e.preventDefault();
+        Swal.fire({
+            title: 'Yakin ingin menghapus?',
+            text: "Data yang dihapus tidak dapat dikembalikan!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Ya, hapus!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                e.target.submit();
             }
         });
+    });
 
-        bsCustomFileInput.init();
-
-        // Checkbox handler
-        $('#checkAll').on('click', function() {
-            $('.row-check').prop('checked', this.checked);
-            toggleGenerateButton();
-        });
-
-        $(document).on('change', '.row-check', function() {
-            $('#checkAll').prop('checked', $('.row-check:checked').length === $('.row-check').length);
-            toggleGenerateButton();
-        });
-
-        function toggleGenerateButton() {
-            $('#btnGenerateMassal').prop('disabled', $('.row-check:checked').length === 0);
+    // Autocomplete nama peserta
+    $("#autocomplete_peserta_pkl").autocomplete({
+        source: "/autocomplete/peserta_pkl",
+        minLength: 2,
+        select: function(event, ui) {
+            $('#peserta_pkl_id').val(ui.item.peserta_pkl_id);
         }
+    });
 
-        // Konfirmasi generate massal
-        $('#formGenerateSertifikat').on('submit', function(e) {
-            e.preventDefault();
-            Swal.fire({
-                title: 'Generate Sertifikat?',
-                text: 'Pastikan semua nilai sudah lengkap. Proses ini tidak dapat dibatalkan!',
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonText: 'Ya, lanjutkan',
-                cancelButtonText: 'Batal'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    e.target.submit();
-                }
-            });
+    bsCustomFileInput.init();
+
+    // Checkbox handler
+    $('#checkAll').on('click', function() {
+        $('.row-check').prop('checked', this.checked);
+        toggleGenerateButton();
+    });
+
+    $(document).on('change', '.row-check', function() {
+        $('#checkAll').prop('checked', $('.row-check:checked').length === $('.row-check').length);
+        toggleGenerateButton();
+    });
+
+    function toggleGenerateButton() {
+        $('#btnGenerateMassal').prop('disabled', $('.row-check:checked').length === 0);
+    }
+
+    // Konfirmasi generate massal
+    $('#formGenerateSertifikat').on('submit', function(e) {
+        e.preventDefault();
+        Swal.fire({
+            title: 'Generate Sertifikat?',
+            text: 'Pastikan semua nilai sudah lengkap!',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Lanjutkan',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) e.target.submit();
         });
     });
+
+});
 </script>
 
+{{-- Notifikasi sukses --}}
 @if (session('success'))
 <script>
     Swal.fire({
@@ -284,6 +289,7 @@
 </script>
 @endif
 
+{{-- Notifikasi error --}}
 @if (session('error'))
 <script>
     Swal.fire({
