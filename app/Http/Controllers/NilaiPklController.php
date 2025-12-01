@@ -159,7 +159,7 @@ class NilaiPklController extends Controller
             'nilai_perilaku' => 'required|integer|min:0|max:100',
             'nilai_sidang_pkl' => 'nullable|integer|min:0|max:100',
             'komentar' => 'nullable|string',
-            'foto_bukti_nilai_pkl' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'foto_bukti_nilai_pkl' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120',
         ]);
 
         $peserta = Peserta::where('user_id', Auth::id())->first();
