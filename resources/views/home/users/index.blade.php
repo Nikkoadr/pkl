@@ -294,7 +294,7 @@
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: "{{ route('users.destroy_massal') }}",
+                    url: "/home/users/destroy_massal",
                     method: 'POST',
                     data: {
                         _token: '{{ csrf_token() }}',
