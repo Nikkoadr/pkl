@@ -347,8 +347,18 @@ class EsertifikatController extends Controller
     public function destroy_massal(Request $request)
     {
         $ids = $request->ids ?? [];
+        if (empty($ids)) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Tidak ada data yang dipilih.'
+            ]);
+        }
         Esertifikat::whereIn('id', $ids)->delete();
-        return redirect()->route('home.esertifikat')->with('success', 'E-sertifikat berhasil dihapus.');
+
+        return response()->json([
+            'status' => true,
+            'message' => 'E-sertifikat berhasil dihapus.'
+        ]);
     }
 
     public function scan($nomor_sertifikat)
