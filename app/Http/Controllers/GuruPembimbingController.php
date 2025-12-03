@@ -8,6 +8,8 @@ use App\Models\Guru;
 use App\Models\Dudi;
 use App\Models\Kompetensi_keahlian;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Kaprodi;
 
 class GuruPembimbingController extends Controller
 {
@@ -28,13 +30,28 @@ class GuruPembimbingController extends Controller
      */
     public function index()
     {
-        if (Gate::allows('admin') || Gate::allows('prodi')) {
+        if (Gate::allows('admin')) {
             $pembimbing = Guru_pembimbing::with('guru.user', 'kompetensi_keahlian', 'dudi')->get();
-            $guru = Guru::with('user')->get();
-            $kompetensi = Kompetensi_keahlian::all();
-            $dudiList = Dudi::all();
-            return view('home.guru_pembimbing.index', compact('pembimbing', 'guru', 'kompetensi', 'dudiList'));
+        } elseif (Gate::allows('prodi')) {
+            $user = Auth::user();
+            $kaprodi = Kaprodi::where('guru_id', $user->guru->id)->first();
+            if (!$kaprodi) {
+                abort(403, 'Anda tidak terdaftar sebagai Kaprodi');
+            }
+            $kompetensiId = $kaprodi->kompetensi_keahlian_id;
+            $pembimbing = Guru_pembimbing::with('guru.user', 'kompetensi_keahlian', 'dudi')
+                ->where('kompetensi_keahlian_id', $kompetensiId)
+                ->get();
+        } else {
+            abort(403, 'Anda tidak memiliki akses ke halaman ini');
         }
+
+        // Data tambahan
+        $guru = Guru::with('user')->get();
+        $kompetensi = Kompetensi_keahlian::all();
+        $dudiList = Dudi::all();
+
+        return view('home.guru_pembimbing.index', compact('pembimbing', 'guru', 'kompetensi', 'dudiList'));
     }
 
     public function store(Request $request)
