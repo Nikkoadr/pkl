@@ -1,0 +1,1 @@
+untuk upload pada laravel kita harus menggunakan php artisan queue:work
