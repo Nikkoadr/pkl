@@ -109,7 +109,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Nomor Telepon</label>
-                                    <input type="text" name="no_telp" class="form-control @error('no_telp') is-invalid @enderror" value="{{ old('no_telp') }}" placeholder="Nomor Telepon" required>
+                                    <input type="number" name="no_telp" class="form-control @error('no_telp') is-invalid @enderror" value="{{ old('no_telp') }}" placeholder="Nomor Telepon" required>
                                     @error('no_telp')<div class="invalid-feedback">{{ $message }}</div>@enderror
                                 </div>
 

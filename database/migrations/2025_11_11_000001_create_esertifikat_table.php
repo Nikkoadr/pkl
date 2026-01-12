@@ -9,7 +9,7 @@ return new class extends Migration {
     {
         Schema::create('esertifikat', function (Blueprint $table) {
             $table->id();
-            $table->string('url_hash', 64)->nullable()->unique();
+            $table->string('hash', 64)->nullable()->unique();
             $table->foreignId('peserta_pkl_id')->constrained('peserta_pkl')->onDelete('cascade');
             $table->string('nomor_sertifikat')->unique();
             $table->date('tanggal_diterbitkan');

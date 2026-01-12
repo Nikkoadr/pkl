@@ -367,7 +367,7 @@ class EsertifikatController extends Controller
             'peserta_pkl.peserta.kelas.kompetensi',
             'peserta_pkl.dudi',
         ])
-            ->where('url_hash', $hash) // Mencari berdasarkan hash SHA256
+            ->where('hash', $hash) // Mencari berdasarkan hash SHA256
             ->first();
 
         if (!$esertifikat) {

@@ -85,7 +85,7 @@ Route::get('/home/penarikan-massal', [SuratController::class, 'cetakPenarikanMas
 Route::get('/home/esertifikat', [EsertifikatController::class, 'index'])->name('home.esertifikat');
 Route::delete('/home/esertifikat/{id}', [EsertifikatController::class, 'destroy'])->name('esertifikat.destroy');
 Route::post('/home/esertifikat/destroy_massal', [EsertifikatController::class, 'destroy_massal'])->name('esertifikat.destroy_massal');
-Route::get('/esertifikat/scan/{nomor_sertifikat}', [EsertifikatController::class, 'scan'])->where('nomor_sertifikat', '.*');
+Route::get('/esertifikat/scan/{hash}', [EsertifikatController::class, 'scan'])->where('hash', '[A-Fa-f0-9]{64}');
 
 Route::get('/home/esertifikat/cetak_depan/{id}', [EsertifikatController::class, 'cetak_depan'])->name('cetak.esertifikat_depan');
 Route::get('/home/esertifikat/cetak_belakang/{id}', [EsertifikatController::class, 'cetak_belakang'])->name('cetak.esertifikat_belakang');

@@ -33,8 +33,13 @@ class Esertifikat extends Model
 
     protected static function booted()
     {
-        static::creating(function ($esertifikat) {
-            $esertifikat->url_hash = hash('sha256', $esertifikat->nomor_sertifikat . config('app.key'));
+        static::saving(function ($esertifikat) {
+            if ($esertifikat->isDirty('nomor_sertifikat')) {
+                $esertifikat->hash = hash(
+                    'sha256',
+                    $esertifikat->nomor_sertifikat . config('app.key')
+                );
+            }
         });
     }
 }
