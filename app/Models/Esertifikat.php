@@ -18,6 +18,7 @@ class Esertifikat extends Model
     {
         return $this->belongsTo(Peserta_pkl::class);
     }
+
     public function nilai_pkl()
     {
         return $this->hasOneThrough(
@@ -28,5 +29,12 @@ class Esertifikat extends Model
             'peserta_pkl_id',
             'id'
         );
+    }
+
+    protected static function booted()
+    {
+        static::creating(function ($esertifikat) {
+            $esertifikat->url_hash = hash('sha256', $esertifikat->nomor_sertifikat . config('app.key'));
+        });
     }
 }

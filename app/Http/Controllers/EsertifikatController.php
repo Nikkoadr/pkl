@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Peserta_pkl;
 use App\Models\Pengaturan;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Auth;
@@ -361,15 +360,19 @@ class EsertifikatController extends Controller
         ]);
     }
 
-    public function scan($nomor_sertifikat)
+    public function scan($hash)
     {
-        $nomor_sertifikat = urldecode($nomor_sertifikat);
-
         $esertifikat = Esertifikat::with([
             'peserta_pkl.peserta.user',
             'peserta_pkl.peserta.kelas.kompetensi',
             'peserta_pkl.dudi',
-        ])->where('nomor_sertifikat', $nomor_sertifikat)->firstOrFail();
+        ])
+            ->where('url_hash', $hash) // Mencari berdasarkan hash SHA256
+            ->first();
+
+        if (!$esertifikat) {
+            return view('home.esertifikat.invalid'); // Tampilan error yang kita buat sebelumnya
+        }
 
         $pengaturan = Pengaturan::latest()->first();
 

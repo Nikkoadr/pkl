@@ -46,7 +46,7 @@
         Kepala SMK Muhammadiyah <br> Kandanghaur,<br>
 
         <div class="qr-ttd">
-            {!! QrCode::size(80)->generate(url('esertifikat/scan/' . urlencode($esertifikat->nomor_sertifikat))) !!}
+            {!! QrCode::size(80)->generate(url('/esertifikat/scan/' . $esertifikat->url_hash)) !!}
         </div>
 
         <div class="nama-ttd">{{ $pengaturan->kepala_sekolah }}</div>
