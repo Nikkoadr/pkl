@@ -258,7 +258,7 @@
                         <img src="{{ $esertifikat->peserta_pkl->peserta->user->foto_profil ? asset('storage/foto_profil/' . $esertifikat->peserta_pkl->peserta->user->foto_profil) : asset('assets/dist/img/foto-default.jpeg') }}" style="width: 100%; height: 100%; object-fit: cover;">
                     </div>
                     <div class="ttd">
-                        Kepala SMK Muhammadiyah <br> Kandanghaur,<br>
+                        Kepala <br> SMK Muhammadiyah Kandanghaur,<br>
                         <div class="qr-ttd">
                             {!! QrCode::size(80)->generate(url('/esertifikat/scan/' . $esertifikat->url_hash)) !!}
                         </div>

@@ -87,11 +87,11 @@ body {
 .ttd {
     position: absolute;
     bottom: 40mm;
-    left: 130mm;
+    left: 120mm;
     text-align: center;
     font-size: 14pt;
     line-height: 1.4;
-    width: 60mm;
+    width: 80mm;
 }
 .qr-ttd {
     width: 28mm;

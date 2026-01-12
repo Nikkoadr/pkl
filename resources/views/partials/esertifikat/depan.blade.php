@@ -36,14 +36,10 @@
         </i>
     </div>
 
-    <div class="tanggal">
-        Sertifikat ini diberikan pada tanggal {{ \Carbon\Carbon::now()->locale('id')->translatedFormat('j F Y') }}
-    </div>
-
     <div class="foto"></div>
 
     <div class="ttd">
-        Kepala SMK Muhammadiyah <br> Kandanghaur,<br>
+        Kepala <br> SMK Muhammadiyah Kandanghaur,<br>
 
         <div class="qr-ttd">
             {!! QrCode::size(80)->generate(url('/esertifikat/scan/' . $esertifikat->url_hash)) !!}
