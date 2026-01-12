@@ -376,6 +376,29 @@ class EsertifikatController extends Controller
 
         $pengaturan = Pengaturan::latest()->first();
 
-        return view('home.esertifikat.show', compact('esertifikat', 'pengaturan'));
+        $nilai = $esertifikat->peserta_pkl->nilai_pkl;
+
+        if ($nilai) {
+            $rata_rata = round((
+                $nilai->nilai_disiplin_kerja +
+                $nilai->nilai_kemajuan_kerja +
+                $nilai->nilai_kualitas_kerja +
+                $nilai->nilai_inisiatif_kreatifitas +
+                $nilai->nilai_perilaku
+            ) / 5, 2);
+
+            $nilai_sidang = $nilai->nilai_sidang_pkl;
+            $nilai_akhir = round(($rata_rata + $nilai_sidang) / 2, 2);
+
+            $esertifikat->rata_rata = $rata_rata;
+            $esertifikat->nilai_sidang_pkl = $nilai_sidang;
+            $esertifikat->nilai_akhir = $nilai_akhir;
+        } else {
+            $esertifikat->rata_rata = null;
+            $esertifikat->nilai_sidang_pkl = null;
+            $esertifikat->nilai_akhir = null;
+        }
+
+        return view('home.esertifikat.show', compact('esertifikat', 'pengaturan', 'nilai'));
     }
 }
