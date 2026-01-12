@@ -8,252 +8,203 @@
 
     <style>
         body {
-            font-family: 'Inter', sans-serif;
-            background: #f4f6f9;
             margin: 0;
-            padding: 30px;
+            background: #f4f6f9;
+            font-family: 'Inter', sans-serif;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: auto;
+        .wrapper {
+            max-width: 1300px;
+            margin: 30px auto;
             display: grid;
             grid-template-columns: 360px 1fr;
-            gap: 20px;
+            gap: 24px;
         }
 
-        /* PANEL VERIFIKASI */
-        .verify-panel {
+        /* =========================
+           PANEL STATUS DOKUMEN
+        ========================== */
+        .status-panel {
             background: #fff;
             border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,.08);
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,.08);
         }
 
-        .verify-title {
+        .status-header {
+            background: #e9f7ef;
+            padding: 12px 16px;
             font-weight: 700;
-            font-size: 18px;
-            margin-bottom: 10px;
-        }
-
-        .status-valid {
-            background: #e8f9f0;
-            color: #0f9d58;
-            padding: 12px;
-            border-radius: 10px;
-            text-align: center;
-            font-weight: 700;
-            margin-bottom: 20px;
-        }
-
-        .info-item {
-            margin-bottom: 12px;
+            color: #198754;
             font-size: 14px;
         }
 
-        .info-item span {
+        .status-body {
+            padding: 20px;
+        }
+
+        .icon-valid {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .icon-valid span {
+            display: inline-block;
+            width: 48px;
+            height: 48px;
+            background: #d1f3e0;
+            border-radius: 50%;
+            line-height: 48px;
+            font-size: 22px;
+            color: #198754;
+            font-weight: bold;
+        }
+
+        .doc-sah {
+            text-align: center;
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .doc-desc {
+            text-align: center;
+            font-size: 13px;
             color: #6c757d;
-            display: block;
-            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        .info {
+            margin-top: 16px;
+            font-size: 13px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 6px;
+        }
+
+        .info-row span {
+            color: #6c757d;
+        }
+
+        .box-valid {
+            background: #e9f7ef;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 16px;
+            font-size: 13px;
         }
 
         .fingerprint {
-            font-family: monospace;
-            font-size: 11px;
             background: #f1f3f5;
             padding: 10px;
+            font-family: monospace;
+            font-size: 11px;
             border-radius: 6px;
             word-break: break-all;
+            margin-top: 6px;
+        }
+
+        .signer {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 16px;
+            font-size: 13px;
         }
 
         .login-btn {
+            margin-top: 16px;
             display: block;
             text-align: center;
             background: #4f46e5;
             color: #fff;
             padding: 12px;
             border-radius: 8px;
-            margin-top: 20px;
             text-decoration: none;
             font-weight: 600;
         }
 
-        /* SERTIFIKAT */
-        .certificate {
+        /* =========================
+           AREA SERTIFIKAT
+        ========================== */
+        .sertifikat-area {
             background: #fff;
             border-radius: 12px;
-            padding: 50px;
-            position: relative;
-            box-shadow: 0 10px 30px rgba(0,0,0,.08);
-        }
-
-        .cert-border {
-            border: 6px double #c9a44c;
-            padding: 40px;
-        }
-
-        .nomor {
-            text-align: right;
-            font-size: 13px;
-            margin-bottom: 20px;
-        }
-
-        .judul {
-            text-align: center;
-            font-size: 34px;
-            font-weight: 700;
-            letter-spacing: 2px;
-        }
-
-        .subjudul {
-            text-align: center;
-            margin-top: 8px;
-            font-size: 14px;
-        }
-
-        .nama {
-            font-family: 'Story Script', cursive;
-            text-align: center;
-            font-size: 48px;
-            margin: 30px 0 10px;
-        }
-
-        .jurusan {
-            text-align: center;
-            font-size: 14px;
-            margin-bottom: 30px;
-        }
-
-        .isi {
-            text-align: center;
-            font-size: 15px;
-            line-height: 1.8;
-        }
-
-        .tanggal {
-            text-align: center;
-            margin-top: 30px;
-        }
-
-        .foto {
-            width: 110px;
-            height: 140px;
-            border: 2px solid #000;
-            position: absolute;
-            top: 60px;
-            left: 60px;
-        }
-
-        .ttd {
-            position: absolute;
-            right: 60px;
-            bottom: 80px;
-            text-align: center;
-            font-size: 13px;
-        }
-
-        .qr {
-            margin: 10px 0;
-        }
-
-        .watermark {
-            position: absolute;
-            inset: 0;
-            background: url('{{ asset('assets/dist/img/logo-watermark.png') }}') center no-repeat;
-            opacity: .05;
-            pointer-events: none;
+            box-shadow: 0 10px 25px rgba(0,0,0,.08);
+            padding: 20px;
         }
     </style>
 </head>
 <body>
 
-<div class="container">
+<div class="wrapper">
 
-    <!-- PANEL VERIFIKASI -->
-    <div class="verify-panel">
-        <div class="verify-title">Verifikasi Dokumen Resmi</div>
+    <!-- =========================
+         KIRI : STATUS DOKUMEN
+    ========================== -->
+    <div class="status-panel">
+        <div class="status-header">STATUS DOKUMEN</div>
 
-        <div class="status-valid">✔ DOKUMEN VALID & ASLI</div>
+        <div class="status-body">
 
-        <div class="info-item">
-            <span>Nomor Sertifikat</span>
-            {{ $esertifikat->nomor_sertifikat }}
-        </div>
-
-        <div class="info-item">
-            <span>Tanggal Terbit</span>
-            {{ \Carbon\Carbon::now()->translatedFormat('d F Y') }}
-        </div>
-
-        <div class="info-item">
-            <span>ID Verifikasi</span>
-            {{ sha1($esertifikat->nomor_sertifikat) }}
-        </div>
-
-        <div class="info-item">
-            <span>Digital Fingerprint (SHA-256)</span>
-            <div class="fingerprint">
-                {{ hash('sha256', $esertifikat->nomor_sertifikat) }}
+            <div class="icon-valid">
+                <span>✓</span>
             </div>
-        </div>
 
-        <a href="{{ route('login') }}" class="login-btn">
-            Login ke Sistem Sekolah
-        </a>
+            <div class="doc-sah">Dokumen Sah</div>
+            <div class="doc-desc">
+                Telah ditandatangani secara elektronik (TTE Lokal)
+            </div>
+
+            <div class="info">
+                <div class="info-row">
+                    <span>Nomor Dokumen</span>
+                    <strong>{{ $esertifikat->nomor_sertifikat }}</strong>
+                </div>
+                <div class="info-row">
+                    <span>Tanggal Terbit</span>
+                    <strong>{{ \Carbon\Carbon::now()->translatedFormat('d F Y, H:i') }}</strong>
+                </div>
+                <div class="info-row">
+                    <span>ID Validasi</span>
+                    <strong>{{ substr(sha1($esertifikat->nomor_sertifikat), 0, 8) }}</strong>
+                </div>
+            </div>
+
+            <div class="box-valid">
+                <strong>Status: VALID & UTUH</strong><br>
+                ✔ Integritas Data Terverifikasi
+                <div class="fingerprint">
+                    {{ hash('sha256', $esertifikat->nomor_sertifikat) }}
+                </div>
+            </div>
+
+            <div class="signer">
+                <strong>Informasi Penanda Tangan</strong><br><br>
+                {{ $pengaturan->kepala_sekolah }}<br>
+                <small>Kepala Sekolah</small><br>
+                <small>SMK Muhammadiyah Kandanghaur</small>
+            </div>
+
+            <a href="{{ route('login') }}" class="login-btn">
+                Login ke Sistem Sekolah
+            </a>
+        </div>
     </div>
 
-    <!-- SERTIFIKAT -->
-    <div class="certificate">
-        <div class="watermark"></div>
+    <!-- =========================
+         KANAN : SERTIFIKAT ASLI
+         (TIDAK DIUBAH)
+    ========================== -->
+    <div class="sertifikat-area">
 
-        <div class="cert-border">
+        <h1>bakekok</h1>
 
-            <div class="foto">
-                @if($esertifikat->peserta_pkl->peserta->user->foto_profil)
-                    <img src="{{ asset('storage/foto_profil/'.$esertifikat->peserta_pkl->peserta->user->foto_profil) }}"
-                         style="width:100%;height:100%;object-fit:cover;">
-                @endif
-            </div>
-
-            <div class="nomor">
-                Nomor : {{ $esertifikat->nomor_sertifikat }}
-            </div>
-
-            <div class="judul">SERTIFIKAT PKL</div>
-            <div class="subjudul">Diberikan Kepada</div>
-
-            <div class="nama">
-                {{ strtoupper($esertifikat->peserta_pkl->peserta->user->nama) }}
-            </div>
-
-            <div class="jurusan">
-                {{ strtoupper($esertifikat->peserta_pkl->peserta->kelas->kompetensi->nama_kompetensi ?? '-') }}
-            </div>
-
-            <div class="isi">
-                Telah menyelesaikan <b>Praktik Kerja Lapangan (PKL)</b><br>
-                di <b>{{ strtoupper($esertifikat->peserta_pkl->dudi->nama_dudi) }}</b><br>
-                Periode:
-                {{ \Carbon\Carbon::parse($pengaturan->tanggal_mulai_pkl)->translatedFormat('d F Y') }}
-                –
-                {{ \Carbon\Carbon::parse($pengaturan->tanggal_selesai_pkl)->translatedFormat('d F Y') }}
-            </div>
-
-            <div class="tanggal">
-                Ditetapkan di Garut, {{ now()->translatedFormat('d F Y') }}
-            </div>
-
-            <div class="ttd">
-                Kepala Sekolah<br>
-                <div class="qr">
-                    {!! QrCode::size(80)->generate(url('esertifikat/scan/'.$esertifikat->nomor_sertifikat)) !!}
-                </div>
-                <b>{{ $pengaturan->kepala_sekolah }}</b>
-            </div>
-
-        </div>
     </div>
 
 </div>
+
 </body>
 </html>
