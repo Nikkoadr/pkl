@@ -55,12 +55,6 @@
                                         <p>DU/DI</p>
                                     </a>
                                 </li>
-                                <li class="nav-item">
-                                    <a href="/home/users" class="nav-link {{ request()->is('home/users') ? 'active' : '' }}">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Users</p>
-                                    </a>
-                                </li>
                             </ul>
                         </li>
                         <li class="nav-item {{ request()->is('home/guru','home/guru_pembimbing','home/kaprodi') ? 'menu-open' : '' }}">

@@ -54,7 +54,6 @@ Route::get('/home/logbook/cetak_rekap', [LogbookController::class, 'cetak_rekap'
 Route::resource('/home/tahun_ajaran', Tahun_ajaranController::class);
 Route::resource('/home/kelas', KelasController::class);
 Route::resource('/home/kaprodi', KaprodiController::class);
-Route::resource('/home/users', UserController::class);
 Route::resource('/home/dudi', DudiController::class);
 Route::resource('/home/guru', GuruController::class);
 Route::resource('/home/peserta', PersertaController::class);
@@ -69,10 +68,6 @@ Route::post('/home/peserta_pkl/import', [PesertaPklController::class, 'import'])
 Route::post('/home/import_dudi', [DudiController::class, 'import'])->name('dudi.import');
 Route::post('/home/import_guru', [GuruController::class, 'import'])->name('guru.import');
 Route::post('/home/import_peserta', [PersertaController::class, 'import'])->name('peserta.import');
-
-// User Management
-Route::post('/home/users/destroy_massal', [UserController::class, 'destroy_massal'])->name('users.destroy_massal');
-Route::put('/home/users/{id}/reset-password', [UserController::class, 'resetPassword'])->name('users.resetPassword');
 
 // Surat / Dokumen
 Route::get('/home/surat', [SuratController::class, 'index'])->name('home.surat');
