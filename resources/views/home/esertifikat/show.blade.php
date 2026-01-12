@@ -6,7 +6,7 @@
     <title>Verifikasi Sertifikat PKL - {{ $esertifikat->nomor_sertifikat }}</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Story+Script&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="{{ asset('assets/dist/css/styles_sertifikat.css') }}?v={{ filemtime(public_path('assets/dist/css/styles_sertifikat.css')) }}">
+    <link rel="stylesheet" href="{{ asset('assets/dist/css/styles_sertifikat.css') }}?v={{ filemtime(public_path('assets/dist/css/styles_sertifikat.css')) }}">
 
     <style>
         :root {
