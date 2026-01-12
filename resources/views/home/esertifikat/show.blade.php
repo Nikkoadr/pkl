@@ -17,12 +17,16 @@
             --text-muted: #64748b;
         }
 
+        /* PERBAIKAN DASAR: Mencegah elemen meluap keluar layar */
+        * { box-sizing: border-box; }
+
         body { 
             margin: 0; 
             background: var(--bg-body); 
             font-family: 'Inter', sans-serif; 
             color: var(--text-main); 
             line-height: 1.5;
+            overflow-x: hidden; /* Mencegah scroll horizontal pada body */
         }
 
         .wrapper {
@@ -79,7 +83,7 @@
         .info { margin-top: 30px; border-top: 1px solid #f1f5f9; padding-top: 25px; }
         .info-row { display: flex; flex-direction: column; margin-bottom: 16px; font-size: 14px; }
         .info-row span { color: var(--text-muted); font-size: 11px; font-weight: 600; text-transform: uppercase; margin-bottom: 4px; }
-        .info-row strong { color: #0f172a; font-size: 15px; }
+        .info-row strong { color: #0f172a; font-size: 15px; word-break: break-word; }
 
         .box-valid {
             background: #f8fafc; padding: 16px;
@@ -145,18 +149,43 @@
         .back-certificate .signature { width: 300px; float: right; margin-top: 40px; text-align: center; font-size: 12pt; }
         .back-certificate .small-table td, .back-certificate .small-table th { font-size: 10pt; padding: 3px 6px; }
 
-        /* RESPONSIVE */
+        /* RESPONSIVE OPTIMIZATION */
         @media (max-width: 992px) {
-            .wrapper { grid-template-columns: 1fr; }
-            .status-panel { position: relative; top: 0; }
+            .wrapper { 
+                grid-template-columns: 1fr; 
+                margin: 20px auto;
+            }
+            .status-panel { position: relative; top: 0; width: 100%; }
         }
 
-        @media (max-width: 768px) {
-            .page, .back-certificate {
-                transform: scale(0.45);
-                transform-origin: top center;
+        @media (max-width: 850px) {
+            .page-shadow {
+                width: 100%;
+                background: transparent;
+                box-shadow: none;
+                display: flex;
+                justify-content: center;
+                overflow: visible;
             }
-            .page-shadow { height: 550px; width: 100%; }
+
+            /* Perbaikan Scaling: Menggunakan Zoom agar lebih stabil di HP */
+            .page, .back-certificate {
+                zoom: 0.42; /* Ukuran zoom disesuaikan otomatis */
+                -moz-transform: scale(0.42); /* Support Firefox */
+                -moz-transform-origin: top center;
+                box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page, .back-certificate {
+                zoom: 0.35;
+                -moz-transform: scale(0.35);
+            }
+            .wrapper { padding: 0 12px; }
+            .status-body { padding: 20px; }
+            .doc-sah { font-size: 18px; }
+            .status-header { padding: 15px; }
         }
     </style>
 </head>
@@ -240,7 +269,7 @@
         </div>
 
         <div style="width: 100%">
-            <div class="section-label">Halaman Belakang (Transkrip Nilai)</div>
+            <div class="section-label">Halaman Belakang</div>
             <div class="page-shadow">
                 <div class="back-certificate">
                     <h3 class="center bold">PENILAIAN PESERTA PRAKTIK KERJA LAPANGAN (PKL)</h3>
