@@ -169,7 +169,6 @@ class LogbookController extends Controller
         return redirect()->route('logbook.index')->with('success', 'Logbook berhasil ditambahkan.');
     }
 
-
     public function store(Request $request)
     {
         $request->validate([
@@ -201,7 +200,6 @@ class LogbookController extends Controller
             $file->storeAs('bukti_logbook', $filename, 'public');
             $data['foto_bukti'] = $filename;
         }
-
         Logbook::create($data);
 
         return redirect()->back()->with('success', 'Logbook berhasil ditambahkan.');
@@ -223,7 +221,6 @@ class LogbookController extends Controller
         ]);
 
         $logbook = Logbook::findOrFail($id);
-
         $data = $request->only(['tanggal', 'jam', 'keterangan']);
 
         if ($request->hasFile('foto_bukti')) {
@@ -269,7 +266,6 @@ class LogbookController extends Controller
         $tanggal_mulai = Pengaturan::first()->tanggal_mulai_pkl;
         $tanggal_selesai = Pengaturan::first()->tanggal_selesai_pkl;
 
-        // Kirim ke view
         return view('home.logbook.rekap', [
             'peserta' => $peserta,
             'peserta_pkl' => $peserta_pkl,

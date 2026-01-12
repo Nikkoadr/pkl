@@ -81,7 +81,6 @@ class KaprodiController extends Controller
             ->with('success', 'Kaprodi berhasil diperbarui.');
     }
 
-
     public function destroy(Kaprodi $kaprodi)
     {
         $this->authorize('admin');

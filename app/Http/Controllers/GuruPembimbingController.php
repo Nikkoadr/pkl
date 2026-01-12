@@ -46,7 +46,6 @@ class GuruPembimbingController extends Controller
             abort(403, 'Anda tidak memiliki akses ke halaman ini');
         }
 
-        // Data tambahan
         $guru = Guru::with('user')->get();
         $kompetensi = Kompetensi_keahlian::all();
         $dudiList = Dudi::all();
@@ -85,7 +84,6 @@ class GuruPembimbingController extends Controller
 
         return redirect()->back()->with('success', 'Guru pembimbing berhasil ditambahkan.');
     }
-
 
     public function edit($id)
     {

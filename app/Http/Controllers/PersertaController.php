@@ -102,6 +102,7 @@ class PersertaController extends Controller
             'tempat_lahir' => 'nullable|string|max:255',
             'tanggal_lahir' => 'required|date',
             'email' => 'required|email|unique:users,email',
+            'no_telp' => 'required|string|max:15',
             'password' => 'required|string|confirmed|min:6',
             'nis' => 'required|string|max:20|unique:peserta,nis',
             'nisn' => 'required|string|max:20|unique:peserta,nisn',
@@ -117,6 +118,7 @@ class PersertaController extends Controller
             'tempat_lahir' => $validated['tempat_lahir'],
             'tanggal_lahir' => $validated['tanggal_lahir'],
             'email' => $validated['email'],
+            'no_telp' => $validated['no_telp'],
             'password' => Hash::make($validated['password']),
         ]);
 
@@ -157,26 +159,38 @@ class PersertaController extends Controller
         return view('home.peserta.edit', compact('peserta', 'kelas', 'tahun_ajaran'));
     }
 
-
     public function update(Request $request, $id)
     {
-        $peserta = Peserta::with(['user'])->findOrFail($id);
+        $peserta = Peserta::with('user')->findOrFail($id);
+
         $request->validate([
             'nama' => 'required|string|max:255',
             'jenis_kelamin' => 'required|in:1,2',
             'tempat_lahir' => 'nullable|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $peserta->user->id,
+            'no_telp' => 'nullable|string|max:15',
+            'password' => 'nullable|string|confirmed|min:6',
             'tanggal_lahir' => 'required|date',
             'nis' => 'required|string|max:50',
             'nisn' => 'required|string|max:50',
             'kelas_id' => 'required|exists:kelas,id',
             'tahun_ajaran_id' => 'required|exists:tahun_ajaran,id',
         ]);
-        $peserta->user->update([
+
+        $dataUser = [
             'nama' => $request->nama,
             'jenis_kelamin' => $request->jenis_kelamin,
             'tempat_lahir' => $request->tempat_lahir,
             'tanggal_lahir' => $request->tanggal_lahir,
-        ]);
+            'email' => $request->email,
+            'no_telp' => $request->no_telp,
+        ];
+
+        if ($request->filled('password')) {
+            $dataUser['password'] = Hash::make($request->password);
+        }
+
+        $peserta->user->update($dataUser);
 
         $peserta->update([
             'nis' => $request->nis,
@@ -185,7 +199,9 @@ class PersertaController extends Controller
             'tahun_ajaran_id' => $request->tahun_ajaran_id,
         ]);
 
-        return redirect()->route('peserta.index')->with('success', 'Data peserta berhasil diperbarui.');
+        return redirect()
+            ->route('peserta.index')
+            ->with('success', 'Data peserta berhasil diperbarui.');
     }
 
     public function request_dudi()
@@ -242,8 +258,12 @@ class PersertaController extends Controller
     public function destroy($id)
     {
         $peserta = Peserta::findOrFail($id);
+
+        $userId = $peserta->user_id;
+
         $peserta->delete();
 
+        User::where('id', $userId)->delete();
         return redirect()->route('peserta.index')->with('success', 'Data peserta berhasil dihapus.');
     }
 }

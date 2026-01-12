@@ -49,6 +49,8 @@ class GuruController extends Controller
             'jenis_kelamin' => 'required',
             'tempat_lahir' => 'nullable|string',
             'tanggal_lahir' => 'nullable|date',
+            'no_telp' => 'nullable|string|max:15',
+            'keterangan' => 'nullable|string|max:255',
         ]);
 
         $user = User::create([
@@ -59,6 +61,8 @@ class GuruController extends Controller
             'jenis_kelamin' => $request->jenis_kelamin,
             'tempat_lahir' => $request->tempat_lahir,
             'tanggal_lahir' => $request->tanggal_lahir,
+            'no_telp' => $request->no_telp,
+
         ]);
 
         Guru::create([
@@ -89,20 +93,56 @@ class GuruController extends Controller
     public function update(Request $request, $id)
     {
         $guru = Guru::findOrFail($id);
-        $validated = $request->validate([
+
+        $request->validate([
+            'nama' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $guru->user_id,
+            'password' => 'nullable|string|min:6|confirmed',
+            'jenis_kelamin' => 'required',
+            'tempat_lahir' => 'nullable|string',
+            'tanggal_lahir' => 'nullable|date',
+            'no_telp' => 'nullable|string|max:15',
             'keterangan' => 'nullable|string|max:255',
         ]);
 
-        $guru->update($validated);
+        $user = User::findOrFail($guru->user_id);
 
-        return redirect()->route('guru.index')->with('success', 'Guru berhasil diperbarui.');
+        $dataUser = [
+            'nama' => $request->nama,
+            'email' => $request->email,
+            'jenis_kelamin' => $request->jenis_kelamin,
+            'tempat_lahir' => $request->tempat_lahir,
+            'tanggal_lahir' => $request->tanggal_lahir,
+            'no_telp' => $request->no_telp,
+        ];
+
+        if ($request->filled('password')) {
+            $dataUser['password'] = Hash::make($request->password);
+        }
+
+        $user->update($dataUser);
+
+        $guru->update([
+            'keterangan' => $request->keterangan,
+        ]);
+
+        return redirect()
+            ->route('guru.index')
+            ->with('success', 'Guru berhasil diperbarui.');
     }
+
 
     public function destroy($id)
     {
         $guru = Guru::findOrFail($id);
+
+        $userId = $guru->user_id;
+
         $guru->delete();
 
-        return redirect()->route('guru.index')->with('success', 'Guru berhasil dihapus.');
+        User::where('id', $userId)->delete();
+
+        return redirect()->route('guru.index')
+            ->with('success', 'Guru berhasil dihapus.');
     }
 }

@@ -25,18 +25,15 @@ class Tahun_ajaranController extends Controller
 
     public function store(Request $request)
     {
-        // Validasi input
         $request->validate([
             'nama_tahun_ajaran' => 'required|string|unique:tahun_ajaran,nama_tahun_ajaran',
             'status' => 'required|in:aktif,nonaktif',
         ]);
 
-        // Jika yang akan dibuat aktif, pastikan tidak ada tahun ajaran lain yang aktif
         if ($request->status === 'aktif' && Tahun_ajaran::where('status', 'aktif')->exists()) {
             return redirect()->back()->with('error', 'Hanya boleh ada satu tahun ajaran aktif.');
         }
 
-        // Buat tahun ajaran baru
         Tahun_ajaran::create([
             'nama_tahun_ajaran' => $request->nama_tahun_ajaran,
             'status' => $request->status,
@@ -67,7 +64,6 @@ class Tahun_ajaranController extends Controller
             'status' => 'required|in:aktif,nonaktif',
         ]);
 
-        // Jika status diubah menjadi 'aktif', nonaktifkan tahun ajaran aktif lainnya
         if ($request->status === 'aktif') {
             Tahun_ajaran::where('status', 'aktif')->where('id', '!=', $id)->update(['status' => 'nonaktif']);
         }
@@ -76,7 +72,6 @@ class Tahun_ajaranController extends Controller
 
         return redirect()->route('tahun_ajaran.index')->with('success', 'Tahun ajaran berhasil diperbarui.');
     }
-
 
     public function destroy(string $id)
     {

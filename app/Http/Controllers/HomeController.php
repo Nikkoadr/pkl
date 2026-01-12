@@ -57,7 +57,6 @@ class HomeController extends Controller
             $user = Auth::user();
             $guru = $user->guru;
 
-            // cek kaprodi
             if ($guru && $guru->kaprodi) {
                 $kaprodi = $guru->kaprodi;
 
@@ -74,7 +73,6 @@ class HomeController extends Controller
                 return view('home.dashboard.prodi.index', compact('totalPeserta', 'tersarap', 'belum'));
             }
 
-            // cek guru pembimbing
             if ($guru) {
                 $pembimbing = $guru->guru_pembimbing()->with('dudi')->get();
                 $dudis = $pembimbing->pluck('dudi')->filter()->values();

@@ -44,27 +44,6 @@
                                     <input type="number" name="nis" class="form-control @error('nis') is-invalid @enderror" value="{{ old('nis') }}" placeholder="NIS" required>
                                     @error('nis')<div class="invalid-feedback">{{ $message }}</div>@enderror
                                 </div>
-
-                                {{-- Nama Lengkap --}}
-                                <div class="form-group">
-                                    <label>Nama Lengkap</label>
-                                    <input type="text" name="nama" class="form-control @error('nama') is-invalid @enderror" value="{{ old('nama') }}" placeholder="Nama Lengkap" required>
-                                    @error('nama')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                                </div>
-
-                                {{-- Tempat Lahir --}}
-                                <div class="form-group">
-                                    <label>Tempat Lahir</label>
-                                    <input type="text" name="tempat_lahir" class="form-control @error('tempat_lahir') is-invalid @enderror" value="{{ old('tempat_lahir') }}" placeholder="Tempat Lahir">
-                                    @error('tempat_lahir')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                                </div>
-
-                                {{-- Tanggal Lahir --}}
-                                <div class="form-group">
-                                    <label>Tanggal Lahir</label>
-                                    <input type="date" name="tanggal_lahir" class="form-control @error('tanggal_lahir') is-invalid @enderror" value="{{ old('tanggal_lahir') }}" required>
-                                    @error('tanggal_lahir')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                                </div>
                             </div>
 
                             <div class="col-md-6">
@@ -94,48 +73,59 @@
                                     @error('jenis_kelamin')<div class="invalid-feedback">{{ $message }}</div>@enderror
                                 </div>
 
-                                {{-- Nama DUDI - Autocomplete --}}
                                 <div class="form-group">
                                     <label>Nama DUDI</label>
                                     <input type="text" id="nama_dudi" class="form-control @error('dudi_id') is-invalid @enderror" placeholder="Nama DUDI" required>
                                     <input type="hidden" name="dudi_id" id="dudi_id" required>
                                     @error('dudi_id')<div class="invalid-feedback">{{ $message }}</div>@enderror
                                 </div>
-
-                                {{-- Alamat DUDI --}}
-                                <div class="form-group">
-                                    <label>Alamat DUDI</label>
-                                    <input type="text" name="alamat_dudi" id="alamat_dudi" class="form-control" placeholder="Alamat DUDI" readonly>
-                                </div>
-
-                                {{-- Pimpinan DUDI --}}
-                                <div class="form-group">
-                                    <label>Nama Pimpinan DUDI</label>
-                                    <input type="text" name="nama_pimpinan_dudi" id="nama_pimpinan_dudi" class="form-control" placeholder="Nama Pimpinan DUDI" readonly>
-                                </div>
                             </div>
                         </div>
+                                {{-- Nama Lengkap --}}
+                                <div class="form-group">
+                                    <label>Nama Lengkap</label>
+                                    <input type="text" name="nama" class="form-control @error('nama') is-invalid @enderror" value="{{ old('nama') }}" placeholder="Nama Lengkap" required>
+                                    @error('nama')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                                </div>
 
-                        {{-- Email --}}
-                        <div class="form-group">
-                            <label>Email</label>
-                            <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email') }}" placeholder="Email" required>
-                            @error('email')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                        </div>
+                                {{-- Tempat Lahir --}}
+                                <div class="form-group">
+                                    <label>Tempat Lahir</label>
+                                    <input type="text" name="tempat_lahir" class="form-control @error('tempat_lahir') is-invalid @enderror" value="{{ old('tempat_lahir') }}" placeholder="Tempat Lahir">
+                                    @error('tempat_lahir')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                                </div>
 
-                        {{-- Password --}}
-                        <div class="form-group">
-                            <label>Password</label>
-                            <input type="password" name="password" class="form-control @error('password') is-invalid @enderror" placeholder="Password" required>
-                            @error('password')<div class="invalid-feedback">{{ $message }}</div>@enderror
-                        </div>
+                                {{-- Tanggal Lahir --}}
+                                <div class="form-group">
+                                    <label>Tanggal Lahir</label>
+                                    <input type="date" name="tanggal_lahir" class="form-control @error('tanggal_lahir') is-invalid @enderror" value="{{ old('tanggal_lahir') }}" required>
+                                    @error('tanggal_lahir')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                                </div>
+                                {{-- Email --}}
+                                <div class="form-group">
+                                    <label>Email</label>
+                                    <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email') }}" placeholder="Email" required>
+                                    @error('email')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                                </div>
+                                <div class="form-group">
+                                    <label>Nomor Telepon</label>
+                                    <input type="text" name="no_telp" class="form-control @error('no_telp') is-invalid @enderror" value="{{ old('no_telp') }}" placeholder="Nomor Telepon" required>
+                                    @error('no_telp')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                                </div>
 
-                        {{-- Konfirmasi Password --}}
-                        <div class="form-group">
-                            <label>Konfirmasi Password</label>
-                            <input type="password" name="password_confirmation" class="form-control" placeholder="Konfirmasi Password" required>
-                        </div>
-                    </div>
+                                {{-- Password --}}
+                                <div class="form-group">
+                                    <label>Password</label>
+                                    <input type="password" name="password" class="form-control @error('password') is-invalid @enderror" placeholder="Password" required>
+                                    @error('password')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                                </div>
+
+                                {{-- Konfirmasi Password --}}
+                                <div class="form-group">
+                                    <label>Konfirmasi Password</label>
+                                    <input type="password" name="password_confirmation" class="form-control" placeholder="Konfirmasi Password" required>
+                                </div>
+                            </div>
 
                     <div class="card-footer">
                         <a href="{{ route('peserta.index') }}" class="btn btn-secondary">Batal</a>
@@ -158,8 +148,6 @@
             select: function (event, ui) {
                 $('#nama_dudi').val(ui.item.label);
                 $('#dudi_id').val(ui.item.id);
-                $('#alamat_dudi').val(ui.item.alamat);
-                $('#nama_pimpinan_dudi').val(ui.item.pimpinan);
                 return false;
             }
         });

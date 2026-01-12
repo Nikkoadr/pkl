@@ -39,6 +39,10 @@
                             <input type="date" name="tanggal_lahir" class="form-control">
                         </div>
                         <div class="form-group col-md-12">
+                            <label for="no_telp">Nomor Telepon</label>
+                            <input type="number" name="no_telp" class="form-control">
+                        </div>
+                        <div class="form-group col-md-12">
                             <label for="password">Password</label>
                             <input type="password" name="password" class="form-control" required>
                         </div>

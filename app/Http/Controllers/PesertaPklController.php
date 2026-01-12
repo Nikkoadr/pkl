@@ -90,7 +90,6 @@ class PesertaPklController extends Controller
         return redirect()->route('home.dashboard')->with('error', 'Anda tidak memiliki akses.');
     }
 
-
     public function store(Request $request)
     {
         $request->validate([

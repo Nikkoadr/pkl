@@ -42,6 +42,7 @@
                                 <th>Jenis Kelamin</th>
                                 <th>Tempat Lahir</th>
                                 <th>Tanggal Lahir</th>
+                                <th>Email</th>
                                 <th>Keterangan</th>
                                 <th data-orderable="false" class="text-center">Aksi</th>
                             </tr>
@@ -54,6 +55,7 @@
                                 <td>{{ $item->user->jenis_kelamin }}</td>
                                 <td>{{ $item->user->tempat_lahir }}</td>
                                 <td>{{ \Carbon\Carbon::parse($item->user->tanggal_lahir)->format('d-m-Y') }}</td>
+                                <td>{{ $item->user->email }}</td>
                                 <td>{{ $item->keterangan }}</td>
                                 <td class="text-center">
                                     <a href="{{ route('guru.edit', $item->id) }}" class="btn btn-primary btn-sm">
