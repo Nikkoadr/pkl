@@ -33,7 +33,7 @@
                 <h3 class="card-title">Informasi</h3>
             </div>
             <div class="card-body">
-                <h5>Anda Adalah Guru Biasa Tidak Terlibat dalam Pembimbingan PKL. Hubungi Admin untuk informasi lebih lanjut.</h5>
+                <h5>Punten Lurrrr</h5>
             </div>
         </div>
 
