@@ -71,7 +71,17 @@ class SidangPklController extends Controller
                 ])
                 ->get();
 
-            return view('sidang_pkl.index', compact('sidang_pkl'));
+            $peserta_pkl = Peserta_pkl::whereHas('peserta.kelas', function ($q) use ($kaprodi, $tahunAktif) {
+                $q->where('kompetensi_keahlian_id', $kaprodi->kompetensi_keahlian_id)
+                    ->where('tahun_ajaran_id', $tahunAktif->id);
+            })
+                ->with([
+                    'peserta.user',
+                    'peserta.kelas',
+                    'dudi'
+                ])->get();
+
+            return view('sidang_pkl.index', compact('sidang_pkl', 'peserta_pkl'));
         }
 
         if (Gate::allows('guru_penguji')) {
