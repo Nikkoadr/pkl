@@ -31,7 +31,7 @@
             <div class="card-header">
                 <div class="row w-100">
                     <div class="col-md-6 d-flex align-items-center">
-                        <h3 class="card-title mb-0">Daftar Logbook</h3>
+                        <h3 class="card-title mb-0">Daftar Nilai PKL</h3>
                     </div>
                     <div class="col-md-6 text-right">
                         @canany(['admin','prodi','guru_pembimbing'])
@@ -172,16 +172,6 @@
                             <input type="file" name="foto_bukti_nilai_pkl" id="foto_bukti_nilai_pkl" class="custom-file-input">
                             <label class="custom-file-label">Pilih file</label>
                         </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Nilai Sidang PKL</label>
-                        <input type="number" name="nilai_sidang_pkl" class="form-control" min="0" max="100">
-                    </div>
-
-                    <div class="form-group">
-                        <label>Komentar</label>
-                        <textarea name="komentar" class="form-control" rows="2"></textarea>
                     </div>
 
                 </div>

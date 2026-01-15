@@ -4,8 +4,8 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\DudiController;
-use App\Http\Controllers\UserController;
 use App\Http\Controllers\GuruPembimbingController;
+use App\Http\Controllers\GuruPengujiController;
 use App\Http\Controllers\GuruController;
 use App\Http\Controllers\PersertaController;
 use App\Http\Controllers\PesertaPklController;
@@ -18,6 +18,7 @@ use App\Http\Controllers\KelasController;
 use App\Http\Controllers\LogbookController;
 use App\Http\Controllers\NilaiPklController;
 use App\Http\Controllers\KaprodiController;
+use App\Http\Controllers\SidangPklController;
 
 
 Route::get('/', function () {
@@ -96,6 +97,11 @@ Route::get('/home/esertifikat/cetak_belakang_massal', [EsertifikatController::cl
 Route::post('/nilai_pkl/generate_massal', [EsertifikatController::class, 'generate_massal'])->name('esertifikat.generate_massal');
 Route::post('/nilai_pkl/generate/{id}', [EsertifikatController::class, 'generate'])->name('esertifikat.generate');
 
+Route::get('/home/sidang_pkl/', [SidangPklController::class, 'index'])->name('sidang_pkl.index');
+Route::post('/home/sidang_pkl/store', [SidangPklController::class, 'store'])->name('sidang_pkl.store');
+Route::get('/home/sidang_pkl/edit/{id}', [SidangPklController::class, 'edit'])->name('sidang_pkl.edit');
+Route::put('/home/sidang_pkl/update/{id}', [SidangPklController::class, 'update'])->name('sidang_pkl.update');
+Route::delete('/home/sidang_pkl/destroy/{id}', [SidangPklController::class, 'destroy'])->name('sidang_pkl.destroy');
 // Nilai
 Route::get('/home/nilai_pkl', [NilaiPklController::class, 'index'])->name('nilai_pkl.index');
 Route::post('/home/nilai_pkl/store', [NilaiPklController::class, 'store'])->name('nilai_pkl.store');

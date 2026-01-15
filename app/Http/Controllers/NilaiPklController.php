@@ -123,8 +123,6 @@ class NilaiPklController extends Controller
             'nilai_inisiatif_kreatifitas' => 'required|integer|min:0|max:100',
             'nilai_perilaku' => 'required|integer|min:0|max:100',
             'foto_bukti_nilai_pkl' => 'required|image|mimes:jpeg,png,jpg,gif|max:5120',
-            'nilai_sidang_pkl' => 'nullable|integer|min:0|max:100',
-            'komentar' => 'nullable|string',
         ]);
 
         $data = $request->only([
@@ -134,8 +132,6 @@ class NilaiPklController extends Controller
             'nilai_kualitas_kerja',
             'nilai_inisiatif_kreatifitas',
             'nilai_perilaku',
-            'nilai_sidang_pkl',
-            'komentar'
         ]);
 
         if ($request->hasFile('foto_bukti_nilai_pkl')) {
@@ -210,9 +206,7 @@ class NilaiPklController extends Controller
             'nilai_kualitas_kerja' => 'required|integer|min:0|max:100',
             'nilai_inisiatif_kreatifitas' => 'required|integer|min:0|max:100',
             'nilai_perilaku' => 'required|integer|min:0|max:100',
-            'nilai_sidang_pkl' => 'nullable|integer|min:0|max:100',
             'foto_bukti_nilai_pkl' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120',
-            'komentar' => 'nullable|string',
         ]);
 
         $nilai_pkl = Nilai_pkl::findOrFail($id);
@@ -222,9 +216,7 @@ class NilaiPklController extends Controller
             'nilai_kemajuan_kerja',
             'nilai_kualitas_kerja',
             'nilai_inisiatif_kreatifitas',
-            'nilai_perilaku',
-            'nilai_sidang_pkl',
-            'komentar'
+            'nilai_perilaku'
         ]);
 
         if ($request->hasFile('foto_bukti_nilai_pkl')) {
