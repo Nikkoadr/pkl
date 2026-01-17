@@ -21,14 +21,12 @@
 @section('content')
 <div class="content-wrapper">
 
-    {{-- HEADER --}}
     <section class="content-header">
         <div class="container-fluid">
             <h1>Sidang PKL</h1>
         </div>
     </section>
 
-    {{-- CONTENT --}}
     <section class="content">
         <div class="container-fluid">
 
@@ -50,7 +48,6 @@
                     </div>
                 </div>
 
-                {{-- TABLE --}}
                 <div class="card-body">
                     <table class="table table-bordered table-striped" id="datatable">
                         <thead>
