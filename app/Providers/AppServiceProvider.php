@@ -61,16 +61,8 @@ class AppServiceProvider extends ServiceProvider
                 return false;
             }
 
-            if ($user->guru->guru_pembimbing()->exists()) {
-                return false;
-            }
 
             return Sidang_pkl::where('guru_id', $user->guru->id)->exists();
-        });
-
-
-        Gate::define('peserta', function (User $user) {
-            return $user->role_id == 4;
         });
     }
 }

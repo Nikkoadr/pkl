@@ -15,7 +15,6 @@
     <section class="content">
         <div class="card">
             <div class="card-body">
-
                 <form action="{{ route('sidang_pkl.update', $nilai_sidang_pkl->id) }}" method="POST">
                     @csrf
                     @method('PUT')
@@ -23,7 +22,7 @@
                         <label for="nilai_sidang_pkl">Nilai Sidang</label>
                         <input type="number" name="nilai_sidang_pkl" id="nilai_sidang"
                             class="form-control @error('nilai_sidang_pkl') is-invalid @enderror"
-                            value="{{ old('nilai_sidang_pkl', $nilai_sidang_pkl->nilai_sidang) }}" min="0" max="100"
+                            value="{{ old('nilai_sidang_pkl', $nilai_sidang_pkl->nilai_sidang_pkl) }}" min="0" max="100"
                             placeholder="Masukkan nilai sidang...">
                         @error('nilai_sidang_pkl')
                             <div class="invalid-feedback">{{ $message }}</div>

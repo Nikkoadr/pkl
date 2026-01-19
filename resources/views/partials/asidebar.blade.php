@@ -27,14 +27,6 @@
                             <p>Dashboard</p>
                         </a>
                     </li>
-                    @can('guru_penguji')
-                        <li class="nav-item">
-                            <a href="/home/sidang_pkl" class="nav-link {{ request()->is('home/sidang_pkl') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-file-alt"></i>
-                                <p>Sidang PKL</p>
-                            </a>
-                        </li>
-                    @endcan
                     @can('admin')
                         <li class="nav-item {{ request()->is('home/tahun_ajaran','home/dudi','home/users','home/kelas') ? 'menu-open' : '' }}">
                             <a href="#" class="nav-link {{ request()->is('home/tahun_ajaran','home/dudi','home/users','home/kelas') ? 'active' : '' }}">
@@ -123,12 +115,6 @@
                             </li>
                         </ul>
                     </li>
-                    <li class="nav-item">
-                        <a href="/home/sidang_pkl" class="nav-link {{ request()->is('home/sidang_pkl') ? 'active' : '' }}">
-                            <i class="nav-icon fa-solid fa-file-alt"></i>
-                            <p>Sidang PKL</p>
-                        </a>
-                    </li>
                     <li class="nav-item {{ request()->is('home/logbook','home/nilai_pkl','home/nilai_sidang') ? 'menu-open' : '' }}">
                         <a href="#" class="nav-link {{ request()->is('home/logbook','home/nilai_pkl','home/nilai_sidang') ? 'active' : '' }}">
                             <i class="nav-icon fa-solid fa-book"></i>
@@ -151,6 +137,12 @@
                                 </a>
                             </li>
                         </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/home/sidang_pkl" class="nav-link {{ request()->is('home/sidang_pkl') ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-file-alt"></i>
+                            <p>Sidang PKL</p>
+                        </a>
                     </li>
                     <li class="nav-item">
                         <a href="/home/esertifikat" class="nav-link {{ request()->is('home/esertifikat') ? 'active' : '' }}">
@@ -229,12 +221,6 @@
                             </li>
                         </ul>
                     </li>
-                    <li class="nav-item">
-                        <a href="/home/sidang_pkl" class="nav-link {{ request()->is('home/sidang_pkl') ? 'active' : '' }}">
-                            <i class="nav-icon fa-solid fa-file-alt"></i>
-                            <p>Sidang PKL</p>
-                        </a>
-                    </li>
                     <li class="nav-item {{ request()->is('home/logbook','home/nilai_pkl','home/nilai_sidang') ? 'menu-open' : '' }}">
                         <a href="#" class="nav-link {{ request()->is('home/logbook','home/nilai_pkl','home/nilai_sidang') ? 'active' : '' }}">
                             <i class="nav-icon fa-solid fa-book"></i>
@@ -257,6 +243,12 @@
                                 </a>
                             </li>
                         </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/home/sidang_pkl" class="nav-link {{ request()->is('home/sidang_pkl') ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-file-alt"></i>
+                            <p>Sidang PKL</p>
+                        </a>
                     </li>
                     <li class="nav-item">
                         <a href="/home/esertifikat" class="nav-link {{ request()->is('home/esertifikat') ? 'active' : '' }}">
@@ -306,12 +298,7 @@
                             </li>
                         </ul>
                     </li>
-                    <li class="nav-item">
-                        <a href="/home/sidang_pkl" class="nav-link {{ request()->is('home/sidang_pkl') ? 'active' : '' }}">
-                            <i class="nav-icon fas fa-file-alt"></i>
-                            <p>Sidang PKL</p>
-                        </a>
-                    </li>
+
                     <li class="nav-item {{ request()->is('home/logbook','home/nilai_pkl','home/nilai_sidang') ? 'menu-open' : '' }}">
                         <a href="#" class="nav-link {{ request()->is('home/logbook','home/nilai_pkl','home/nilai_sidang') ? 'active' : '' }}">
                             <i class="nav-icon fa-solid fa-book"></i>
@@ -334,6 +321,12 @@
                                 </a>
                             </li>
                         </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/home/sidang_pkl" class="nav-link {{ request()->is('home/sidang_pkl') ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-file-alt"></i>
+                            <p>Sidang PKL</p>
+                        </a>
                     </li>
                 @endcan
                 @can('peserta')
