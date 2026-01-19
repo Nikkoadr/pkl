@@ -44,6 +44,7 @@ class SidangPklController extends Controller
             ])->get();
 
             $peserta_pkl = Peserta_pkl::whereNotIn('id', $pesertaSudahSidang)
+                ->whereHas('nilai_pkl') // hanya yang sudah memiliki nilai PKL
                 ->with([
                     'peserta.user',
                     'peserta.kelas',
@@ -80,6 +81,7 @@ class SidangPklController extends Controller
                     ->where('tahun_ajaran_id', $tahunAktif->id);
             })
                 ->whereNotIn('id', $pesertaSudahSidang)
+                ->whereHas('nilai_pkl')
                 ->with([
                     'peserta.user',
                     'peserta.kelas',
@@ -113,7 +115,6 @@ class SidangPklController extends Controller
         abort(403, 'Anda tidak memiliki akses ke halaman ini');
     }
 
-
     public function store(Request $request)
     {
         $request->validate([
@@ -125,9 +126,6 @@ class SidangPklController extends Controller
 
         $tanggal_sidang = now()->toDateString();
 
-        /**
-         * 1️⃣ CEK PESERTA SUDAH PUNYA GURU PENGUJI LAIN
-         */
         $pesertaSudahAda = Sidang_pkl::whereIn('peserta_pkl_id', $request->peserta_pkl_id)
             ->where('guru_id', '!=', $request->guru_id)
             ->pluck('peserta_pkl_id')
@@ -148,9 +146,6 @@ class SidangPklController extends Controller
                 );
         }
 
-        /**
-         * 2️⃣ CEK PESERTA BELUM ADA NILAI PKL (INI YANG KAMU MAU)
-         */
         $pesertaBelumDinilai = Peserta_pkl::whereIn('id', $request->peserta_pkl_id)
             ->whereDoesntHave('nilai_pkl')
             ->with('peserta.user')
@@ -170,9 +165,6 @@ class SidangPklController extends Controller
                 );
         }
 
-        /**
-         * 3️⃣ SIMPAN SIDANG (AMAN)
-         */
         foreach ($request->peserta_pkl_id as $pesertaId) {
             Sidang_pkl::firstOrCreate(
                 [
