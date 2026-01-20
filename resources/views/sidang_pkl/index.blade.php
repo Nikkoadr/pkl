@@ -123,6 +123,7 @@
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </form>
+                                @endcanany
                             </td>
                         </tr>
                         @endforeach
