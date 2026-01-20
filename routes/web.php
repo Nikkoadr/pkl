@@ -5,7 +5,6 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\DudiController;
 use App\Http\Controllers\GuruPembimbingController;
-use App\Http\Controllers\GuruPengujiController;
 use App\Http\Controllers\GuruController;
 use App\Http\Controllers\PersertaController;
 use App\Http\Controllers\PesertaPklController;
@@ -31,7 +30,6 @@ Auth::routes([
     'verify' => false
 ]);
 
-// Autocomplete
 Route::prefix('autocomplete')->group(function () {
     Route::get('/dudi', [AutoCompleteController::class, 'autoCompleteDudi']);
     Route::get('/users', [AutoCompleteController::class, 'autoCompleteUser']);
@@ -42,7 +40,6 @@ Route::prefix('autocomplete')->group(function () {
     Route::get('/kompetensi', [AutoCompleteController::class, 'autoCompleteKompetensi']);
 });
 
-// Dashboard & Umum
 Route::get('/home/dashboard', [HomeController::class, 'index'])->name('home.dashboard');
 Route::get('/home/profil', [HomeController::class, 'profil'])->name('home.profil');
 Route::put('/home/profil/update', [HomeController::class, 'update_profil'])->name('home.profil.update');
@@ -51,7 +48,6 @@ Route::get('/home/peserta/request_dudi', [PersertaController::class, 'request_du
 Route::post('/home/peserta/store_request_dudi', [PersertaController::class, 'store_request_dudi'])->name('peserta.store_request_dudi');
 Route::get('/home/logbook/cetak_rekap', [LogbookController::class, 'cetak_rekap'])->name('logbook.cetak.rekap');
 
-// Master Data
 Route::resource('/home/tahun_ajaran', Tahun_ajaranController::class);
 Route::resource('/home/kelas', KelasController::class);
 Route::resource('/home/kaprodi', KaprodiController::class);
@@ -65,12 +61,10 @@ Route::resource('/home/logbook', LogbookController::class);
 Route::post('/home/logbook/store_siswa', [LogbookController::class, 'store_siswa'])->name('logbook.store_siswa');
 Route::post('/home/peserta_pkl/import', [PesertaPklController::class, 'import'])->name('peserta_pkl.import');
 
-// Import Data
 Route::post('/home/import_dudi', [DudiController::class, 'import'])->name('dudi.import');
 Route::post('/home/import_guru', [GuruController::class, 'import'])->name('guru.import');
 Route::post('/home/import_peserta', [PersertaController::class, 'import'])->name('peserta.import');
 
-// Surat / Dokumen
 Route::get('/home/surat', [SuratController::class, 'index'])->name('home.surat');
 Route::get('/home/kop_surat/{id}', [SuratController::class, 'cetakKopSurat'])->name('surat.kop_surat');
 Route::get('/home/booking/{id}', [SuratController::class, 'cetakBooking'])->name('surat.booking');
@@ -93,7 +87,6 @@ Route::get('/home/esertifikat/cetak_belakang/{id}', [EsertifikatController::clas
 Route::get('/home/esertifikat/cetak_depan_massal', [EsertifikatController::class, 'cetak_depan_massal'])->name('cetak.esertifikat_depan.massal');
 Route::get('/home/esertifikat/cetak_belakang_massal', [EsertifikatController::class, 'cetak_belakang_massal'])->name('cetak.esertifikat_belakang.massal');
 
-// Generate Sertifikat
 Route::post('/nilai_pkl/generate_massal', [EsertifikatController::class, 'generate_massal'])->name('esertifikat.generate_massal');
 Route::post('/nilai_pkl/generate/{id}', [EsertifikatController::class, 'generate'])->name('esertifikat.generate');
 
@@ -102,7 +95,7 @@ Route::post('/home/sidang_pkl/store', [SidangPklController::class, 'store'])->na
 Route::get('/home/sidang_pkl/edit/{id}', [SidangPklController::class, 'edit'])->name('sidang_pkl.edit');
 Route::put('/home/sidang_pkl/update/{id}', [SidangPklController::class, 'update'])->name('sidang_pkl.update');
 Route::delete('/home/sidang_pkl/destroy/{id}', [SidangPklController::class, 'destroy'])->name('sidang_pkl.destroy');
-// Nilai
+
 Route::get('/home/nilai_pkl', [NilaiPklController::class, 'index'])->name('nilai_pkl.index');
 Route::post('/home/nilai_pkl/store', [NilaiPklController::class, 'store'])->name('nilai_pkl.store');
 Route::post('/home/nilai_pkl/store_peserta', [NilaiPklController::class, 'store_peserta'])->name('nilai_pkl.store_peserta');
