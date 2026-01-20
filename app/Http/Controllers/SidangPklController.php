@@ -21,21 +21,6 @@ class SidangPklController extends Controller
     {
         $this->middleware('auth');
     }
-    private function hitungNilaiAkhir($nilai)
-    {
-        if (!$nilai) {
-            return null;
-        }
-
-        return round(collect([
-            $nilai->nilai_disiplin_kerja,
-            $nilai->nilai_kemajuan_kerja,
-            $nilai->nilai_kualitas_kerja,
-            $nilai->nilai_inisiatif_kreatifitas,
-            $nilai->nilai_perilaku,
-            $nilai->nilai_sidang_pkl,
-        ])->filter()->avg(), 2);
-    }
 
     public function index()
     {
@@ -57,12 +42,6 @@ class SidangPklController extends Controller
                 'peserta_pkl.nilai_pkl',
                 'peserta_pkl.dudi'
             ])->get();
-            $sidang_pkl->each(function ($item) {
-                if ($item->peserta_pkl && $item->peserta_pkl->nilai_pkl) {
-                    $nilai = $item->peserta_pkl->nilai_pkl;
-                    $nilai->nilai_akhir_pkl = $this->hitungNilaiAkhir($nilai);
-                }
-            });
 
             $peserta_pkl = Peserta_pkl::whereNotIn('id', $pesertaSudahSidang)
                 ->whereHas('nilai_pkl') // hanya yang sudah memiliki nilai PKL
@@ -96,12 +75,6 @@ class SidangPklController extends Controller
                     'peserta_pkl.dudi'
                 ])
                 ->get();
-            $sidang_pkl->each(function ($item) {
-                if ($item->peserta_pkl && $item->peserta_pkl->nilai_pkl) {
-                    $nilai = $item->peserta_pkl->nilai_pkl;
-                    $nilai->nilai_akhir_pkl = $this->hitungNilaiAkhir($nilai);
-                }
-            });
 
             $peserta_pkl = Peserta_pkl::whereHas('peserta.kelas', function ($q) use ($kaprodi, $tahunAktif) {
                 $q->where('kompetensi_keahlian_id', $kaprodi->kompetensi_keahlian_id)
@@ -135,13 +108,7 @@ class SidangPklController extends Controller
                     'peserta_pkl.dudi'
                 ])
                 ->get();
-            $sidang_pkl->each(function ($item) {
-                if ($item->peserta_pkl && $item->peserta_pkl->nilai_pkl) {
-                    $nilai = $item->peserta_pkl->nilai_pkl;
-                    $nilai->nilai_akhir_pkl = $this->hitungNilaiAkhir($nilai);
-                }
-            });
-            
+
             return view('sidang_pkl.index', compact('sidang_pkl'));
         }
 
