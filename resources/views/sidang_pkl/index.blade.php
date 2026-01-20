@@ -60,6 +60,7 @@
                                 <th>Foto Bukti PKL</th>
                                 <th>Semua Nilai PKL</th>
                                 <th>Nilai Sidang</th>
+                                <th>Nilai Akhir</th>
                                 <th>Komentar</th>
                                 <th class="text-center">Aksi</th>
                             </tr>
@@ -101,7 +102,9 @@
                             <td class="text-center">
                                 {{ $item->peserta_pkl->nilai_pkl->nilai_sidang_pkl ?? '-' }}
                             </td>
-
+                            <td class="text-center">
+                                {{ $item->peserta_pkl->nilai_pkl->nilai_akhir_pkl ?? '-' }}
+                            </td>
                             <td>{{ $item->peserta_pkl->nilai_pkl->komentar ?? '-' }}</td>
 
                             <td class="text-center">
