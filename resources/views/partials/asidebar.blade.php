@@ -27,7 +27,7 @@
                             <p>Dashboard</p>
                         </a>
                     </li>
-                    @canany(['admin', 'prodi', 'guru_pembimbing'])
+                    @canany(['guru_penguji'])
                     <li class="nav-item">
                         <a href="/home/sidang_pkl" class="nav-link {{ request()->is('home/sidang_pkl') ? 'active' : '' }}">
                             <i class="nav-icon fas fa-file-alt"></i>
