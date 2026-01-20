@@ -330,12 +330,6 @@
                             </li>
                         </ul>
                     </li>
-                    <li class="nav-item">
-                        <a href="/home/sidang_pkl" class="nav-link {{ request()->is('home/sidang_pkl') ? 'active' : '' }}">
-                            <i class="nav-icon fas fa-file-alt"></i>
-                            <p>Sidang PKL</p>
-                        </a>
-                    </li>
                 @endcan
                 @can('peserta')
                     <li class="nav-item {{ request()->is('home/logbook','home/nilai_pkl','home/nilai_sidang') ? 'menu-open' : '' }}">
