@@ -112,7 +112,7 @@
                                 class="btn btn-primary btn-sm">
                                     <i class="fas fa-edit"></i>
                                 </a>
-
+                                @canany(['admin', 'prodi'])
                                 <form action="{{ route('sidang_pkl.destroy', $item->id) }}"
                                     method="POST"
                                     class="d-inline form-delete">
