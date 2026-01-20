@@ -65,39 +65,33 @@
                         </thead>
 
                         <tbody>
-                            @foreach($esertifikat as $p)
-                                @php
-                                    $peserta = $p->peserta_pkl->peserta ?? null;
-                                    $user = $peserta->user ?? null;
-                                    $kelas = $peserta->kelas ?? null;
-                                @endphp
-
-                                <tr id="row-{{ $p->id }}">
-                                    <td><input type="checkbox" class="selectItem" value="{{ $p->id }}"></td>
+                            @foreach($esertifikat as $row)
+                                <tr id="row-{{ $row->id }}">
+                                    <td><input type="checkbox" class="selectItem" value="{{ $row->id }}"></td>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $p->nomor_sertifikat ?? '-' }}</td>
-                                    <td>{{ $peserta->nisn ?? '-' }}</td>
-                                    <td>{{ $user->nama ?? '-' }}</td>
-                                    <td>{{ $kelas->nama_kelas ?? '-' }}</td>
-                                    <td>{{ $kelas->kompetensi->nama_kompetensi ?? '-' }}</td>
-                                    <td>{{ $p->peserta_pkl->dudi->nama_dudi ?? '-' }}</td>
-                                    <td>{{ $p->rata_rata_sikap ?? '-' }}</td>
-                                    <td>{{ $p->nilai_sidang_pkl ?? '-' }}</td>
-                                    <td>{{ $p->nilai_akhir ?? '-' }}</td>
+                                    <td>{{ $row->nomor_sertifikat ?? '-' }}</td>
+                                    <td>{{ $row->nisn ?? '-' }}</td>
+                                    <td>{{ $row->nama ?? '-' }}</td>
+                                    <td>{{ $row->kelas ?? '-' }}</td>
+                                    <td>{{ $row->kompetensi ?? '-' }}</td>
+                                    <td>{{ $row->nama_dudi ?? '-' }}</td>
+                                    <td>{{ $row->rata_rata_sikap ?? '-' }}</td>
+                                    <td>{{ $row->nilai_sidang_pkl ?? '-' }}</td>
+                                    <td>{{ $row->nilai_akhir ?? '-' }}</td>
 
                                     <td class="text-center">
-                                        <a href="{{ route('cetak.esertifikat_depan', $p->id) }}"
+                                        <a href="{{ route('cetak.esertifikat_depan', $row->id) }}"
                                         class="btn btn-info btn-sm m-1" target="_blank">
                                             <i class="fas fa-file-alt"></i> Depan
                                         </a>
-                                        <a href="{{ route('cetak.esertifikat_belakang', $p->id) }}"
+                                        <a href="{{ route('cetak.esertifikat_belakang', $row->id) }}"
                                         class="btn btn-success btn-sm" target="_blank">
                                             <i class="fas fa-envelope-open-text"></i> Belakang
                                         </a>
                                     </td>
 
                                     <td class="text-center">
-                                        <form action="{{ route('esertifikat.destroy', $p->id) }}"
+                                        <form action="{{ route('esertifikat.destroy', $row->id) }}"
                                             method="POST"
                                             class="d-inline form-hapus">
                                             @csrf
