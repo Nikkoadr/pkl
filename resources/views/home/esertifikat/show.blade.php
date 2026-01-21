@@ -176,30 +176,37 @@
                 box-shadow: 0 10px 15px rgba(0,0,0,0.1);
             }
         }
-
-        @media (max-width: 480px) {
-            .page, .back-certificate {
-                zoom: 0.35;
-                -moz-transform: scale(0.35);
-            }
-            .wrapper { padding: 0 12px; }
-            .status-body { padding: 20px; }
-            .doc-sah { font-size: 18px; }
-            .status-header { padding: 15px; }
-        }
     </style>
 </head>
 <body>
-
 @php
-    if (!function_exists('predikat')) {
-        function predikat($n) {
-            if ($n >= 90) return 'Sangat Kompeten';
-            if ($n >= 80) return 'Kompeten';
-            if ($n >= 70) return 'Cukup Kompeten';
-            return 'Belum Kompeten';
-        }
+if (!function_exists('predikat')) {
+    function predikat($n) {
+        if ($n >= 90) return 'Sangat Baik';
+        if ($n >= 80) return 'Baik';
+        if ($n >= 70) return 'Cukup Baik';
+        return 'Belum Baik';
     }
+}
+
+if (!function_exists('catatan_sikap')) {
+    function catatan_sikap($n) {
+
+        $max = max($n);
+        $min = min($n);
+
+        // Jika semua predikat sama
+        if (predikat($max) === predikat($min)) {
+            return "Selama pelaksanaan PKL, peserta didik menunjukkan capaian sikap yang konsisten pada kategori " .
+                   predikat($max) . ".";
+        }
+
+        return "Selama pelaksanaan PKL, peserta didik menunjukkan capaian sikap " .
+               predikat($max) . " pada aspek " . array_search($max, $n) .
+               ", sementara pada aspek " . array_search($min, $n) .
+               " berada pada kategori " . predikat($min) . ".";
+    }
+}
 @endphp
 
 <div class="wrapper">
@@ -221,7 +228,7 @@
 
             <div class="box-valid">
                 <strong>Sidik Jari Digital</strong>
-                <div class="fingerprint">{{ $esertifikat->url_hash }}</div>
+                <div class="fingerprint">{{ $esertifikat->hash }}</div>
             </div>
 
             <div class="info" style="border: none; padding-top: 10px;">
@@ -282,43 +289,77 @@
                     </table>
 
                     <h3 class="bold">A. NILAI SIKAP</h3>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th style="width:30px;">No</th>
-                                <th>Aspek Yang Dinilai</th>
-                                <th style="width:70px;">Angka</th>
-                                <th style="width:120px;">Predikat</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr><td class="center">1</td><td>Disiplin Kerja</td><td class="center">{{ $esertifikat->peserta_pkl->nilai_pkl->nilai_disiplin_kerja }}</td><td class="center">{{ predikat($esertifikat->peserta_pkl->nilai_pkl->nilai_disiplin_kerja) }}</td></tr>
-                            <tr><td class="center">2</td><td>Kemajuan Kerja dan Motivasi</td><td class="center">{{ $esertifikat->peserta_pkl->nilai_pkl->nilai_kemajuan_kerja }}</td><td class="center">{{ predikat($esertifikat->peserta_pkl->nilai_pkl->nilai_kemajuan_kerja) }}</td></tr>
-                            <tr><td class="center">3</td><td>Kualitas Kerja</td><td class="center">{{ $esertifikat->peserta_pkl->nilai_pkl->nilai_kualitas_kerja }}</td><td class="center">{{ predikat($esertifikat->peserta_pkl->nilai_pkl->nilai_kualitas_kerja) }}</td></tr>
-                            <tr><td class="center">4</td><td>Inisiatif dan Kreatifitas</td><td class="center">{{ $esertifikat->peserta_pkl->nilai_pkl->nilai_inisiatif_kreatifitas }}</td><td class="center">{{ predikat($esertifikat->peserta_pkl->nilai_pkl->nilai_inisiatif_kreatifitas) }}</td></tr>
-                            <tr><td class="center">5</td><td>Perilaku / Sikap</td><td class="center">{{ $esertifikat->peserta_pkl->nilai_pkl->nilai_perilaku }}</td><td class="center">{{ predikat($esertifikat->peserta_pkl->nilai_pkl->nilai_perilaku) }}</td></tr>
-                        </tbody>
-                    </table>
+<table>
+    <thead>
+        <tr>
+            <th style="width:5%;">No</th>
+            <th style="width:55%;">Aspek Yang Dinilai</th>
+            <th style="width:15%;">Angka</th>
+            <th style="width:25%;">Predikat</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td class="center">1</td>
+            <td>Disiplin Kerja</td>
+            <td class="center">{{ $esertifikat->peserta_pkl->nilai_pkl->nilai_disiplin_kerja }}</td>
+            <td class="center">{{ predikat($esertifikat->peserta_pkl->nilai_pkl->nilai_disiplin_kerja) }}</td>
+        </tr>
+        <tr>
+            <td class="center">2</td>
+            <td>Kemajuan Kerja dan Motivasi</td>
+            <td class="center">{{ $esertifikat->peserta_pkl->nilai_pkl->nilai_kemajuan_kerja }}</td>
+            <td class="center">{{ predikat($esertifikat->peserta_pkl->nilai_pkl->nilai_kemajuan_kerja) }}</td>
+        </tr>
+        <tr>
+            <td class="center">3</td>
+            <td>Kualitas Kerja</td>
+            <td class="center">{{ $esertifikat->peserta_pkl->nilai_pkl->nilai_kualitas_kerja }}</td>
+            <td class="center">{{ predikat($esertifikat->peserta_pkl->nilai_pkl->nilai_kualitas_kerja) }}</td>
+        </tr>
+        <tr>
+            <td class="center">4</td>
+            <td>Inisiatif dan Kreativitas</td>
+            <td class="center">{{ $esertifikat->peserta_pkl->nilai_pkl->nilai_inisiatif_kreatifitas }}</td>
+            <td class="center">{{ predikat($esertifikat->peserta_pkl->nilai_pkl->nilai_inisiatif_kreatifitas) }}</td>
+        </tr>
+        <tr>
+            <td class="center">5</td>
+            <td>Perilaku / Sikap</td>
+            <td class="center">{{ $esertifikat->peserta_pkl->nilai_pkl->nilai_perilaku }}</td>
+            <td class="center">{{ predikat($esertifikat->peserta_pkl->nilai_pkl->nilai_perilaku) }}</td>
+        </tr>
+    </tbody>
+</table>
 
                     <h3 class="bold">B. NILAI KOMPETENSI</h3>
                     <table>
-                        <thead>
-                            <tr>
-                                <th style="width:30px;">No</th>
-                                <th>Kompetensi yang diuji</th>
-                                <th colspan="2" style="background-color:#ffcc00; text-align:center;">Nilai Perolehan</th>
-                            </tr>
-                            <tr>
-                                <th></th><th></th>
-                                <th style="width:70px;">Angka</th><th style="width:120px;">Predikat</th>
-                            </tr>
-                        </thead>
+<thead>
+    <tr>
+        <th rowspan="2" style="width:5%;">No</th>
+        <th rowspan="2" style="width:55%;">Kompetensi yang diuji</th>
+        <th colspan="2" style="background-color:#f5a700; text-align:center;">
+            Nilai Perolehan
+        </th>
+    </tr>
+    <tr>
+        <th style="width:15%;">Angka</th>
+        <th style="width:25%;">Predikat</th>
+    </tr>
+</thead>
+
                         <tbody>
                             <tr><td class="center">1</td><td>Nilai rata-rata sikap</td><td class="center">{{ number_format($esertifikat->rata_rata, 0) }}</td><td class="center">{{ predikat($esertifikat->rata_rata) }}</td></tr>
                             <tr><td class="center">2</td><td>Nilai sidang laporan PKL</td><td class="center">{{ $esertifikat->peserta_pkl->nilai_pkl->nilai_sidang_pkl }}</td><td class="center">{{ predikat($esertifikat->peserta_pkl->nilai_pkl->nilai_sidang_pkl) }}</td></tr>
                             <tr><td colspan="2" class="bold" style="text-align:right;">Nilai Akhir :</td><td colspan="2" class="center bold">{{ number_format($esertifikat->nilai_akhir, 0) }}</td></tr>
                             <tr><td colspan="2" class="bold" style="text-align:right;">Predikat :</td><td colspan="2" class="center bold">{{ predikat($esertifikat->nilai_akhir) }}</td></tr>
-                            <tr><td colspan="4" class="note"><b>Catatan:</b><br>{{ $esertifikat->peserta_pkl->nilai_pkl->komentar }}</td></tr>
+                            <tr><td colspan="4" class="note"><b>Catatan:</b><br>{{ catatan_sikap([
+                                'Disiplin Kerja' => $esertifikat->peserta_pkl->nilai_pkl->nilai_disiplin_kerja,
+                                'Kemajuan Kerja dan Motivasi' => $esertifikat->peserta_pkl->nilai_pkl->nilai_kemajuan_kerja,
+                                'Kualitas Kerja' => $esertifikat->peserta_pkl->nilai_pkl->nilai_kualitas_kerja,
+                                'Inisiatif dan Kreativitas' => $esertifikat->peserta_pkl->nilai_pkl->nilai_inisiatif_kreatifitas,
+                                'Perilaku / Sikap' => $esertifikat->peserta_pkl->nilai_pkl->nilai_perilaku,
+                            ]) }}</td></tr>
                         </tbody>
                     </table>
 
@@ -326,10 +367,10 @@
                         <table class="small-table" style="width: 250px; border: 1px solid black; text-align: center;">
                             <thead><tr><th>Nilai</th><th>Predikat</th></tr></thead>
                             <tbody>
-                                <tr><td>90 - 100</td><td>Sangat Kompeten</td></tr>
-                                <tr><td>80 - 89</td><td>Kompeten</td></tr>
-                                <tr><td>70 - 79</td><td>Cukup Kompeten</td></tr>
-                                <tr><td>0 - 69</td><td>Belum Kompeten</td></tr>
+                                <tr><td>90 - 100</td><td>Sangat Baik</td></tr>
+                                <tr><td>80 - 89</td><td>Baik</td></tr>
+                                <tr><td>70 - 79</td><td>Cukup Baik</td></tr>
+                                <tr><td>0 - 69</td><td>Belum Baik</td></tr>
                             </tbody>
                         </table>
                         <div class="signature">

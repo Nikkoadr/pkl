@@ -23,18 +23,17 @@ class SidangPklController extends Controller
     }
     private function hitungNilaiAkhir($nilai)
     {
-        if (!$nilai) {
-            return null;
-        }
+        if (!$nilai) return null;
 
-        return round(collect([
-            $nilai->nilai_disiplin_kerja,
-            $nilai->nilai_kemajuan_kerja,
-            $nilai->nilai_kualitas_kerja,
-            $nilai->nilai_inisiatif_kreatifitas,
-            $nilai->nilai_perilaku,
-            $nilai->nilai_sidang_pkl,
-        ])->filter()->avg(), 2);
+        $rataSikap = (
+            $nilai->nilai_disiplin_kerja +
+            $nilai->nilai_kemajuan_kerja +
+            $nilai->nilai_kualitas_kerja +
+            $nilai->nilai_inisiatif_kreatifitas +
+            $nilai->nilai_perilaku
+        ) / 5;
+
+        return round(($rataSikap + $nilai->nilai_sidang_pkl) / 2, 2);
     }
 
     public function index()
@@ -65,7 +64,7 @@ class SidangPklController extends Controller
             });
 
             $peserta_pkl = Peserta_pkl::whereNotIn('id', $pesertaSudahSidang)
-                ->whereHas('nilai_pkl') // hanya yang sudah memiliki nilai PKL
+                ->whereHas('nilai_pkl')
                 ->with([
                     'peserta.user',
                     'peserta.kelas',
@@ -141,7 +140,7 @@ class SidangPklController extends Controller
                     $nilai->nilai_akhir_pkl = $this->hitungNilaiAkhir($nilai);
                 }
             });
-            
+
             return view('sidang_pkl.index', compact('sidang_pkl'));
         }
 

@@ -83,6 +83,7 @@ class NilaiPklController extends Controller
                 ->get();
 
             return view('home.nilai_pkl.index', compact('nilai_pkl'));
+
         } elseif (Gate::allows('peserta')) {
             $peserta = Peserta::where('user_id', $user->id)
                 ->where('tahun_ajaran_id', $tahunAktif->id)
@@ -111,7 +112,6 @@ class NilaiPklController extends Controller
 
         abort(403);
     }
-
 
     public function store(Request $request)
     {

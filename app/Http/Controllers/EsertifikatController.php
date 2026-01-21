@@ -313,7 +313,6 @@ class EsertifikatController extends Controller
                     continue;
                 }
 
-                // Hitung nilai rata-rata dan nilai akhir
                 $rata_rata = round(((
                     $nilai->nilai_disiplin_kerja +
                     $nilai->nilai_kemajuan_kerja +
@@ -325,7 +324,6 @@ class EsertifikatController extends Controller
                 $nilai_sidang = $nilai->nilai_sidang_pkl;
                 $nilai_akhir = round(($rata_rata + $nilai_sidang) / 2, 2);
 
-                // Tambahkan ke model sementara (tidak disimpan ke DB)
                 $esertifikat->rata_rata = $rata_rata;
                 $esertifikat->nilai_sidang_pkl = $nilai_sidang;
                 $esertifikat->nilai_akhir = $nilai_akhir;
@@ -407,7 +405,6 @@ class EsertifikatController extends Controller
             $esertifikat->nilai_sidang_pkl = null;
             $esertifikat->nilai_akhir = null;
         }
-
         return view('home.esertifikat.show', compact('esertifikat', 'pengaturan', 'nilai'));
     }
 }

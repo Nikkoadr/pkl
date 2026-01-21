@@ -10,23 +10,19 @@
 
 @section('content')
 <div class="content-wrapper">
-
     <section class="content-header">
         <div class="container-fluid">
             <h1>Sertifikat PKL</h1>
         </div>
     </section>
-
     <section class="content">
         <div class="container-fluid">
-
             <div class="card">
                 <div class="card-header">
                     <div class="row w-100 align-items-center">
                         <div class="col-md-6">
                             <h5 class="mb-0">Daftar Sertifikat PKL</h5>
                         </div>
-
                         <div class="col-md-6 text-md-right text-left mt-2 mt-md-0">
                             <div class="btn-group">
                                 <button type="button" class="btn btn-primary btn-sm" id="btnDepan">
@@ -42,9 +38,7 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="card-body">
-
                     <table id="tabelEsertifikat" class="table table-bordered table-striped">
                         <thead>
                             <tr>
@@ -63,7 +57,6 @@
                                 <th class="text-center">Aksi</th>
                             </tr>
                         </thead>
-
                         <tbody>
                             @foreach($esertifikat as $row)
                                 <tr id="row-{{ $row->id }}">
@@ -78,7 +71,6 @@
                                     <td>{{ $row->rata_rata_sikap ?? '-' }}</td>
                                     <td>{{ $row->nilai_sidang_pkl ?? '-' }}</td>
                                     <td>{{ $row->nilai_akhir ?? '-' }}</td>
-
                                     <td class="text-center">
                                         <a href="{{ route('cetak.esertifikat_depan', $row->id) }}"
                                         class="btn btn-info btn-sm m-1" target="_blank">
@@ -89,7 +81,6 @@
                                             <i class="fas fa-envelope-open-text"></i> Belakang
                                         </a>
                                     </td>
-
                                     <td class="text-center">
                                         <form action="{{ route('esertifikat.destroy', $row->id) }}"
                                             method="POST"
@@ -102,17 +93,29 @@
                                             </button>
                                         </form>
                                     </td>
-
                                 </tr>
                             @endforeach
                         </tbody>
-
                     </table>
+                    <form id="formCetakDepan" 
+                        action="{{ route('cetak.esertifikat-depan-massal') }}" 
+                        method="POST" 
+                        target="_blank" 
+                        style="display:none;">
+                        @csrf
+                        <input type="hidden" name="ids" id="idsCetakDepan">
+                    </form>
 
+                    <form id="formCetakBelakang" 
+                        action="{{ route('cetak.esertifikat-belakang-massal') }}" 
+                        method="POST" 
+                        target="_blank" 
+                        style="display:none;">
+                        @csrf
+                        <input type="hidden" name="ids" id="idsCetakBelakang">
+                    </form>
                 </div>
-
             </div>
-
         </div>
     </section>
 
@@ -182,30 +185,19 @@
             }
         });
     });
-
-    // =============================
-    // Hapus Massal
-    // =============================
     let selectedIds = [];
-
-    // Select All
     $('#selectAll').on('change', function () {
         $('.selectItem').prop('checked', this.checked).trigger('change');
     });
-
-    // Checkbox Item
     $(document).on('change', '.selectItem', function () {
         let id = $(this).val();
-
         if ($(this).is(':checked')) {
             if (!selectedIds.includes(id)) selectedIds.push(id);
         } else {
             selectedIds = selectedIds.filter(item => item !== id);
         }
     });
-
     $('#btnDeleteSelected').on('click', function () {
-
         if (selectedIds.length === 0) {
             Swal.fire({
                 icon: 'warning',
@@ -214,7 +206,6 @@
             });
             return;
         }
-
         Swal.fire({
             title: 'Yakin ingin menghapus?',
             text: "Semua data terpilih akan dihapus permanen!",
@@ -225,7 +216,6 @@
             confirmButtonText: 'Ya, hapus!',
             cancelButtonText: 'Batal'
         }).then(result => {
-
             if (result.isConfirmed) {
                 $.ajax({
                     url: "/home/esertifikat/destroy_massal",
@@ -236,18 +226,14 @@
                     },
                     success: function (res) {
                         if (res.status) {
-
                             selectedIds.forEach(id => {
                                 $('#row-' + id).fadeOut(500, function () {
                                     $(this).remove();
                                 });
                             });
-
                             Swal.fire("Berhasil!", res.message, "success");
                             selectedIds = [];
-
                             setTimeout(() => location.reload(), 1500);
-
                         } else {
                             Swal.fire("Gagal!", res.message, "error");
                         }
@@ -257,10 +243,40 @@
                     }
                 });
             }
-
         });
-
     });
+
+    $('#btnDepan').on('click', function () {
+
+    if (selectedIds.length === 0) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Tidak ada data terpilih',
+            text: 'Pilih minimal 1 sertifikat.'
+        });
+        return;
+    }
+
+    $('#idsCetakDepan').val(selectedIds.join(','));
+    $('#formCetakDepan').submit();
+});
+
+
+$('#btnBelakang').on('click', function () {
+
+    if (selectedIds.length === 0) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Tidak ada data terpilih',
+            text: 'Pilih minimal 1 sertifikat.'
+        });
+        return;
+    }
+
+    $('#idsCetakBelakang').val(selectedIds.join(','));
+    $('#formCetakBelakang').submit();
+});
+
 </script>
 
 @endsection
