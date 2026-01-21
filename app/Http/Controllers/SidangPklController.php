@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Gate;
 use App\Models\Sidang_pkl;
 use App\Models\Kaprodi;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
 
 class SidangPklController extends Controller
 {
@@ -42,7 +43,7 @@ class SidangPklController extends Controller
         $tahunAktif = tahunAktif();
 
         if (!$tahunAktif) {
-            abort(403, 'Tidak ada tahun ajaran aktif');
+            return redirect()->route('home.dashboard')->with('error', 'Tidak ada tahun ajaran aktif.');
         }
 
         $pesertaSudahSidang = Sidang_pkl::pluck('peserta_pkl_id');
@@ -55,7 +56,12 @@ class SidangPklController extends Controller
                 'peserta_pkl.peserta.kelas',
                 'peserta_pkl.nilai_pkl',
                 'peserta_pkl.dudi'
-            ])->get();
+            ])
+                ->whereHas('peserta_pkl.peserta', function ($q) use ($tahunAktif) {
+                    $q->where('tahun_ajaran_id', $tahunAktif->id);
+                })
+                ->get();
+
             $sidang_pkl->each(function ($item) {
                 if ($item->peserta_pkl && $item->peserta_pkl->nilai_pkl) {
                     $nilai = $item->peserta_pkl->nilai_pkl;
@@ -65,6 +71,9 @@ class SidangPklController extends Controller
 
             $peserta_pkl = Peserta_pkl::whereNotIn('id', $pesertaSudahSidang)
                 ->whereHas('nilai_pkl')
+                ->whereHas('peserta', function ($q) use ($tahunAktif) {
+                    $q->where('tahun_ajaran_id', $tahunAktif->id);
+                })
                 ->with([
                     'peserta.user',
                     'peserta.kelas',
@@ -95,6 +104,7 @@ class SidangPklController extends Controller
                     'peserta_pkl.dudi'
                 ])
                 ->get();
+
             $sidang_pkl->each(function ($item) {
                 if ($item->peserta_pkl && $item->peserta_pkl->nilai_pkl) {
                     $nilai = $item->peserta_pkl->nilai_pkl;
@@ -134,6 +144,7 @@ class SidangPklController extends Controller
                     'peserta_pkl.dudi'
                 ])
                 ->get();
+
             $sidang_pkl->each(function ($item) {
                 if ($item->peserta_pkl && $item->peserta_pkl->nilai_pkl) {
                     $nilai = $item->peserta_pkl->nilai_pkl;
@@ -146,6 +157,7 @@ class SidangPklController extends Controller
 
         abort(403, 'Anda tidak memiliki akses ke halaman ini');
     }
+
 
     public function store(Request $request)
     {

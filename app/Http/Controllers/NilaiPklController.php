@@ -13,6 +13,7 @@ use App\Models\Kaprodi;
 use App\Models\Guru;
 use App\Models\Guru_pembimbing;
 use App\Models\Esertifikat;
+use Intervention\Image\Laravel\Facades\Image;
 
 class NilaiPklController extends Controller
 {
@@ -83,7 +84,6 @@ class NilaiPklController extends Controller
                 ->get();
 
             return view('home.nilai_pkl.index', compact('nilai_pkl'));
-
         } elseif (Gate::allows('peserta')) {
             $peserta = Peserta::where('user_id', $user->id)
                 ->where('tahun_ajaran_id', $tahunAktif->id)
@@ -136,8 +136,18 @@ class NilaiPklController extends Controller
 
         if ($request->hasFile('foto_bukti_nilai_pkl')) {
             $file = $request->file('foto_bukti_nilai_pkl');
-            $filename = uniqid() . '.' . $file->getClientOriginalExtension();
-            $file->storeAs('bukti_nilai_pkl', $filename, 'public');
+            $filename = uniqid() . '.jpg';
+
+            $image = Image::read($file);
+
+            $image->resize(800, 800, function ($constraint) {
+                $constraint->aspectRatio();
+                $constraint->upsize();
+            });
+
+            $path = storage_path('app/public/bukti_nilai_pkl/' . $filename);
+            $image->encodeByExtension('jpg', 35)->save($path);
+
             $data['foto_bukti_nilai_pkl'] = $filename;
         }
 
@@ -145,6 +155,7 @@ class NilaiPklController extends Controller
 
         return redirect()->route('nilai_pkl.index')->with('success', 'Data nilai PKL berhasil ditambahkan.');
     }
+
     public function store_peserta(Request $request)
     {
         $request->validate([
@@ -154,7 +165,6 @@ class NilaiPklController extends Controller
             'nilai_inisiatif_kreatifitas' => 'required|integer|min:0|max:100',
             'nilai_perilaku' => 'required|integer|min:0|max:100',
             'foto_bukti_nilai_pkl' => 'required|image|mimes:jpeg,png,jpg,gif|max:5120',
-            'komentar' => 'nullable|string',
         ]);
 
         $peserta = Peserta::where('user_id', Auth::id())->first();
@@ -174,15 +184,24 @@ class NilaiPklController extends Controller
             'nilai_inisiatif_kreatifitas',
             'nilai_perilaku',
             'nilai_sidang_pkl',
-            'komentar'
         ]);
 
         $data['peserta_pkl_id'] = $peserta_pkl->id;
 
         if ($request->hasFile('foto_bukti_nilai_pkl')) {
             $file = $request->file('foto_bukti_nilai_pkl');
-            $filename = uniqid() . '.' . $file->getClientOriginalExtension();
-            $file->storeAs('bukti_nilai_pkl', $filename, 'public');
+            $filename = uniqid() . '.jpg';
+
+            $image = Image::read($file);
+
+            $image->resize(800, 800, function ($constraint) {
+                $constraint->aspectRatio();
+                $constraint->upsize();
+            });
+
+            $path = storage_path('app/public/bukti_nilai_pkl/' . $filename);
+            $image->encodeByExtension('jpg', 35)->save($path);
+
             $data['foto_bukti_nilai_pkl'] = $filename;
         }
 
@@ -190,7 +209,6 @@ class NilaiPklController extends Controller
 
         return redirect()->route('nilai_pkl.index')->with('success', 'Data nilai PKL berhasil ditambahkan.');
     }
-
 
     public function edit($id)
     {
@@ -225,8 +243,18 @@ class NilaiPklController extends Controller
             }
 
             $file = $request->file('foto_bukti_nilai_pkl');
-            $filename = uniqid() . '.' . $file->getClientOriginalExtension();
-            $file->storeAs('bukti_nilai_pkl', $filename, 'public');
+            $filename = uniqid() . '.jpg';
+
+            $image = Image::read($file);
+
+            $image->resize(800, 800, function ($constraint) {
+                $constraint->aspectRatio();
+                $constraint->upsize();
+            });
+
+            $path = storage_path('app/public/bukti_nilai_pkl/' . $filename);
+            $image->encodeByExtension('jpg', 35)->save($path);
+
             $data['foto_bukti_nilai_pkl'] = $filename;
         }
 
@@ -234,6 +262,7 @@ class NilaiPklController extends Controller
 
         return redirect()->route('nilai_pkl.index')->with('success', 'Data nilai PKL berhasil diperbarui.');
     }
+
     public function update_siswa(Request $request, $id)
     {
         $request->validate([
@@ -261,8 +290,18 @@ class NilaiPklController extends Controller
             }
 
             $file = $request->file('foto_bukti_nilai_pkl');
-            $filename = uniqid() . '.' . $file->getClientOriginalExtension();
-            $file->storeAs('bukti_nilai_pkl', $filename, 'public');
+            $filename = uniqid() . '.jpg';
+
+            $image = Image::read($file);
+
+            $image->resize(800, 800, function ($constraint) {
+                $constraint->aspectRatio();
+                $constraint->upsize();
+            });
+
+            $path = storage_path('app/public/bukti_nilai_pkl/' . $filename);
+            $image->encodeByExtension('jpg', 35)->save($path);
+
             $data['foto_bukti_nilai_pkl'] = $filename;
         }
 
@@ -270,6 +309,7 @@ class NilaiPklController extends Controller
 
         return redirect()->route('nilai_pkl.index')->with('success', 'Data nilai PKL berhasil diperbarui.');
     }
+
 
     public function destroy($id)
     {

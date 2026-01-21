@@ -26,7 +26,7 @@
     <section class="content">
         <div class="container-fluid">
 
-            <div class="card card-warning">
+            <div class="card card-primary">
                 <div class="card-header">
                     <h3 class="card-title">Form Edit Tahun Ajaran</h3>
                 </div>
@@ -63,7 +63,7 @@
 
                     <div class="card-footer">
                         <a href="{{ route('tahun_ajaran.index') }}" class="btn btn-secondary">Batal</a>
-                        <button type="submit" class="btn btn-warning">Update</button>
+                        <button type="submit" class="btn btn-primary">Update</button>
                     </div>
                 </form>
             </div>
