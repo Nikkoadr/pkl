@@ -153,7 +153,7 @@
                     <div class="form-group">
                         <label>Nama Guru Penguji</label>
                         <input type="text" class="form-control" id="nama_guru"
-                               placeholder="Ketik nama guru...">
+                            placeholder="Ketik nama guru...">
                         <input type="hidden" name="guru_id" id="guru_id">
                     </div>
 
@@ -176,7 +176,7 @@
                                     <td class="text-center">
                                         <input type="checkbox"
                                             name="peserta_pkl_id[]"
-                                              value="{{ $p->id }}">
+                                            value="{{ $p->id }}">
                                     </td>
                                     <td>{{ $p->peserta->user->nama }}</td>
                                     <td>{{ $p->peserta->kelas->nama_kelas }}</td>

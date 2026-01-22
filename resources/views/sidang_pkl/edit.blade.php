@@ -38,7 +38,7 @@
                         @enderror
                     </div>
 
-                    <a href="{{ route('nilai_pkl.index') }}" class="btn btn-secondary">Kembali</a>
+                    <a href="{{ route('sidang_pkl.index') }}" class="btn btn-secondary">Kembali</a>
                     <button type="submit" class="btn btn-primary">Simpan</button>
 
                 </form>
