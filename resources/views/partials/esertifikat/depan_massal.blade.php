@@ -194,16 +194,15 @@
 
             <div class="foto"></div>
 
-<div class="ttd">
-    Ditandatangani secara elektronik oleh <br>
-    Kepala Sekolah SMK Muhammadiyah Kandanghaur<br>
-
-    <div class="qr-ttd">
-        {!! QrCode::size(80)->generate(url('/esertifikat/scan/' . $esertifikat->hash)) !!}
-    </div>
-
-    <div class="nama-ttd">{{ $pengaturan->kepala_sekolah }}</div>
-</div>
+            <div class="ttd">
+                Kepala <br> SMK Muhammadiyah Kandanghaur
+                <div class="qr-ttd">
+                    {!! QrCode::size(80)->generate(url('/esertifikat/scan/' . $row->hash)) !!}
+                </div>
+                <div class="nama-ttd">
+                    {{ $pengaturan->kepala_sekolah }}
+                </div>
+            </div>
 
         </div>
     @endforeach
