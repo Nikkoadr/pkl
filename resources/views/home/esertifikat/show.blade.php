@@ -149,7 +149,6 @@
         .back-certificate .signature { width: 300px; float: right; margin-top: 40px; text-align: center; font-size: 12pt; }
         .back-certificate .small-table td, .back-certificate .small-table th { font-size: 10pt; padding: 3px 6px; }
 
-        /* RESPONSIVE OPTIMIZATION */
         @media (max-width: 992px) {
             .wrapper { 
                 grid-template-columns: 1fr; 
@@ -168,13 +167,16 @@
                 overflow: visible;
             }
 
-            /* Perbaikan Scaling: Menggunakan Zoom agar lebih stabil di HP */
             .page, .back-certificate {
-                zoom: 0.42; /* Ukuran zoom disesuaikan otomatis */
-                -moz-transform: scale(0.42); /* Support Firefox */
+                zoom: 0.42;
+                -moz-transform: scale(0.42);
                 -moz-transform-origin: top center;
                 box-shadow: 0 10px 15px rgba(0,0,0,0.1);
             }
+        }
+        .ttd-box, .ttd-barcode img, .ttd-text {
+            transform: scale(1);
+            transform-origin: top left;
         }
     </style>
 </head>
