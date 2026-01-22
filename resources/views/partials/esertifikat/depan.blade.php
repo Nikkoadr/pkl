@@ -44,16 +44,18 @@
 @php
 $qrWithLogo = base64_encode(
     QrCode::format('png')
-        ->size(85)
+        ->size(220) // render besar biar tajam
+        ->margin(1)
         ->errorCorrection('H')
-        ->merge(public_path('assets/dist/img/logo.png'), 0.25, true)
+        ->merge(public_path('assets/dist/img/logo.png'), 0.18, true) // kecilin logo
         ->generate(url('/esertifikat/scan/' . $esertifikat->hash))
 );
 @endphp
 
 <div class="ttd-barcode">
-    <img src="data:image/png;base64,{{ $qrWithLogo }}" width="85" height="85">
+    <img src="data:image/png;base64,{{ $qrWithLogo }}" width="85" height="85" style="image-rendering: crisp-edges;">
 </div>
+
 
             <div class="ttd-text">
                 <div class="ttd-atas">
