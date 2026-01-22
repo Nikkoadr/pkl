@@ -92,10 +92,11 @@ class SidangPklController extends Controller
                 abort(403, 'Anda tidak terdaftar sebagai Kaprodi');
             }
 
-            $sidang_pkl = Sidang_pkl::whereHas('peserta_pkl.peserta.kelas', function ($q) use ($kaprodi, $tahunAktif) {
-                $q->where('kompetensi_keahlian_id', $kaprodi->kompetensi_keahlian_id)
-                    ->where('tahun_ajaran_id', $tahunAktif->id);
-            })
+            $sidang_pkl = Sidang_pkl::whereHas('peserta_pkl.nilai_pkl') // ✅ TAMBAH INI
+                ->whereHas('peserta_pkl.peserta.kelas', function ($q) use ($kaprodi, $tahunAktif) {
+                    $q->where('kompetensi_keahlian_id', $kaprodi->kompetensi_keahlian_id)
+                        ->where('tahun_ajaran_id', $tahunAktif->id);
+                })
                 ->with([
                     'guru.user',
                     'peserta_pkl.peserta.user',
