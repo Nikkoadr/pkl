@@ -57,7 +57,7 @@
                                 <th>Nama Peserta</th>
                                 <th>Kelas</th>
                                 <th>DUDI</th>
-                                {{-- <th>Foto Bukti PKL</th> --}}
+                                <th>Foto Bukti PKL</th>
                                 <th>Semua Nilai PKL</th>
                                 <th>Nilai Sidang</th>
                                 <th>Nilai Akhir</th>
@@ -78,7 +78,7 @@
 
                             <td>{{ $item->peserta_pkl->dudi->nama_dudi ?? '-' }}</td>
 
-                            {{-- <td class="text-center">
+                            <td class="text-center">
                                 @if ($item->peserta_pkl->nilai_pkl->foto_bukti_nilai_pkl)
                                     <a href="{{ asset('storage/bukti_nilai_pkl/'.$item->peserta_pkl->nilai_pkl->foto_bukti_nilai_pkl) }}"
                                     target="_blank">
@@ -88,7 +88,7 @@
                                 @else
                                     -
                                 @endif
-                            </td> --}}
+                            </td>
                             <td>
                                     <ul class="mb-0 pl-3">
                                         <li>Disiplin: {{ $item->peserta_pkl->nilai_pkl->nilai_disiplin_kerja ?? '-' }}</li>
@@ -107,7 +107,7 @@
                             </td>
                             <td>{{ $item->peserta_pkl->nilai_pkl->komentar ?? '-' }}</td>
 
-                            {{-- <td class="text-center">
+                            <td class="text-center">
                                 <a href="{{ route('sidang_pkl.edit', $item->peserta_pkl->nilai_pkl->id) }}"
                                 class="btn btn-primary btn-sm">
                                     <i class="fas fa-edit"></i>
@@ -124,7 +124,7 @@
                                     </button>
                                 </form>
                                 @endcanany
-                            </td> --}}
+                            </td>
                         </tr>
                         @endforeach
                         </tbody>
