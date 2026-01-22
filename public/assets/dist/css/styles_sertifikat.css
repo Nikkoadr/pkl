@@ -78,7 +78,7 @@ body {
 .foto {
     position: absolute;
     bottom: 40mm;
-    left: 50mm;
+    left: 40mm;
     width: 28mm;
     height: 38mm;
     border: 1px solid #000;
@@ -86,8 +86,8 @@ body {
 }
 .area-ttd {
     position: absolute;
-    right: 24mm; /* biar konsisten pakai mm */
-    bottom: 40mm; /* sejajar dengan foto */
+    right: 24mm;
+    bottom: 40mm;
 }
 
 .ttd-box {
@@ -122,12 +122,12 @@ body {
 }
 
 .ttd-atas {
-    font-size: 11px;
+    font-size: 12px;
     margin-bottom: 8px;
 }
 
 .ttd-nama {
-    font-size: 13px;
+    font-size: 15px;
     font-weight: 700;
     margin-bottom: 2px;
 }

@@ -56,7 +56,6 @@ $qrWithLogo = base64_encode(
     <img src="data:image/png;base64,{{ $qrWithLogo }}" width="85" height="85" style="image-rendering: crisp-edges;">
 </div>
 
-
             <div class="ttd-text">
                 <div class="ttd-atas">
                     Ditandatangani secara elektronik oleh:<br>
