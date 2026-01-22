@@ -86,8 +86,8 @@ body {
 }
 .area-ttd {
     position: absolute;
-    right: 90px;
-    bottom: 120px;
+    right: 24mm; /* biar konsisten pakai mm */
+    bottom: 40mm; /* sejajar dengan foto */
 }
 
 .ttd-box {
