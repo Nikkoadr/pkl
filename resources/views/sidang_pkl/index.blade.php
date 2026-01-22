@@ -107,7 +107,7 @@
                             </td>
                             <td>{{ $item->peserta_pkl->nilai_pkl->komentar ?? '-' }}</td>
 
-                            <td class="text-center">
+                            {{-- <td class="text-center">
                                 <a href="{{ route('sidang_pkl.edit', $item->peserta_pkl->nilai_pkl->id) }}"
                                 class="btn btn-primary btn-sm">
                                     <i class="fas fa-edit"></i>
@@ -124,7 +124,7 @@
                                     </button>
                                 </form>
                                 @endcanany
-                            </td>
+                            </td> --}}
                         </tr>
                         @endforeach
                         </tbody>
