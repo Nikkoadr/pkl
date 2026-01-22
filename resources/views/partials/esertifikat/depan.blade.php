@@ -44,7 +44,7 @@
 @php
 $qrWithLogo = base64_encode(
     QrCode::format('png')
-        ->size(220) // render besar biar tajam
+        ->size(220)
         ->margin(1)
         ->errorCorrection('H')
         ->merge(public_path('assets/dist/img/logo_barcode.png'), 0.25, true)

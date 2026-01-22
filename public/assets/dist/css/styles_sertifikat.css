@@ -127,14 +127,11 @@ body {
 }
 
 .ttd-nama {
-    font-size: 16px;
+    font-size: 17px;
     font-weight: 700;
     margin-bottom: 2px;
 }
 
-.ttd-jabatan {
-    font-size: 11px;
-}
 
 @media print {
     body {
