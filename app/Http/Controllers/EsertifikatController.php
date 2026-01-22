@@ -271,20 +271,13 @@ class EsertifikatController extends Controller
     {
         $ids = explode(',', $request->input('ids'));
 
-        $data = [];
+        $data = Esertifikat::with([
+            'peserta_pkl.peserta.user',
+            'peserta_pkl.peserta.kelas.kompetensi',
+            'peserta_pkl.dudi',
+        ])->find($ids)->filter()->values();
+
         $pengaturan = Pengaturan::latest()->first();
-
-        foreach ($ids as $id) {
-            $esertifikat = Esertifikat::with([
-                'peserta_pkl.peserta.user',
-                'peserta_pkl.peserta.kelas.kompetensi',
-                'peserta_pkl.dudi',
-            ])->find($id);
-
-            if ($esertifikat) {
-                $data[] = $esertifikat;
-            }
-        }
 
         return view('partials.esertifikat.depan_massal', compact('data', 'pengaturan'));
     }
