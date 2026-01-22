@@ -264,14 +264,38 @@ if (!function_exists('catatan_sikap')) {
                     <div class="foto">
                         <img src="{{ $esertifikat->peserta_pkl->peserta->user->foto_profil ? asset('storage/foto_profil/' . $esertifikat->peserta_pkl->peserta->user->foto_profil) : asset('assets/dist/img/foto-default.jpeg') }}" style="width: 100%; height: 100%; object-fit: cover;">
                     </div>
-                    <div class="ttd">
-                        Ditandatangani secara elektronik oleh <br>
-                        Kepala Sekolah SMK Muhammadiyah Kandanghaur<br>
-                        <div class="qr-ttd">
-                            {!! QrCode::size(80)->generate(url('/esertifikat/scan/' . $esertifikat->hash)) !!}
+                        <div class="area-ttd">
+                            <div class="ttd-box">
+                                <div class="ttd-row">
+                        @php
+                        $qrWithLogo = base64_encode(
+                            QrCode::format('png')
+                                ->size(220)
+                                ->margin(1)
+                                ->errorCorrection('H')
+                                ->merge(public_path('assets/dist/img/logo_barcode.png'), 0.25, true)
+                                ->generate(url('/esertifikat/scan/' . $esertifikat->hash))
+                        );
+                        @endphp
+
+                        <div class="ttd-barcode">
+                            <img src="data:image/png;base64,{{ $qrWithLogo }}" width="85" height="85" style="image-rendering: crisp-edges;">
                         </div>
-                        <div class="nama-ttd">{{ $pengaturan->kepala_sekolah }}</div>
-                    </div>
+
+                                    <div class="ttd-text">
+                                        <div class="ttd-atas">
+                                            Ditandatangani secara elektronik oleh:<br>
+                                            Kepala Sekolah <br>
+                                            SMK Muhammadiyah Kandanghaur
+                                        </div>
+
+                                        <div class="ttd-nama">
+                                            {{ $pengaturan->kepala_sekolah }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                 </div>
             </div>
         </div>
