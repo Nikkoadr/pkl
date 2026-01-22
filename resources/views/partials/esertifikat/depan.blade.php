@@ -41,12 +41,18 @@
 <div class="area-ttd">
     <div class="ttd-box">
         <div class="ttd-row">
-<div class="ttd-barcode">
-    {!! QrCode::format('png')
+@php
+$qrWithLogo = base64_encode(
+    QrCode::format('png')
         ->size(85)
         ->errorCorrection('H')
         ->merge(public_path('assets/dist/img/logo.png'), 0.25, true)
-        ->generate(url('/esertifikat/scan/' . $esertifikat->hash)) !!}
+        ->generate(url('/esertifikat/scan/' . $esertifikat->hash))
+);
+@endphp
+
+<div class="ttd-barcode">
+    <img src="data:image/png;base64,{{ $qrWithLogo }}" width="85" height="85">
 </div>
 
             <div class="ttd-text">
