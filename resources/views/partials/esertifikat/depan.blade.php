@@ -47,7 +47,7 @@ $qrWithLogo = base64_encode(
         ->size(220) // render besar biar tajam
         ->margin(1)
         ->errorCorrection('H')
-        ->merge(public_path('assets/dist/img/logo.png'), 0.18, true) // kecilin logo
+        ->merge(public_path('assets/dist/img/logo.png'), 0.25, true)
         ->generate(url('/esertifikat/scan/' . $esertifikat->hash))
 );
 @endphp
