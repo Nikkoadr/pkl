@@ -38,15 +38,31 @@
 
     <div class="foto"></div>
 
-    <div class="ttd">
-        Kepala <br> SMK Muhammadiyah Kandanghaur,<br>
+<div class="area-ttd">
+    <div class="ttd-box">
+        <div class="ttd-row">
+<div class="ttd-barcode">
+    {!! QrCode::format('png')
+        ->size(85)
+        ->errorCorrection('H')
+        ->merge(public_path('assets/dist/img/logo.png'), 0.25, true)
+        ->generate(url('/esertifikat/scan/' . $esertifikat->hash)) !!}
+</div>
 
-        <div class="qr-ttd">
-            {!! QrCode::size(80)->generate(url('/esertifikat/scan/' . $esertifikat->hash)) !!}
+            <div class="ttd-text">
+                <div class="ttd-atas">
+                    Ditandatangani secara elektronik oleh:<br>
+                    Kepala Sekolah <br>
+                    SMK Muhammadiyah Kandanghaur
+                </div>
+
+                <div class="ttd-nama">
+                    {{ $pengaturan->kepala_sekolah }}
+                </div>
+            </div>
         </div>
-
-        <div class="nama-ttd">{{ $pengaturan->kepala_sekolah }}</div>
     </div>
+</div>
 
 </div>
 

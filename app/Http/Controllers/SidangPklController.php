@@ -57,6 +57,7 @@ class SidangPklController extends Controller
                 'peserta_pkl.nilai_pkl',
                 'peserta_pkl.dudi'
             ])
+                ->whereHas('peserta_pkl.nilai_pkl')
                 ->whereHas('peserta_pkl.peserta', function ($q) use ($tahunAktif) {
                     $q->where('tahun_ajaran_id', $tahunAktif->id);
                 })
@@ -92,7 +93,7 @@ class SidangPklController extends Controller
                 abort(403, 'Anda tidak terdaftar sebagai Kaprodi');
             }
 
-            $sidang_pkl = Sidang_pkl::whereHas('peserta_pkl.nilai_pkl') // ✅ TAMBAH INI
+            $sidang_pkl = Sidang_pkl::whereHas('peserta_pkl.nilai_pkl')
                 ->whereHas('peserta_pkl.peserta.kelas', function ($q) use ($kaprodi, $tahunAktif) {
                     $q->where('kompetensi_keahlian_id', $kaprodi->kompetensi_keahlian_id)
                         ->where('tahun_ajaran_id', $tahunAktif->id);
@@ -134,6 +135,7 @@ class SidangPklController extends Controller
             $guruId = $user->guru->id;
 
             $sidang_pkl = Sidang_pkl::where('guru_id', $guruId)
+                ->whereHas('peserta_pkl.nilai_pkl')
                 ->whereHas('peserta_pkl.peserta', function ($q) use ($tahunAktif) {
                     $q->where('tahun_ajaran_id', $tahunAktif->id);
                 })
@@ -158,7 +160,6 @@ class SidangPklController extends Controller
 
         abort(403, 'Anda tidak memiliki akses ke halaman ini');
     }
-
 
     public function store(Request $request)
     {

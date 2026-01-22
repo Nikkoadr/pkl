@@ -14,6 +14,7 @@ use App\Models\Guru;
 use App\Models\Guru_pembimbing;
 use App\Models\Esertifikat;
 use Intervention\Image\Laravel\Facades\Image;
+use App\Models\Sidang_pkl;
 
 class NilaiPklController extends Controller
 {
@@ -315,12 +316,22 @@ class NilaiPklController extends Controller
     {
         $nilai_pkl = Nilai_pkl::findOrFail($id);
 
-        if ($nilai_pkl->foto_bukti_nilai_pkl && Storage::disk('public')->exists('bukti_nilai_pkl/' . $nilai_pkl->foto_bukti_nilai_pkl)) {
+        $pesertaPklId = $nilai_pkl->peserta_pkl_id;
+
+        if (
+            $nilai_pkl->foto_bukti_nilai_pkl &&
+            Storage::disk('public')->exists('bukti_nilai_pkl/' . $nilai_pkl->foto_bukti_nilai_pkl)
+        ) {
             Storage::disk('public')->delete('bukti_nilai_pkl/' . $nilai_pkl->foto_bukti_nilai_pkl);
         }
 
+
         $nilai_pkl->delete();
 
-        return redirect()->route('nilai_pkl.index')->with('success', 'Data nilai PKL berhasil dihapus.');
+        Sidang_pkl::where('peserta_pkl_id', $pesertaPklId)->delete();
+
+        Peserta_pkl::where('id', $pesertaPklId)->delete();
+
+        return redirect()->route('nilai_pkl.index')->with('success', 'Nilai PKL, sidang, dan peserta PKL berhasil dihapus.');
     }
 }

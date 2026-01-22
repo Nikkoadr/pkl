@@ -78,27 +78,62 @@ body {
 .foto {
     position: absolute;
     bottom: 40mm;
-    left: 80mm;
+    left: 50mm;
     width: 28mm;
     height: 38mm;
     border: 1px solid #000;
     background-color: #fff;
 }
-.ttd {
+.area-ttd {
     position: absolute;
-    bottom: 40mm;
-    left: 110mm;
-    text-align: center;
-    font-size: 14pt;
-    line-height: 1.4;
-    width: 90mm;
+    right: 90px;
+    bottom: 120px;
 }
-.qr-ttd {
-    width: 28mm;
-    margin: 8px auto 0 auto;
+
+.ttd-box {
+    border: 1.5px solid #000;
+    border-radius: 10px;
+    padding: 12px 14px;
+    background: #fff;
+    width: 320px;
 }
-.nama-ttd {
-    font-weight: bold;
+
+.ttd-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.ttd-barcode {
+    width: 90px;
+    flex: 0 0 90px;
+}
+
+.ttd-barcode svg,
+.ttd-barcode img {
+    display: block;
+    width: 90px;
+    height: 90px;
+}
+
+.ttd-text {
+    text-align: left;
+    line-height: 1.25;
+}
+
+.ttd-atas {
+    font-size: 11px;
+    margin-bottom: 8px;
+}
+
+.ttd-nama {
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 2px;
+}
+
+.ttd-jabatan {
+    font-size: 11px;
 }
 
 @media print {
