@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Kaprodi;
 use App\Models\Esertifikat;
 use App\Models\Nilai_pkl;
+use App\Helpers\EsertifikatHelper;
 
 class EsertifikatController extends Controller
 {
@@ -366,6 +367,7 @@ class EsertifikatController extends Controller
             'peserta_pkl.peserta.user',
             'peserta_pkl.peserta.kelas.kompetensi',
             'peserta_pkl.dudi',
+            'peserta_pkl.nilai_pkl',
         ])
             ->where('hash', $hash)
             ->first();
@@ -375,29 +377,43 @@ class EsertifikatController extends Controller
         }
 
         $pengaturan = Pengaturan::latest()->first();
-
         $nilai = $esertifikat->peserta_pkl->nilai_pkl;
 
         if ($nilai) {
-            $rata_rata = round((
-                $nilai->nilai_disiplin_kerja +
-                $nilai->nilai_kemajuan_kerja +
-                $nilai->nilai_kualitas_kerja +
-                $nilai->nilai_inisiatif_kreatifitas +
-                $nilai->nilai_perilaku
-            ) / 5, 2);
+
+            $nilai_aspek = [
+                'Disiplin Kerja'        => $nilai->nilai_disiplin_kerja,
+                'Kemajuan Kerja'        => $nilai->nilai_kemajuan_kerja,
+                'Kualitas Kerja'        => $nilai->nilai_kualitas_kerja,
+                'Inisiatif & Kreativitas' => $nilai->nilai_inisiatif_kreatifitas,
+                'Perilaku'              => $nilai->nilai_perilaku,
+            ];
+
+            $rata_rata = round(array_sum($nilai_aspek) / count($nilai_aspek), 2);
 
             $nilai_sidang = $nilai->nilai_sidang_pkl;
-            $nilai_akhir = round(($rata_rata + $nilai_sidang) / 2, 2);
+            $nilai_akhir  = round(($rata_rata + $nilai_sidang) / 2, 2);
 
-            $esertifikat->rata_rata = $rata_rata;
+            $predikat_akhir = EsertifikatHelper::predikat($nilai_akhir);
+            $catatan_sikap  = EsertifikatHelper::catatan_sikap($nilai_aspek);
+
+            $esertifikat->rata_rata        = $rata_rata;
             $esertifikat->nilai_sidang_pkl = $nilai_sidang;
-            $esertifikat->nilai_akhir = $nilai_akhir;
+            $esertifikat->nilai_akhir      = $nilai_akhir;
+            $esertifikat->predikat         = $predikat_akhir;
+            $esertifikat->catatan_sikap    = $catatan_sikap;
         } else {
-            $esertifikat->rata_rata = null;
+            $esertifikat->rata_rata        = null;
             $esertifikat->nilai_sidang_pkl = null;
-            $esertifikat->nilai_akhir = null;
+            $esertifikat->nilai_akhir      = null;
+            $esertifikat->predikat         = null;
+            $esertifikat->catatan_sikap    = null;
         }
-        return view('home.esertifikat.show', compact('esertifikat', 'pengaturan', 'nilai'));
+
+        return view('home.esertifikat.show', compact(
+            'esertifikat',
+            'pengaturan',
+            'nilai'
+        ));
     }
 }

@@ -62,7 +62,7 @@
                             Kepala Sekolah <br>
                             SMK Muhammadiyah Kandanghaur
                         </div>
-
+                        <hr>
                         <div class="ttd-nama">
                             {{ $pengaturan->kepala_sekolah }}
                         </div>

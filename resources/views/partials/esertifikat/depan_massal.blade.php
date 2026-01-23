@@ -7,6 +7,11 @@
     <!-- Font Nama -->
     <link href="https://fonts.googleapis.com/css2?family=Story+Script&display=swap" rel="stylesheet">
     <link rel="stylesheet"href="{{ asset('assets/dist/css/styles_sertifikat.css') }}?v={{ filemtime(public_path('assets/dist/css/styles_sertifikat.css')) }}">
+    <style>
+        .page {
+            margin: 0 auto 20px auto;!important
+        }
+    </style>
 </head>
 <body>
 <div class="print-wrapper">
@@ -69,7 +74,7 @@ $qrWithLogo = base64_encode(
                     Kepala Sekolah <br>
                     SMK Muhammadiyah Kandanghaur
                 </div>
-
+                <hr>
                 <div class="ttd-nama">
                     {{ $pengaturan->kepala_sekolah }}
                 </div>
