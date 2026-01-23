@@ -13,7 +13,7 @@
 <div class="page">
 
     <div class="nomor">
-        Nomor : {{ $esertifikat->nomor_sertifikat ?? ('086.' . str_pad($esertifikat->id, 3, '0', STR_PAD_LEFT) . '/KET/III.4/AU/F/' . date('Y')) }}
+        Nomor : {{ $esertifikat->nomor_sertifikat }}
     </div>
 
     <div class="judul">Sertifikat ini diberikan Kepada :</div>
@@ -30,9 +30,9 @@
         <i>di <b>{{ strtoupper($esertifikat->peserta_pkl->dudi->nama_dudi ?? '-') }}</b></i><br>
         <i>
             dari tanggal 
-            {{ \Carbon\Carbon::parse($pengaturan->tanggal_mulai_pkl)->locale('id')->translatedFormat('d F Y') }} 
+            {{ \Carbon\Carbon::parse($esertifikat->tanggal_mulai_pkl)->locale('id')->translatedFormat('d F Y') }} 
             sampai dengan 
-            {{ \Carbon\Carbon::parse($pengaturan->tanggal_selesai_pkl)->locale('id')->translatedFormat('d F Y') }}
+            {{ \Carbon\Carbon::parse($esertifikat->tanggal_selesai_pkl)->locale('id')->translatedFormat('d F Y') }}
         </i>
     </div>
 
@@ -64,7 +64,7 @@
                         </div>
                         <hr>
                         <div class="ttd-nama">
-                            {{ $pengaturan->kepala_sekolah }}
+                            {{ $esertifikat->kepala_sekolah }}
                         </div>
                     </div>
                 </div>

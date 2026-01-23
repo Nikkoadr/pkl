@@ -28,6 +28,15 @@ class EsertifikatController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
+    private function generateNomor()
+    {
+        $tahun = date('Y');
+
+        $count = Esertifikat::whereYear('tanggal_diterbitkan', $tahun)->count() + 1;
+
+        return '086.' . str_pad($count, 3, '0', STR_PAD_LEFT)
+            . '/KET/III.4/AU/F/' . $tahun;
+    }
 
     public function generate($id)
     {
@@ -50,11 +59,13 @@ class EsertifikatController extends Controller
         if ($sudahAda) {
             return back()->with('error', 'Sertifikat peserta tersebut sudah pernah digenerate.');
         }
-
         Esertifikat::create([
-            'peserta_pkl_id' => $nilai_pkl->peserta_pkl_id,
-            'nomor_sertifikat' => $this->generateNomor(),
-            'tanggal_diterbitkan' => now(),
+            'peserta_pkl_id'       => $nilai_pkl->peserta_pkl_id,
+            'nomor_sertifikat'     => $this->generateNomor(),
+            'kepala_sekolah'       => Pengaturan::value('kepala_sekolah') ?? '',
+            'tanggal_mulai_pkl'    => Pengaturan::value('tanggal_mulai_pkl') ?? null,
+            'tanggal_selesai_pkl'  => Pengaturan::value('tanggal_selesai_pkl') ?? null,
+            'tanggal_diterbitkan'  => now(),
         ]);
 
         return back()->with('success', 'E-sertifikat berhasil digenerate.');
@@ -104,6 +115,9 @@ class EsertifikatController extends Controller
                 Esertifikat::create([
                     'peserta_pkl_id' => $nilai->peserta_pkl_id,
                     'nomor_sertifikat' => $this->generateNomor(),
+                    'kepala_sekolah'       => Pengaturan::value('kepala_sekolah') ?? '',
+                    'tanggal_mulai_pkl'    => Pengaturan::value('tanggal_mulai_pkl') ?? null,
+                    'tanggal_selesai_pkl'  => Pengaturan::value('tanggal_selesai_pkl') ?? null,
                     'tanggal_diterbitkan' => now(),
                 ]);
 
@@ -122,16 +136,6 @@ class EsertifikatController extends Controller
         return back()->with('success', "E-sertifikat berhasil dibuat: {$berhasil}, gagal: {$gagal} {$pesanGagal}");
     }
 
-    private function generateNomor()
-    {
-        $tahun = date('Y');
-
-        $count = Esertifikat::whereYear('tanggal_diterbitkan', $tahun)->count() + 1;
-
-        return '086.' . str_pad($count, 3, '0', STR_PAD_LEFT)
-            . '/KET/III.4/AU/F/' . $tahun;
-    }
-
     public function index()
     {
         $tahunAktif = tahunAktif();
@@ -142,9 +146,6 @@ class EsertifikatController extends Controller
                 ->with('error', 'Tidak ada tahun ajaran aktif.');
         }
 
-        // =========================
-        // QUERY DATA
-        // =========================
         if (Gate::allows('admin')) {
 
             $esertifikat = Esertifikat::whereHas('peserta_pkl.peserta', function ($q) use ($tahunAktif) {
@@ -167,9 +168,6 @@ class EsertifikatController extends Controller
             abort(403);
         }
 
-        // =========================
-        // EAGER LOADING
-        // =========================
         $esertifikat = $esertifikat->with([
             'peserta_pkl.peserta.user',
             'peserta_pkl.peserta.kelas.kompetensi',
@@ -177,15 +175,11 @@ class EsertifikatController extends Controller
             'peserta_pkl.nilai_pkl',
         ])->get();
 
-        // =========================
-        // LOGIKA NILAI & ALIAS DATA
-        // =========================
         $esertifikat->each(function ($item) {
 
             $peserta = $item->peserta_pkl->peserta ?? null;
             $nilai   = $item->peserta_pkl->nilai_pkl ?? null;
 
-            // Alias data peserta (untuk Blade)
             $item->nisn       = $peserta->nisn ?? null;
             $item->nama       = $peserta->user->nama ?? null;
             $item->kelas      = $peserta->kelas->nama_kelas ?? null;
@@ -226,9 +220,7 @@ class EsertifikatController extends Controller
             'peserta_pkl.dudi',
         ])->findOrFail($id);
 
-        $pengaturan = Pengaturan::latest()->first();
-
-        return view('partials.esertifikat.depan', compact('esertifikat', 'pengaturan'));
+        return view('partials.esertifikat.depan', compact('esertifikat'));
     }
 
     public function cetak_belakang($id)
@@ -240,7 +232,6 @@ class EsertifikatController extends Controller
             'peserta_pkl.nilai_pkl'
         ])->findOrFail($id);
 
-        $pengaturan = Pengaturan::latest()->first();
 
         $nilai = $esertifikat->peserta_pkl->nilai_pkl;
 
@@ -265,7 +256,7 @@ class EsertifikatController extends Controller
             $esertifikat->nilai_akhir = null;
         }
 
-        return view('partials.esertifikat.belakang', compact('esertifikat', 'pengaturan'));
+        return view('partials.esertifikat.belakang', compact('esertifikat',));
     }
 
     public function cetak_depan_massal(Request $request)
@@ -278,9 +269,7 @@ class EsertifikatController extends Controller
             'peserta_pkl.dudi',
         ])->find($ids)->filter()->values();
 
-        $pengaturan = Pengaturan::latest()->first();
-
-        return view('partials.esertifikat.depan_massal', compact('data', 'pengaturan'));
+        return view('partials.esertifikat.depan_massal', compact('data',));
     }
 
     public function cetak_belakang_massal(Request $request)
@@ -288,7 +277,6 @@ class EsertifikatController extends Controller
         $ids = explode(',', $request->input('ids'));
 
         $data = [];
-        $pengaturan = Pengaturan::latest()->first();
         $pesertaTanpaNilai = [];
 
         foreach ($ids as $id) {
@@ -333,7 +321,7 @@ class EsertifikatController extends Controller
             );
         }
 
-        return view('partials.esertifikat.belakang_massal', compact('data', 'pengaturan'));
+        return view('partials.esertifikat.belakang_massal', compact('data'));
     }
 
     public function destroy($id)
@@ -376,7 +364,6 @@ class EsertifikatController extends Controller
             return view('home.esertifikat.invalid');
         }
 
-        $pengaturan = Pengaturan::latest()->first();
         $nilai = $esertifikat->peserta_pkl->nilai_pkl;
 
         if ($nilai) {
@@ -412,7 +399,6 @@ class EsertifikatController extends Controller
 
         return view('home.esertifikat.show', compact(
             'esertifikat',
-            'pengaturan',
             'nilai'
         ));
     }

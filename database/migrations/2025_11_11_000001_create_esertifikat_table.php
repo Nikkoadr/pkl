@@ -12,6 +12,9 @@ return new class extends Migration {
             $table->string('hash', 64)->nullable()->unique();
             $table->foreignId('peserta_pkl_id')->constrained('peserta_pkl')->onDelete('cascade');
             $table->string('nomor_sertifikat')->unique();
+            $table->string('kepala_sekolah');
+            $table->date('tanggal_mulai_pkl')->nullable();
+            $table->date('tanggal_selesai_pkl')->nullable();
             $table->date('tanggal_diterbitkan');
             $table->timestamps();
         });

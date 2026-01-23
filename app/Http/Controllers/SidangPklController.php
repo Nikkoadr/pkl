@@ -82,7 +82,7 @@ class SidangPklController extends Controller
                 ])
                 ->get();
 
-            return view('sidang_pkl.index', compact('sidang_pkl', 'peserta_pkl'));
+            return view('home.sidang_pkl.index', compact('sidang_pkl', 'peserta_pkl'));
         }
 
         if (Gate::allows('prodi')) {
@@ -127,7 +127,7 @@ class SidangPklController extends Controller
                 ])
                 ->get();
 
-            return view('sidang_pkl.index', compact('sidang_pkl', 'peserta_pkl'));
+            return view('home.sidang_pkl.index', compact('sidang_pkl', 'peserta_pkl'));
         }
 
         if (Gate::allows('guru_penguji')) {
@@ -155,7 +155,7 @@ class SidangPklController extends Controller
                 }
             });
 
-            return view('sidang_pkl.index', compact('sidang_pkl'));
+            return view('home.sidang_pkl.index', compact('sidang_pkl'));
         }
 
         abort(403, 'Anda tidak memiliki akses ke halaman ini');
@@ -232,7 +232,7 @@ class SidangPklController extends Controller
     {
         $nilai_sidang_pkl = Nilai_pkl::with('peserta_pkl.peserta.user')->findOrFail($id);
 
-        return view('sidang_pkl.edit', compact('nilai_sidang_pkl'));
+        return view('home.sidang_pkl.edit', compact('nilai_sidang_pkl'));
     }
 
     public function update(Request $request, $id)

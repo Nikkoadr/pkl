@@ -11,6 +11,9 @@ class Esertifikat extends Model
     protected $fillable = [
         'peserta_pkl_id',
         'nomor_sertifikat',
+        'kepala_sekolah',
+        'tanggal_mulai_pkl',
+        'tanggal_selesai_pkl',
         'tanggal_diterbitkan',
     ];
 

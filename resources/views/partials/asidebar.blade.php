@@ -159,6 +159,12 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a href="/home/arsip" class="nav-link {{ request()->is('home/arsip') ? 'active' : '' }}">
+                            <i class="nav-icon fa-solid fa-box-archive"></i>
+                            <p>Arsip</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a href="/home/pengaturan" class="nav-link {{ request()->is('home/pengaturan') ? 'active' : '' }}">
                             <i class="nav-icon fa-solid fa-cogs"></i>
                             <p>Pengaturan</p>
@@ -262,6 +268,12 @@
                         <a href="/home/esertifikat" class="nav-link {{ request()->is('home/esertifikat') ? 'active' : '' }}">
                             <i class="nav-icon fa-solid fa-certificate"></i>
                             <p>E-Sertifikat</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/home/arsip" class="nav-link {{ request()->is('home/arsip') ? 'active' : '' }}">
+                            <i class="nav-icon fa-solid fa-box-archive"></i>
+                            <p>Arsip</p>
                         </a>
                     </li>
                 @endcan

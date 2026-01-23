@@ -40,9 +40,9 @@
 
             <div class="tanggal">
                 dari tanggal
-                {{ \Carbon\Carbon::parse($pengaturan->tanggal_mulai_pkl)->locale('id')->translatedFormat('d F Y') }}
+                {{ \Carbon\Carbon::parse($row->tanggal_mulai_pkl)->locale('id')->translatedFormat('d F Y') }}
                 sampai
-                {{ \Carbon\Carbon::parse($pengaturan->tanggal_selesai_pkl)->locale('id')->translatedFormat('d F Y') }}
+                {{ \Carbon\Carbon::parse($row->tanggal_selesai_pkl)->locale('id')->translatedFormat('d F Y') }}
             </div>
 
             <div class="foto"></div>
@@ -76,7 +76,7 @@ $qrWithLogo = base64_encode(
                 </div>
                 <hr>
                 <div class="ttd-nama">
-                    {{ $pengaturan->kepala_sekolah }}
+                    {{ $row->kepala_sekolah }}
                 </div>
             </div>
         </div>

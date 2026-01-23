@@ -54,7 +54,7 @@ class GuruController extends Controller
         ]);
 
         $user = User::create([
-            'role_id' => 2,
+            'role_id' => 3,
             'nama' => $request->nama,
             'email' => $request->email,
             'password' => Hash::make($request->password),
