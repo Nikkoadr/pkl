@@ -64,7 +64,7 @@
                             <th>Perilaku</th>
                             {{-- <th>Foto Bukti</th> --}}
                             <th>Sidang</th>
-                            <th>Komentar</th>
+                            {{-- <th>Komentar</th> --}}
                             <th class="text-center" data-orderable="false">Aksi</th>
                         </tr>
                     </thead>
@@ -91,7 +91,7 @@
                                 @endif
                             </td> --}}
                             <td>{{ $nilai->nilai_sidang_pkl }}</td>
-                            <td>{{ $nilai->komentar }}</td>
+                            {{-- <td>{{ $nilai->komentar }}</td> --}}
                             <td class="text-center">
 
                                 <a href="{{ route('nilai_pkl.edit', $nilai->id) }}" class="btn btn-warning btn-sm">
