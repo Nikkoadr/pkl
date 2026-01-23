@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Tahun_ajaran;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\ArsipExport;
+use Illuminate\Support\Str;
 use Illuminate\Support\Carbon;
 
 class ArsipController extends Controller
@@ -33,11 +34,10 @@ class ArsipController extends Controller
 
     public function export_arsip($id_tahun_ajaran)
     {
-        $tahunAjaran = Tahun_ajaran::findOrFail($id_tahun_ajaran);
+        $tahun_jaran = Tahun_ajaran::findOrFail($id_tahun_ajaran);
+        $nama_tahun = Str::slug($tahun_jaran->nama_tahun_ajaran);
+        $nama_file = 'arsip_PKL_' . $nama_tahun . Carbon::now()->format('d-m-Y') . '.xlsx';
 
-        $namaFile = 'arsip_PKL_' . $tahunAjaran->tahun_ajaran . '.xlsx';
- 
-
-        return Excel::download(new ArsipExport($id_tahun_ajaran), $namaFile);
+        return Excel::download(new ArsipExport($id_tahun_ajaran), $nama_file);
     }
 }

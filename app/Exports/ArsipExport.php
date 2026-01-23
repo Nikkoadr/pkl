@@ -14,11 +14,11 @@ use Carbon\Carbon;
 
 class ArsipExport implements FromCollection, WithHeadings
 {
-    protected $tahunAjaranId;
+    protected $tahun_tahun_ajaran_id;
 
-    public function __construct($tahunAjaranId)
+    public function __construct($tahun_tahun_ajaran_id)
     {
-        $this->tahunAjaranId = $tahunAjaranId;
+        $this->tahun_tahun_ajaran_id = $tahun_tahun_ajaran_id;
     }
 
     private function getCurrentGuru()
@@ -36,7 +36,7 @@ class ArsipExport implements FromCollection, WithHeadings
             'peserta_pkl.esertifikat',
         ])
 
-            ->where('tahun_ajaran_id', $this->tahunAjaranId);
+            ->where('tahun_ajaran_id', $this->tahun_tahun_ajaran_id);
 
         if (Gate::allows('prodi')) {
 
