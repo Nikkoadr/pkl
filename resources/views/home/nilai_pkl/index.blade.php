@@ -62,7 +62,7 @@
                             <th>Kualitas</th>
                             <th>Inisiatif</th>
                             <th>Perilaku</th>
-                            <th>Foto Bukti</th>
+                            {{-- <th>Foto Bukti</th> --}}
                             <th>Sidang</th>
                             <th>Komentar</th>
                             <th class="text-center" data-orderable="false">Aksi</th>
@@ -81,7 +81,7 @@
                             <td>{{ $nilai->nilai_kualitas_kerja }}</td>
                             <td>{{ $nilai->nilai_inisiatif_kreatifitas }}</td>
                             <td>{{ $nilai->nilai_perilaku }}</td>
-                            <td>
+                            {{-- <td>
                                 @if($nilai->foto_bukti_nilai_pkl)
                                     <a href="{{ asset('storage/bukti_nilai_pkl/'.$nilai->foto_bukti_nilai_pkl) }}" target="_blank">
                                         <img src="{{ asset('storage/bukti_nilai_pkl/'.$nilai->foto_bukti_nilai_pkl) }}" width="60">
@@ -89,7 +89,7 @@
                                 @else
                                     -
                                 @endif
-                            </td>
+                            </td> --}}
                             <td>{{ $nilai->nilai_sidang_pkl }}</td>
                             <td>{{ $nilai->komentar }}</td>
                             <td class="text-center">
