@@ -21,7 +21,6 @@ return new class extends Migration
             $table->integer('nilai_perilaku')->nullable();
             $table->string('foto_bukti_nilai_pkl', 120)->nullable();
             $table->integer('nilai_sidang_pkl')->nullable();
-            $table->text('komentar')->nullable();
             $table->timestamps();
         });
     }

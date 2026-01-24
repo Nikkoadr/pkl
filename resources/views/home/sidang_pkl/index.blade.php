@@ -61,7 +61,6 @@
                                 <th>Semua Nilai PKL</th>
                                 <th>Nilai Sidang</th>
                                 <th>Nilai Akhir</th>
-                                <th>Komentar</th>
                                 <th class="text-center">Aksi</th>
                             </tr>
                         </thead>
@@ -105,7 +104,6 @@
                             <td class="text-center">
                                 {{ $item->peserta_pkl->nilai_pkl->nilai_akhir_pkl ?? '-' }}
                             </td>
-                            <td>{{ $item->peserta_pkl->nilai_pkl->komentar ?? '-' }}</td>
 
                             <td class="text-center">
                                 <a href="{{ route('sidang_pkl.edit', $item->peserta_pkl->nilai_pkl->id) }}"

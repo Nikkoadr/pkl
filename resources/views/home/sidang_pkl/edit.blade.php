@@ -28,15 +28,6 @@
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
-                    <div class="form-group">
-                        <label for="komentar">Komentar</label>
-                        <textarea name="komentar" id="komentar"
-                            class="form-control @error('komentar') is-invalid @enderror"
-                            placeholder="Masukkan komentar...">{{ old('komentar', $nilai_sidang_pkl->komentar) }}</textarea>
-                        @error('komentar')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
 
                     <a href="{{ route('sidang_pkl.index') }}" class="btn btn-secondary">Kembali</a>
                     <button type="submit" class="btn btn-primary">Simpan</button>
