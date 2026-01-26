@@ -41,29 +41,33 @@
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Tahun Ajaran</th>
-                                <th>NISN</th>
-                                <th>NIS</th>
+                                <th>Info (Tahun / NISN / NIS / Email)</th>
                                 <th>Nama</th>
-                                <th>Email</th>
                                 <th>Kelas</th>
                                 <th data-orderable="false" class="text-center">Aksi</th>
                             </tr>
                         </thead>
+
                         <tbody>
                             @foreach($peserta as $item)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $item->tahun_ajaran->nama_tahun_ajaran ?? '-' }}</td>
-                                <td>{{ $item->nisn ?? '-' }}</td>
-                                <td>{{ $item->nis ?? '-' }}</td>
+
+                                <td>
+                                    <div><b>Tahun:</b> {{ $item->tahun_ajaran->nama_tahun_ajaran ?? '-' }}</div>
+                                    <div><b>NISN:</b> {{ $item->nisn ?? '-' }}</div>
+                                    <div><b>NIS:</b> {{ $item->nis ?? '-' }}</div>
+                                    <div><b>Email:</b> {{ $item->user->email ?? '-' }}</div>
+                                </td>
+
                                 <td>{{ $item->user->nama ?? '-' }}</td>
-                                <td>{{ $item->user->email ?? '-' }}</td>
                                 <td>{{ $item->kelas->nama_kelas ?? '-' }}</td>
+
                                 <td class="text-center">
                                     <a href="{{ route('peserta.edit', $item->id) }}" class="btn btn-primary btn-sm">
                                         <i class="fas fa-edit"></i>
                                     </a>
+
                                     <form action="{{ route('peserta.destroy', $item->id) }}" method="POST" class="d-inline form-hapus">
                                         @csrf
                                         @method('DELETE')
