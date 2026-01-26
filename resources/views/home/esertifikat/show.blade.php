@@ -85,7 +85,7 @@
             <div class="info" style="border: none; padding-top: 10px;">
                 <div class="info-row">
                     <span>Penanda Tangan</span>
-                    <strong>{{ $pengaturan->kepala_sekolah ?? '-' }}</strong>
+                    <strong>{{ $esertifikat->kepala_sekolah ?? '-' }}</strong>
                     <small style="color: var(--text-muted)">Kepala Sekolah</small>
                 </div>
             </div>
