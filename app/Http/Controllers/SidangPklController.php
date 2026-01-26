@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\Gate;
 use App\Models\Sidang_pkl;
 use App\Models\Kaprodi;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
 
 class SidangPklController extends Controller
 {
