@@ -2,6 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8" />
+    <link rel="icon" type="image/x-icon" href="{{ asset('assets/dist/img/about.png') }}">
     <title>Penilaian Peserta Praktik Kerja Lapangan (PKL)</title>
     <style>
         body { font-family: "Times New Roman", serif; font-size: 12pt; margin: 0; padding: 40px 0; background-color: #e0e0e0; display: flex; justify-content: center; flex-direction: column; align-items: center;}

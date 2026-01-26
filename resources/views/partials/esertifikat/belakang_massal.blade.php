@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <title>Penilaian Peserta Praktik Kerja Lapangan (PKL)</title>
-
+    <link rel="icon" type="image/x-icon" href="{{ asset('assets/dist/img/about.png') }}">
     <style>
         body {
             font-family: "Times New Roman", serif;
