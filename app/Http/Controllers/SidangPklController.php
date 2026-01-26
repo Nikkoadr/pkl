@@ -33,7 +33,7 @@ class SidangPklController extends Controller
             $nilai->nilai_perilaku
         ) / 5;
 
-        return round(($rataSikap + $nilai->nilai_sidang_pkl) / 2, 2);
+        return round(($rataSikap + $nilai->nilai_sidang_pkl) / 2);
     }
 
     public function index()

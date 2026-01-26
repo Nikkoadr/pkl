@@ -199,9 +199,9 @@ class EsertifikatController extends Controller
                 $nilaiSidang = $nilai->nilai_sidang_pkl;
                 $nilaiAkhir  = ($rataSikap + $nilaiSidang) / 2;
 
-                $item->rata_rata_sikap  = round($rataSikap, 2);
+                $item->rata_rata_sikap  = round($rataSikap);
                 $item->nilai_sidang_pkl = $nilaiSidang;
-                $item->nilai_akhir      = round($nilaiAkhir, 2);
+                $item->nilai_akhir      = round($nilaiAkhir);
             } else {
                 $item->rata_rata_sikap  = null;
                 $item->nilai_sidang_pkl = null;
