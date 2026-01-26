@@ -44,14 +44,17 @@ class NilaiPklController extends Controller
         }
 
         if (Gate::allows('admin')) {
+
             $nilai_pkl = Nilai_pkl::whereHas('peserta_pkl.peserta', function ($q) use ($tahunAktif) {
                 $q->where('tahun_ajaran_id', $tahunAktif->id);
             })
+                ->whereDoesntHave('esertifikat') // ✅ sudah generate -> tidak ditampilkan
                 ->with('peserta_pkl.peserta.user', 'peserta_pkl.dudi')
                 ->get();
 
             return view('home.nilai_pkl.index', compact('nilai_pkl'));
         } elseif (Gate::allows('prodi')) {
+
             $kaprodi = Kaprodi::where('guru_id', $user->guru->id)->first();
 
             if (!$kaprodi) {
@@ -62,11 +65,13 @@ class NilaiPklController extends Controller
                 $q->where('kompetensi_keahlian_id', $kaprodi->kompetensi_keahlian_id)
                     ->where('tahun_ajaran_id', $tahunAktif->id);
             })
+                ->whereDoesntHave('esertifikat') // ✅ sudah generate -> tidak ditampilkan
                 ->with('peserta_pkl.peserta.user', 'peserta_pkl.dudi')
                 ->get();
 
             return view('home.nilai_pkl.index', compact('nilai_pkl'));
         } elseif (Gate::allows('guru')) {
+
             $guru = Guru::where('user_id', $user->id)->first();
 
             if (!$guru) {
@@ -81,11 +86,13 @@ class NilaiPklController extends Controller
                         $qq->where('tahun_ajaran_id', $tahunAktif->id);
                     });
             })
+                ->whereDoesntHave('esertifikat') // ✅ sudah generate -> tidak ditampilkan
                 ->with('peserta_pkl.peserta.user', 'peserta_pkl.dudi')
                 ->get();
 
             return view('home.nilai_pkl.index', compact('nilai_pkl'));
         } elseif (Gate::allows('peserta')) {
+
             $peserta = Peserta::where('user_id', $user->id)
                 ->where('tahun_ajaran_id', $tahunAktif->id)
                 ->first();
@@ -102,6 +109,7 @@ class NilaiPklController extends Controller
                     ->with('error', 'Anda belum mengikuti PKL di tahun ajaran aktif.');
             }
 
+            // peserta tetap bisa lihat nilainya sendiri (tidak perlu disembunyikan)
             $nilai_pkl = Nilai_pkl::where('peserta_pkl_id', $pesertaPkl->id)
                 ->with('peserta_pkl.peserta.user', 'peserta_pkl.dudi')
                 ->first() ?? new Nilai_pkl();

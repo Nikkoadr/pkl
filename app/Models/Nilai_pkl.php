@@ -13,4 +13,9 @@ class Nilai_pkl extends Model
     {
         return $this->belongsTo(Peserta_pkl::class);
     }
+
+    public function esertifikat()
+    {
+        return $this->hasOne(Esertifikat::class, 'peserta_pkl_id', 'peserta_pkl_id');
+    }
 }
