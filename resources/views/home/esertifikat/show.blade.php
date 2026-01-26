@@ -123,12 +123,12 @@
 
                         <i>
                             dari tanggal
-                            {{ $pengaturan?->tanggal_mulai_pkl
-                                ? \Carbon\Carbon::parse($pengaturan->tanggal_mulai_pkl)->locale('id')->translatedFormat('d F Y')
+                            {{ $esertifikat?->tanggal_mulai_pkl
+                                ? \Carbon\Carbon::parse($esertifikat->tanggal_mulai_pkl)->locale('id')->translatedFormat('d F Y')
                                 : '-' }}
                             sampai dengan
-                            {{ $pengaturan?->tanggal_selesai_pkl
-                                ? \Carbon\Carbon::parse($pengaturan->tanggal_selesai_pkl)->locale('id')->translatedFormat('d F Y')
+                            {{ $esertifikat?->tanggal_selesai_pkl
+                                ? \Carbon\Carbon::parse($esertifikat->tanggal_selesai_pkl)->locale('id')->translatedFormat('d F Y')
                                 : '-' }}
                         </i>
                     </div>
@@ -152,7 +152,7 @@
                                     </div>
                                     <hr>
                                     <div class="ttd-nama">
-                                        {{ $pengaturan->kepala_sekolah ?? '-' }}
+                                        {{ $esertifikat->kepala_sekolah ?? '-' }}
                                     </div>
                                 </div>
                             </div>
