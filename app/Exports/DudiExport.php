@@ -53,6 +53,7 @@ class DudiExport implements FromCollection, WithHeadings
                     : null,
                 'nama_pimpinan_dudi' => $dudi->nama_pimpinan_dudi,
                 'kuota'              => $dudi->kuota,
+                'kompetensi_keahlian' => $dudi->kompetensi_keahlian->nama_kompetensi,
             ];
         });
     }
@@ -67,6 +68,7 @@ class DudiExport implements FromCollection, WithHeadings
             'Nomor Kepegawaian',
             'Nama Pimpinan DUDI',
             'Kuota',
+            'Kompetensi Keahlian',
         ];
     }
 }

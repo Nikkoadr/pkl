@@ -16,12 +16,12 @@ class DudiImport implements ToModel, WithHeadingRow
             throw new \Exception("Kompetensi Keahlian {$row['kompetensi_keahlian']} tidak ditemukan");
         }
         return new Dudi([
-            'nama_dudi' => $row['nama_dudi'],
-            'alamat_dudi' => $row['alamat_dudi'],
-            'no_telp_dudi' => $row['no_telp_dudi'],
-            'nomor_kepegawaian' => $row['nomor_kepegawaian'],
-            'nama_pimpinan_dudi' => $row['nama_pimpinan_dudi'],
-            'kuota' => $row['kuota'],
+            'nama_dudi'            => $row['nama_dudi'],
+            'alamat_dudi'          => $row['alamat_dudi'] ?? null,
+            'no_telp_dudi'         => ltrim($row['no_telp_dudi'] ?? '', "'"),
+            'nomor_kepegawaian'    => ltrim($row['nomor_kepegawaian'] ?? '', "'"),
+            'nama_pimpinan_dudi'   => $row['nama_pimpinan_dudi'] ?? null,
+            'kuota'                => $row['kuota'] ?? null,
             'kompetensi_keahlian_id' => $kompetensi_keahlian->id,
         ]);
     }
