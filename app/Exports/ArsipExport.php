@@ -73,8 +73,8 @@ class ArsipExport implements FromCollection, WithHeadings
             return [
                 'nis'               => "'" . ($peserta->nis ?? '-'),
                 'nisn'              => "'" . ($peserta->nisn ?? '-'),
-                'jenis_kelamin'     => optional($peserta->user)->jenis_kelamin ?? '-',
                 'nama'              => optional($peserta->user)->nama ?? '-',
+                'jenis_kelamin'     => optional($peserta->user)->jenis_kelamin ?? '-',
                 'tempat_lahir'      => optional($peserta->user)->tempat_lahir ?? '-',
                 'tanggal_lahir'     => optional($peserta->user)->tanggal_lahir
                     ? Carbon::parse($peserta->user->tanggal_lahir)->translatedFormat('d F Y')
@@ -106,8 +106,8 @@ class ArsipExport implements FromCollection, WithHeadings
             'Jenis Kelamin',
             'Tempat Lahir',
             'Tanggal Lahir',
+            'No. Telepon',
             'Kelas',
-            'No. Telp',
             'Nama DUDI',
             'Nilai Disiplin Kerja',
             'Nilai Kemajuan Kerja',
