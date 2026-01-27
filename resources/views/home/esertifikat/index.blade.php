@@ -10,35 +10,83 @@
 
 @section('content')
 <div class="content-wrapper">
+
+    {{-- HEADER --}}
     <section class="content-header">
         <div class="container-fluid">
             <h1>Sertifikat PKL</h1>
         </div>
     </section>
+
+    {{-- CONTENT --}}
     <section class="content">
         <div class="container-fluid">
             <div class="card">
+
+                {{-- CARD HEADER --}}
                 <div class="card-header">
-                    <div class="row w-100 align-items-center">
+                    <div class="row align-items-center">
                         <div class="col-md-6">
                             <h5 class="mb-0">Daftar Sertifikat PKL</h5>
                         </div>
-                        <div class="col-md-6 text-md-right text-left mt-2 mt-md-0">
+                        <div class="col-md-6 text-md-right mt-2 mt-md-0">
                             <div class="btn-group">
-                                <button type="button" class="btn btn-primary btn-sm" id="btnDepan">
+                                <button class="btn btn-primary btn-sm" id="btnDepan">
                                     <i class="fas fa-file-alt"></i> Cetak Depan
                                 </button>
-                                <button type="button" class="btn btn-success btn-sm" id="btnBelakang">
+                                <button class="btn btn-success btn-sm" id="btnBelakang">
                                     <i class="fas fa-envelope-open-text"></i> Cetak Belakang
                                 </button>
-                                <button type="button" class="btn btn-danger btn-sm" id="btnDeleteSelected">
+                                <button class="btn btn-danger btn-sm" id="btnDeleteSelected">
                                     <i class="fas fa-trash"></i> Hapus Terpilih
                                 </button>
                             </div>
                         </div>
                     </div>
                 </div>
+
                 <div class="card-body">
+                    <form method="GET" action="{{ route('esertifikat.index') }}">
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label>Konsentrasi Keahlian</label>
+                                <select name="kompetensi" id="kompetensi" class="form-control">
+                                    <option value="">-- Semua Konsentrasi --</option>
+                                    @foreach ($listKompetensi as $kompetensi)
+                                        <option value="{{ $kompetensi->id }}"
+                                            {{ request('kompetensi') == $kompetensi->id ? 'selected' : '' }}>
+                                            {{ $kompetensi->nama_kompetensi }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label>Kelas</label>
+                                <select name="kelas" id="kelas"
+                                    class="form-control"
+                                    {{ request('kompetensi') ? '' : 'disabled' }}>
+                                    <option value="">-- Semua Kelas --</option>
+                                    @foreach ($listKelas as $kelas)
+                                        <option value="{{ $kelas->id }}"
+                                            {{ request('kelas') == $kelas->id ? 'selected' : '' }}>
+                                            {{ $kelas->nama_kelas }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-2 d-flex align-items-end">
+                                <button type="submit" class="btn btn-primary btn-block">
+                                    <i class="fas fa-filter"></i> Filter
+                                </button>
+                            </div>
+                            <div class="col-md-2 d-flex align-items-end">
+                                <a href="{{ route('esertifikat.index') }}"
+                                class="btn btn-secondary btn-block">
+                                    <i class="fas fa-sync"></i> Reset
+                                </a>
+                            </div>
+                        </div>
+                    </form>
                     <table id="tabelEsertifikat" class="table table-bordered table-striped">
                         <thead>
                             <tr>
@@ -53,64 +101,62 @@
                                 <th>Rata-rata Sikap</th>
                                 <th>Nilai Sidang</th>
                                 <th>Nilai Akhir</th>
-                                <th class="text-center">Cetak E-Sertifikat</th>
+                                <th class="text-center">Cetak</th>
                                 <th class="text-center">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($esertifikat as $row)
-                                <tr id="row-{{ $row->id }}">
-                                    <td><input type="checkbox" class="selectItem" value="{{ $row->id }}"></td>
-                                    <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $row->nomor_sertifikat ?? '-' }}</td>
-                                    <td>{{ $row->nisn ?? '-' }}</td>
-                                    <td>{{ $row->nama ?? '-' }}</td>
-                                    <td>{{ $row->kelas ?? '-' }}</td>
-                                    <td>{{ $row->kompetensi ?? '-' }}</td>
-                                    <td>{{ $row->nama_dudi ?? '-' }}</td>
-                                    <td>{{ $row->rata_rata_sikap ?? '-' }}</td>
-                                    <td>{{ $row->nilai_sidang_pkl ?? '-' }}</td>
-                                    <td>{{ $row->nilai_akhir ?? '-' }}</td>
-                                    <td class="text-center">
-                                        <a href="{{ route('cetak.esertifikat_depan', $row->id) }}"
-                                        class="btn btn-info btn-sm m-1" target="_blank">
-                                            <i class="fas fa-file-alt"></i> Depan
-                                        </a>
-                                        <a href="{{ route('cetak.esertifikat_belakang', $row->id) }}"
-                                        class="btn btn-success btn-sm" target="_blank">
-                                            <i class="fas fa-envelope-open-text"></i> Belakang
-                                        </a>
-                                    </td>
-                                    <td class="text-center">
-                                        <form action="{{ route('esertifikat.destroy', $row->id) }}"
-                                            method="POST"
-                                            class="d-inline form-hapus">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="button"
-                                                    class="btn btn-danger btn-sm btn-konfirmasi-hapus">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </form>
-                                    </td>
-                                </tr>
+                            @foreach ($esertifikat as $row)
+                            <tr id="row-{{ $row->id }}">
+                                <td>
+                                    <input type="checkbox" class="selectItem" value="{{ $row->id }}">
+                                </td>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $row->nomor_sertifikat ?? '-' }}</td>
+                                <td>{{ $row->nisn ?? '-' }}</td>
+                                <td>{{ $row->nama ?? '-' }}</td>
+                                <td>{{ $row->kelas ?? '-' }}</td>
+                                <td>{{ $row->kompetensi ?? '-' }}</td>
+                                <td>{{ $row->nama_dudi ?? '-' }}</td>
+                                <td>{{ $row->rata_rata_sikap ?? '-' }}</td>
+                                <td>{{ $row->nilai_sidang_pkl ?? '-' }}</td>
+                                <td>{{ $row->nilai_akhir ?? '-' }}</td>
+
+                                <td class="text-center">
+                                    <a href="{{ route('cetak.esertifikat_depan', $row->id) }}"
+                                       class="btn btn-info btn-sm mb-1" target="_blank">
+                                        <i class="fas fa-file-alt"></i> Depan
+                                    </a>
+                                    <a href="{{ route('cetak.esertifikat_belakang', $row->id) }}"
+                                       class="btn btn-success btn-sm" target="_blank">
+                                        <i class="fas fa-envelope-open-text"></i> Belakang
+                                    </a>
+                                </td>
+
+                                <td class="text-center">
+                                    <form action="{{ route('esertifikat.destroy', $row->id) }}"
+                                          method="POST" class="form-hapus d-inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="button"
+                                                class="btn btn-danger btn-sm btn-konfirmasi-hapus">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
                             @endforeach
                         </tbody>
                     </table>
-                    <form id="formCetakDepan" 
-                        action="{{ route('cetak.esertifikat-depan-massal') }}" 
-                        method="POST" 
-                        target="_blank" 
-                        style="display:none;">
+                    <form id="formCetakDepan"
+                          action="{{ route('cetak.esertifikat-depan-massal') }}"
+                          method="POST" target="_blank" hidden>
                         @csrf
                         <input type="hidden" name="ids" id="idsCetakDepan">
                     </form>
-
-                    <form id="formCetakBelakang" 
-                        action="{{ route('cetak.esertifikat-belakang-massal') }}" 
-                        method="POST" 
-                        target="_blank" 
-                        style="display:none;">
+                    <form id="formCetakBelakang"
+                          action="{{ route('cetak.esertifikat-belakang-massal') }}"
+                          method="POST" target="_blank" hidden>
                         @csrf
                         <input type="hidden" name="ids" id="idsCetakBelakang">
                     </form>
@@ -118,19 +164,16 @@
             </div>
         </div>
     </section>
-
 </div>
 @endsection
 
 @section('scripts')
-
 <script src="{{ asset('assets/plugins/datatables/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('assets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
 <script src="{{ asset('assets/plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
 <script src="{{ asset('assets/plugins/datatables-buttons/js/dataTables.buttons.min.js') }}"></script>
 <script src="{{ asset('assets/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 <script src="{{ asset('assets/plugins/sweetalert2/sweetalert2.min.js') }}"></script>
-
 @if (session('success'))
 <script>
     Swal.fire({
@@ -143,7 +186,6 @@
     });
 </script>
 @endif
-
 @if ($errors->any())
 <script>
     Swal.fire({
@@ -156,22 +198,19 @@
     });
 </script>
 @endif
-
 <script>
     $(function () {
         $("#tabelEsertifikat").DataTable({
             responsive: true,
             lengthChange: true,
             autoWidth: true,
-            pageLength: -1,
+            pageLength: 10,
             lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]]
         });
     });
-
     $(document).on('click', '.btn-konfirmasi-hapus', function (e) {
         e.preventDefault();
         let form = $(this).closest("form");
-
         Swal.fire({
             title: 'Yakin ingin menghapus?',
             text: "Data akan dihapus permanen!",
@@ -272,6 +311,21 @@ $('#btnBelakang').on('click', function () {
 
     $('#idsCetakBelakang').val(selectedIds.join(','));
     $('#formCetakBelakang').submit();
+});
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const kompetensi = document.getElementById('kompetensi');
+    const kelas = document.getElementById('kelas');
+
+    kompetensi.addEventListener('change', function () {
+        if (this.value) {
+            kelas.disabled = false;
+        } else {
+            kelas.value = '';
+            kelas.disabled = true;
+        }
+    });
 });
 </script>
 

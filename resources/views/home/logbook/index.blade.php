@@ -196,7 +196,9 @@
             responsive: true,
             lengthChange: true,
             autoWidth: true,
-        }).buttons().container().appendTo('#tabelLogbook_wrapper .col-md-6:eq(0)');
+            pageLength: 10,
+            lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]]
+        });
 
         // Autocomplete Peserta
         $("#autocomplete_peserta_pkl").autocomplete({

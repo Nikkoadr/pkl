@@ -24,26 +24,36 @@
                         <div class="col-md-6 d-flex align-items-center">
                             <h3 class="card-title mb-0">Daftar DUDI</h3>
                         </div>
-                        <div class="col-md-6 text-right">
-                            @can('admin')
-                                <a href="{{ route('dudi.export') }}" class="btn btn-primary btn-sm mr-2">
-                                    <i class="fas fa-file-excel"></i> Export
-                                </a>
-                            <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalImport">
-                                <i class="fas fa-file-import"></i> Import Excel
-                            </button>
-                            @endcan
-                            @canany(['admin', 'prodi'])
-                            <button class="btn btn-success btn-sm" data-toggle="modal" data-target="#modalTambah">
-                                <i class="fas fa-plus"></i> Tambah DUDI
-                            </button>
-                            @endcanany
-                        </div>
+                            <div class="col-md-6 text-md-right mt-2 mt-md-0">
+                                <div class="btn-group">
+                                    @can('admin')
+                                        <a href="{{ route('dudi.export') }}"
+                                        class="btn btn-primary btn-sm">
+                                            <i class="fas fa-file-excel"></i> Export
+                                        </a>
+                                        <button type="button"
+                                                class="btn btn-info btn-sm"
+                                                data-toggle="modal"
+                                                data-target="#modalImport">
+                                            <i class="fas fa-file-import"></i> Import Excel
+                                        </button>
+                                    @endcan
+
+                                    @canany(['admin','prodi'])
+                                        <button type="button"
+                                                class="btn btn-success btn-sm"
+                                                data-toggle="modal"
+                                                data-target="#modalTambah">
+                                            <i class="fas fa-plus"></i> Tambah DUDI
+                                        </button>
+                                    @endcanany
+                                </div>
+                            </div>
                     </div>
                 </div>
 
                 <div class="card-body">
-                    <table id="tabelDUDI" class="table table-bordered table-striped">
+                    <table id="tabel_dudi" class="table table-bordered table-striped">
                         <thead>
                             <tr>
                                 <th>No</th>
@@ -252,12 +262,13 @@ $(function () {
 </script>
 <script>
     $(function () {
-        $("#tabelDUDI").DataTable({
+        $("#tabel_dudi").DataTable({
             responsive: true,
             lengthChange: true,
             autoWidth: true,
-            buttons: ["copy", "csv", "excel", "pdf", "print", "colvis"]
-        }).buttons().container().appendTo('#tabelDUDI_wrapper .col-md-6:eq(0)');
+            pageLength: 10,
+            lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]]
+        });
     });
 
     // Konfirmasi Hapus

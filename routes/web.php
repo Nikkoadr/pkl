@@ -98,7 +98,7 @@ Route::put('/home/nilai_pkl/{id}/update/', [NilaiPklController::class, 'update']
 Route::put('/home/nilai_pkl/{id}/update_peserta/', [NilaiPklController::class, 'update_siswa'])->name('nilai_pkl.update_siswa');
 Route::delete('/home/nilai_pkl/{id}/destroy/', [NilaiPklController::class, 'destroy'])->name('nilai_pkl.destroy');
 
-Route::get('/home/esertifikat', [EsertifikatController::class, 'index'])->name('home.esertifikat');
+Route::get('/home/esertifikat', [EsertifikatController::class, 'index'])->name('esertifikat.index');
 Route::delete('/home/esertifikat/{id}', [EsertifikatController::class, 'destroy'])->name('esertifikat.destroy');
 Route::post('/home/esertifikat/destroy_massal', [EsertifikatController::class, 'destroy_massal'])->name('esertifikat.destroy_massal');
 

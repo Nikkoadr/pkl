@@ -183,7 +183,9 @@ $(function () {
     $('#tabel_guru_pembimbing').DataTable({
         responsive: true,
         lengthChange: true,
-        autoWidth: false
+        autoWidth: true,
+        pageLength: 10,
+        lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]]
     });
 
     // Konfirmasi hapus

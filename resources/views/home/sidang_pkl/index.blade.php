@@ -49,7 +49,7 @@
                 </div>
 
                 <div class="card-body">
-                    <table class="table table-bordered table-striped" id="datatable">
+                    <table class="table table-bordered table-striped" id="tabel_sidang_pkl">
                         <thead>
                             <tr>
                                 <th>No</th>
@@ -207,9 +207,12 @@
 <script>
 $(function () {
 
-    $('#datatable').DataTable({
+    $('#tabel_sidang_pkl').DataTable({
         responsive: true,
-        autoWidth: false
+        lengthChange: true,
+        autoWidth: true,
+        pageLength: 10,
+        lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]]
     });
 
     // konfirmasi hapus

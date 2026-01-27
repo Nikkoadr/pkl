@@ -33,18 +33,32 @@
                     <div class="col-md-6 d-flex align-items-center">
                         <h3 class="card-title mb-0">Daftar Nilai PKL</h3>
                     </div>
-                    <div class="col-md-6 text-right">
+                    <div class="col-md-6 text-md-right mt-2 mt-md-0">
                         @canany(['admin','prodi','guru_pembimbing'])
-                            <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalTambah">
-                                <i class="fas fa-plus"></i> Tambah Nilai
-                            </button>
+                            <div class="btn-group">
 
-                            <form id="formGenerateSertifikat" action="{{ route('esertifikat.generate_massal') }}" method="POST" class="d-inline">
-                                @csrf
-                                <button type="submit" id="btnGenerateMassal" class="btn btn-success btn-sm" disabled>
-                                    <i class="fas fa-certificate"></i> Generate Sertifikat
+                                {{-- TAMBAH NILAI --}}
+                                <button type="button"
+                                        class="btn btn-primary btn-sm"
+                                        data-toggle="modal"
+                                        data-target="#modalTambah">
+                                    <i class="fas fa-plus"></i> Tambah Nilai
                                 </button>
-                            </form>
+
+                                {{-- GENERATE SERTIFIKAT MASSAL --}}
+                                <form id="formGenerateSertifikat"
+                                    action="{{ route('esertifikat.generate_massal') }}"
+                                    method="POST" class="d-inline">
+                                    @csrf
+                                    <button type="submit"
+                                            id="btnGenerateMassal"
+                                            class="btn btn-success btn-sm"
+                                            disabled>
+                                        <i class="fas fa-certificate"></i> Generate Sertifikat
+                                    </button>
+                                </form>
+
+                            </div>
                         @endcanany
                     </div>
                 </div>
@@ -62,9 +76,7 @@
                             <th>Kualitas</th>
                             <th>Inisiatif</th>
                             <th>Perilaku</th>
-                            {{-- <th>Foto Bukti</th> --}}
                             <th>Sidang</th>
-                            {{-- <th>Komentar</th> --}}
                             <th class="text-center" data-orderable="false">Aksi</th>
                         </tr>
                     </thead>
@@ -81,36 +93,22 @@
                             <td>{{ $nilai->nilai_kualitas_kerja }}</td>
                             <td>{{ $nilai->nilai_inisiatif_kreatifitas }}</td>
                             <td>{{ $nilai->nilai_perilaku }}</td>
-                            {{-- <td>
-                                @if($nilai->foto_bukti_nilai_pkl)
-                                    <a href="{{ asset('storage/bukti_nilai_pkl/'.$nilai->foto_bukti_nilai_pkl) }}" target="_blank">
-                                        <img src="{{ asset('storage/bukti_nilai_pkl/'.$nilai->foto_bukti_nilai_pkl) }}" width="60">
-                                    </a>
-                                @else
-                                    -
-                                @endif
-                            </td> --}}
                             <td>{{ $nilai->nilai_sidang_pkl }}</td>
-                            {{-- <td>{{ $nilai->komentar }}</td> --}}
                             <td class="text-center">
-
                                 <a href="{{ route('nilai_pkl.edit', $nilai->id) }}" class="btn btn-warning btn-sm">
                                     <i class="fas fa-edit"></i>
                                 </a>
-
                                 <form action="{{ route('nilai_pkl.destroy', $nilai->id) }}" method="POST" class="d-inline form-delete">
                                     @csrf
                                     @method('DELETE')
                                     <button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
                                 </form>
-
                                 <form action="{{ route('esertifikat.generate', $nilai->id) }}" method="POST" class="d-inline">
                                     @csrf
                                     <button class="btn btn-success btn-sm">
                                         <i class="fas fa-certificate"></i>
                                     </button>
                                 </form>
-
                             </td>
                         </tr>
                         @endforeach

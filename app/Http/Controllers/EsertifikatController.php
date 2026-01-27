@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Kaprodi;
 use App\Models\Esertifikat;
 use App\Models\Nilai_pkl;
+use App\Models\Kelas;
+use App\Models\Kompetensi_keahlian;
 use App\Helpers\EsertifikatHelper;
 
 class EsertifikatController extends Controller
@@ -135,8 +137,7 @@ class EsertifikatController extends Controller
 
         return back()->with('success', "E-sertifikat berhasil dibuat: {$berhasil}, gagal: {$gagal} {$pesanGagal}");
     }
-
-    public function index()
+    public function index(Request $request)
     {
         $tahunAktif = tahunAktif();
 
@@ -146,48 +147,61 @@ class EsertifikatController extends Controller
                 ->with('error', 'Tidak ada tahun ajaran aktif.');
         }
 
-        if (Gate::allows('admin')) {
+        // ================= QUERY DASAR =================
+        $query = Esertifikat::whereHas('peserta_pkl.peserta', function ($q) use ($tahunAktif) {
+            $q->where('tahun_ajaran_id', $tahunAktif->id);
+        });
 
-            $esertifikat = Esertifikat::whereHas('peserta_pkl.peserta', function ($q) use ($tahunAktif) {
-                $q->where('tahun_ajaran_id', $tahunAktif->id);
-            });
-        } elseif (Gate::allows('prodi')) {
-
+        // ================= ROLE PRODI =================
+        if (Gate::allows('prodi')) {
             $user = Auth::user();
             $kaprodi = Kaprodi::where('guru_id', $user->guru->id)->first();
 
             if (!$kaprodi) {
-                abort(403, 'Anda tidak terdaftar sebagai Kaprodi');
+                abort(403);
             }
 
-            $esertifikat = Esertifikat::whereHas('peserta_pkl.peserta.kelas', function ($q) use ($kaprodi, $tahunAktif) {
-                $q->where('kompetensi_keahlian_id', $kaprodi->kompetensi_keahlian_id)
-                    ->where('tahun_ajaran_id', $tahunAktif->id);
+            $query->whereHas('peserta_pkl.peserta.kelas', function ($q) use ($kaprodi) {
+                $q->where('kompetensi_keahlian_id', $kaprodi->kompetensi_keahlian_id);
             });
-        } else {
-            abort(403);
         }
 
-        $esertifikat = $esertifikat->with([
+        // ================= FILTER =================
+
+        // Filter Kompetensi
+        if ($request->filled('kompetensi')) {
+            $query->whereHas('peserta_pkl.peserta.kelas', function ($q) use ($request) {
+                $q->where('kompetensi_keahlian_id', $request->kompetensi);
+            });
+        }
+
+        // Filter Kelas (hanya kalau kompetensi sudah dipilih)
+        if ($request->filled('kompetensi') && $request->filled('kelas')) {
+            $query->whereHas('peserta_pkl.peserta.kelas', function ($q) use ($request) {
+                $q->where('id', $request->kelas);
+            });
+        }
+
+        // ================= LOAD DATA =================
+        $esertifikat = $query->with([
             'peserta_pkl.peserta.user',
             'peserta_pkl.peserta.kelas.kompetensi',
             'peserta_pkl.dudi',
             'peserta_pkl.nilai_pkl',
         ])->get();
 
+        // ================= OLAH DATA =================
         $esertifikat->each(function ($item) {
-
             $peserta = $item->peserta_pkl->peserta ?? null;
             $nilai   = $item->peserta_pkl->nilai_pkl ?? null;
 
-            $item->nisn       = $peserta->nisn ?? null;
-            $item->nama       = $peserta->user->nama ?? null;
-            $item->kelas      = $peserta->kelas->nama_kelas ?? null;
-            $item->kompetensi = $peserta->kelas->kompetensi->nama_kompetensi ?? null;
-            $item->nama_dudi  = $item->peserta_pkl->dudi->nama_dudi ?? null;
+            $item->nisn       = $peserta->nisn ?? '-';
+            $item->nama       = $peserta->user->nama ?? '-';
+            $item->kelas      = $peserta->kelas->nama_kelas ?? '-';
+            $item->kompetensi = $peserta->kelas->kompetensi->nama_kompetensi ?? '-';
+            $item->nama_dudi  = $item->peserta_pkl->dudi->nama_dudi ?? '-';
 
             if ($nilai) {
-
                 $rataSikap = (
                     $nilai->nilai_disiplin_kerja +
                     $nilai->nilai_kemajuan_kerja +
@@ -196,20 +210,27 @@ class EsertifikatController extends Controller
                     $nilai->nilai_perilaku
                 ) / 5;
 
-                $nilaiSidang = $nilai->nilai_sidang_pkl;
-                $nilaiAkhir  = ($rataSikap + $nilaiSidang) / 2;
-
                 $item->rata_rata_sikap  = round($rataSikap);
-                $item->nilai_sidang_pkl = $nilaiSidang;
-                $item->nilai_akhir      = round($nilaiAkhir);
-            } else {
-                $item->rata_rata_sikap  = null;
-                $item->nilai_sidang_pkl = null;
-                $item->nilai_akhir      = null;
+                $item->nilai_sidang_pkl = $nilai->nilai_sidang_pkl;
+                $item->nilai_akhir      = round(($rataSikap + $nilai->nilai_sidang_pkl) / 2);
             }
         });
 
-        return view('home.esertifikat.index', compact('esertifikat'));
+        // ================= DROPDOWN =================
+        $listKompetensi = Kompetensi_keahlian::orderBy('nama_kompetensi')->get();
+
+        $listKelas = collect();
+        if ($request->filled('kompetensi')) {
+            $listKelas = Kelas::where('kompetensi_keahlian_id', $request->kompetensi)
+                ->orderBy('nama_kelas')
+                ->get();
+        }
+
+        return view('home.esertifikat.index', compact(
+            'esertifikat',
+            'listKompetensi',
+            'listKelas'
+        ));
     }
 
     public function cetak_depan($id)

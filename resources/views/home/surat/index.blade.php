@@ -55,7 +55,7 @@
                 </div>
 
                 <div class="card-body">
-                    <table id="dataTable" class="table table-bordered table-striped">
+                    <table id="tabel_surat" class="table table-bordered table-striped">
                         <thead>
                             <tr>
                                 <th data-orderable="false" style="width:42px;">
@@ -135,11 +135,12 @@
 
 <script>
 $(function () {
-    let table = $('#dataTable').DataTable({
+    let table = $('#tabel_surat').DataTable({
         responsive: true,
         lengthChange: true,
-        autoWidth: false,
-        pageLength: 10
+        autoWidth: true,
+        pageLength: 10,
+        lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]]
     });
 
     $(document).on('click', '#selectAll', function () {

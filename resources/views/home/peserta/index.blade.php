@@ -22,23 +22,28 @@
                 <div class="card-header">
                     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center w-100">
                         <h3 class="card-title mb-2 mb-md-0">Daftar Peserta</h3>
-                        
-                        <div class="d-flex flex-column flex-md-row align-items-md-center gap-2">
-                            @can('admin')
-                                <a href="{{ route('peserta.export') }}" class="btn btn-primary btn-sm mr-2">
-                                    <i class="fas fa-file-excel"></i> Export
+                        <div class="col-md-6 text-md-right mt-2 mt-md-0">
+                            <div class="btn-group">
+                                @can('admin')
+                                    <a href="{{ route('peserta.export') }}"
+                                    class="btn btn-primary btn-sm">
+                                        <i class="fas fa-file-excel"></i> Export
+                                    </a>
+                                    <button type="button"
+                                            class="btn btn-success btn-sm"
+                                            data-toggle="modal"
+                                            data-target="#modalImport">
+                                        <i class="fas fa-file-import"></i> Import Excel
+                                    </button>
+                                @endcan
+                                <a href="{{ route('peserta.create') }}"
+                                class="btn btn-info btn-sm">
+                                    <i class="fas fa-user-plus"></i> Tambah Peserta
                                 </a>
-                                <button class="btn btn-sm btn-success mr-2" data-toggle="modal" data-target="#modalImport">
-                                    <i class="fas fa-file-import"></i> Import Excel
-                                </button>
-                            @endcan
-                            <a href="{{ route('peserta.create') }}" class="btn btn-info btn-sm">
-                                <i class="fas fa-user-plus"></i> Tambah Peserta
-                            </a>
+                            </div>
                         </div>
                     </div>
                 </div>
-
                 <div class="card-body">
                     <table id="tabelPeserta" class="table table-bordered table-striped">
                         <thead>
@@ -145,34 +150,9 @@
             responsive: true,
             lengthChange: true,
             autoWidth: true,
-            // buttons: [
-            //     {
-            //         extend: 'copyHtml5',
-            //         text: '<i class="fas fa-copy"></i> Copy',
-            //         className: 'btn btn-secondary btn-sm'
-            //     },
-            //     {
-            //         extend: 'excelHtml5',
-            //         text: '<i class="fas fa-file-excel"></i> Excel',
-            //         className: 'btn btn-success btn-sm'
-            //     },
-            //     {
-            //         extend: 'csvHtml5',
-            //         text: '<i class="fas fa-file-csv"></i> CSV',
-            //         className: 'btn btn-info btn-sm'
-            //     },
-            //     {
-            //         extend: 'pdfHtml5',
-            //         text: '<i class="fas fa-file-pdf"></i> PDF',
-            //         className: 'btn btn-danger btn-sm'
-            //     },
-            //     {
-            //         extend: 'print',
-            //         text: '<i class="fas fa-print"></i> Print',
-            //         className: 'btn btn-primary btn-sm'
-            //     }
-            // ],
-        }).buttons().container().appendTo('#tabelPeserta_wrapper .col-md-6:eq(0)');
+            pageLength: 10,
+            lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]]
+        });
     });
 
     $(document).on('click', '.btn-konfirmasi-hapus', function (e) {

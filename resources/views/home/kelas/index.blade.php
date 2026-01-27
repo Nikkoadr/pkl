@@ -18,12 +18,6 @@
                 <div class="col-sm-6">
                     <h1>Manajemen Kelas</h1>
                 </div>
-                <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">Kelas</li>
-                    </ol>
-                </div>
             </div>
         </div>
     </section>
@@ -120,7 +114,9 @@
             responsive: true,
             lengthChange: true,
             autoWidth: true,
-        }).buttons().container().appendTo('#tabel_kelas_wrapper .col-md-6:eq(0)');
+            pageLength: 10,
+            lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]]
+        });
     });
 
     $(document).on('click', '.btn-konfirmasi-hapus', function (e) {

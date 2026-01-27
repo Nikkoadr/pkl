@@ -17,12 +17,6 @@
                 <div class="col-sm-6">
                     <h1>Manajemen Tahun Ajaran</h1>
                 </div>
-                <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="#">Home</a></li>
-                        <li class="breadcrumb-item active">Tahun Ajaran</li>
-                    </ol>
-                </div>
             </div>
         </div>
     </section>
@@ -42,7 +36,7 @@
                 </div>
 
                 <div class="card-body">
-                    <table id="tahun-ajaran-table" class="table table-bordered table-striped">
+                    <table id="tabel_tahun_ajaran" class="table table-bordered table-striped">
                         <thead>
                             <tr>
                                 <th style="width: 5%">No</th>
@@ -92,20 +86,12 @@
 
 <script>
 $(function () {
-    const table = $('#tahun-ajaran-table').DataTable({
+    const table = $('#tabel_tahun_ajaran').DataTable({
         responsive: true,
-        autoWidth: false,
-        language: {
-            search: "Cari:",
-            lengthMenu: "Tampilkan _MENU_ data",
-            zeroRecords: "Data tidak ditemukan",
-            info: "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
-            infoEmpty: "Tidak ada data tersedia",
-            paginate: {
-                previous: "Sebelumnya",
-                next: "Berikutnya"
-            }
-        }
+        lengthChange: true,
+        autoWidth: true,
+        pageLength: 10,
+        lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]]
     });
 
     // Delete confirmation

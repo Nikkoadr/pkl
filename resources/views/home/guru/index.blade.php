@@ -22,17 +22,20 @@
                 <div class="card-header">
                     <div class="d-flex justify-content-between align-items-center w-100">
                         <h3 class="card-title mb-0">Daftar Guru</h3>
-                        <div>
-                            <button class="btn btn-sm btn-success mr-2" data-toggle="modal" data-target="#modalImport">
+                        <div class="btn-group">
+                            <button type="button"
+                                    class="btn btn-success btn-sm"
+                                    data-toggle="modal"
+                                    data-target="#modalImport">
                                 <i class="fas fa-file-import"></i> Import Excel
                             </button>
-                            <a href="{{ route('guru.create') }}" class="btn btn-sm btn-primary">
+                            <a href="{{ route('guru.create') }}"
+                            class="btn btn-primary btn-sm">
                                 <i class="fas fa-plus"></i> Tambah Guru
                             </a>
                         </div>
                     </div>
                 </div>
-
                 <div class="card-body">
                     <table id="tabelGuru" class="table table-bordered table-striped">
                         <thead>
@@ -124,7 +127,9 @@
             responsive: true,
             lengthChange: true,
             autoWidth: true,
-        }).buttons().container().appendTo('#tabelGuru_wrapper .col-md-6:eq(0)');
+            pageLength: 10,
+            lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]]
+        });
     });
 
     $(document).on('click', '.btn-konfirmasi-hapus', function (e) {
