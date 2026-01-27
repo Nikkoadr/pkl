@@ -11,6 +11,8 @@ use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Gate;
 use App\Models\Kompetensi_keahlian;
 use App\Models\Guru_pembimbing;
+use App\Exports\DudiExport;
+use Illuminate\Support\Carbon;
 
 class DudiController extends Controller
 {
@@ -94,6 +96,12 @@ class DudiController extends Controller
         Excel::import(new DudiImport, $request->file('file'));
 
         return redirect()->back()->with('success', 'Import berhasil!');
+    }
+
+    public function export()
+    {
+        $tanggal = Carbon::now()->format('Y-m-d');
+        return Excel::download(new DudiExport, 'dudi_' . $tanggal . '.xlsx');
     }
 
     public function edit($id)

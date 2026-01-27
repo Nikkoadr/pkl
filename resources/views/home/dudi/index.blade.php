@@ -26,6 +26,9 @@
                         </div>
                         <div class="col-md-6 text-right">
                             @can('admin')
+                                <a href="{{ route('dudi.export') }}" class="btn btn-primary btn-sm mr-2">
+                                    <i class="fas fa-file-excel"></i> Export
+                                </a>
                             <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalImport">
                                 <i class="fas fa-file-import"></i> Import Excel
                             </button>
