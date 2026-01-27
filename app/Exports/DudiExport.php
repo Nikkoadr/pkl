@@ -42,13 +42,17 @@ class DudiExport implements FromCollection, WithHeadings
 
         return $query->get()->map(function ($dudi) {
             return [
-                'nama_dudi'          => $dudi->nama_dudi ?? '-',
-                'alamat_dudi'        => $dudi->alamat_dudi ?? '-',
-                'no_telp_dudi'       => "'" . ($dudi->no_telp_dudi ?? '-'),
-                'jabatan_pimpinan'   => $dudi->jabatan_pimpinan ?? '-',
-                'nomor_kepegawaian'  => "'" . ($dudi->nomor_kepegawaian ?? '-'),
-                'nama_pimpinan_dudi' => $dudi->nama_pimpinan_dudi ?? '-',
-                'kuota'              => $dudi->kuota ?? '-',
+                'nama_dudi'          => $dudi->nama_dudi,
+                'alamat_dudi'        => $dudi->alamat_dudi,
+                'no_telp_dudi'       => $dudi->no_telp_dudi
+                    ? "'" . $dudi->no_telp_dudi
+                    : null,
+                'jabatan_pimpinan'   => $dudi->jabatan_pimpinan,
+                'nomor_kepegawaian'  => $dudi->nomor_kepegawaian
+                    ? "'" . $dudi->nomor_kepegawaian
+                    : null,
+                'nama_pimpinan_dudi' => $dudi->nama_pimpinan_dudi,
+                'kuota'              => $dudi->kuota,
             ];
         });
     }
