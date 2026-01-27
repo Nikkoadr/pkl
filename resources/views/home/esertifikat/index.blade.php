@@ -163,6 +163,8 @@
             responsive: true,
             lengthChange: true,
             autoWidth: true,
+            pageLength: -1,
+            lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]]
         });
     });
 
@@ -245,9 +247,7 @@
             }
         });
     });
-
     $('#btnDepan').on('click', function () {
-
     if (selectedIds.length === 0) {
         Swal.fire({
             icon: 'warning',
@@ -256,12 +256,9 @@
         });
         return;
     }
-
     $('#idsCetakDepan').val(selectedIds.join(','));
     $('#formCetakDepan').submit();
 });
-
-
 $('#btnBelakang').on('click', function () {
 
     if (selectedIds.length === 0) {
@@ -276,7 +273,6 @@ $('#btnBelakang').on('click', function () {
     $('#idsCetakBelakang').val(selectedIds.join(','));
     $('#formCetakBelakang').submit();
 });
-
 </script>
 
 @endsection
