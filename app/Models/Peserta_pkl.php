@@ -8,7 +8,7 @@ class Peserta_pkl extends Model
 {
     protected $table = 'peserta_pkl';
 
-    protected $guarded = [];
+    protected $fillable = ['dudi_id', 'peserta_id'];
 
     public function dudi()
     {

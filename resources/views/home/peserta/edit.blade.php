@@ -1,6 +1,8 @@
 @extends('layouts.master')
 @section('title', 'Edit Peserta')
-
+@section('link')
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+@endsection
 @section('content')
 <div class="content-wrapper">
     <section class="content-header">
@@ -16,9 +18,7 @@
                 <form action="{{ route('peserta.update', $peserta->id) }}" method="POST">
                     @csrf
                     @method('PUT')
-
                     <div class="card-body row">
-
                         {{-- Nama --}}
                         <div class="form-group col-md-6">
                             <label>Nama Lengkap</label>
@@ -47,12 +47,12 @@
                             <select name="jenis_kelamin"
                                 class="form-control @error('jenis_kelamin') is-invalid @enderror">
                                 <option value="">-- Pilih --</option>
-                                <option value="1"
-                                    {{ old('jenis_kelamin', $peserta->user->jenis_kelamin) == 1 ? 'selected' : '' }}>
+                                <option value="Laki-laki"
+                                    {{ old('jenis_kelamin', $peserta->user->jenis_kelamin) == 'Laki-laki' ? 'selected' : '' }}>
                                     Laki-laki
                                 </option>
-                                <option value="2"
-                                    {{ old('jenis_kelamin', $peserta->user->jenis_kelamin) == 2 ? 'selected' : '' }}>
+                                <option value="Perempuan"
+                                    {{ old('jenis_kelamin', $peserta->user->jenis_kelamin) == 'Perempuan' ? 'selected' : '' }}>
                                     Perempuan
                                 </option>
                             </select>
@@ -168,7 +168,25 @@
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
+                        <div class="form-group col-md-12">
+                            <label for="nama_dudi">Nama DUDI</label>
 
+                            <input type="text"
+                                class="form-control @error('dudi_id') is-invalid @enderror"
+                                id="nama_dudi"
+                                value="{{ $peserta->peserta_pkl->dudi->nama_dudi ?? '' }}">
+
+                            <input type="hidden"
+                                name="dudi_id"
+                                id="dudi_id"
+                                value="{{ $peserta->peserta_pkl->dudi_id ?? '' }}">
+
+                            @error('dudi_id')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
                     </div>
 
                     <div class="card-footer">
@@ -184,4 +202,25 @@
         </div>
     </section>
 </div>
+@endsection
+@section('scripts')
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>
+$(function() {
+    function setupAutocomplete(selector, hiddenSelector, url) {
+        $(selector).autocomplete({
+            source: url,
+            minLength: 2,
+            select: function(event, ui) {
+                $(selector).val(ui.item.label);
+                $(hiddenSelector).val(ui.item.id);
+                return false;
+            }
+        });
+    }
+
+    setupAutocomplete("#nama_peserta", "#peserta_id", "/autocomplete/peserta");
+    setupAutocomplete("#nama_dudi", "#dudi_id", "/autocomplete/dudi");
+});
+</script>
 @endsection

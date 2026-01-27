@@ -14,6 +14,9 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Kaprodi;
 use App\Jobs\ImportPesertaJob;
 use App\Models\Dudi;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\PesertaExport;
+use Illuminate\Support\Carbon;
 
 class PersertaController extends Controller
 {
@@ -44,10 +47,9 @@ class PersertaController extends Controller
         }
 
         if (Gate::allows('admin')) {
-            $peserta = Peserta::with(['tahun_ajaran', 'kelas.kompetensi', 'user'])
+            $peserta = Peserta::with(['tahun_ajaran', 'kelas.kompetensi', 'user', 'peserta_pkl.dudi'])
                 ->where('tahun_ajaran_id', $tahunAktif->id)
                 ->get();
-
             return view('home.peserta.index', compact('peserta', 'tahunAktif'));
         }
 
@@ -57,7 +59,7 @@ class PersertaController extends Controller
 
             if (!$kaprodi) abort(403, 'Anda tidak terdaftar sebagai kaprodi');
 
-            $peserta = Peserta::with(['tahun_ajaran', 'kelas.kompetensi', 'user'])
+            $peserta = Peserta::with(['tahun_ajaran', 'kelas.kompetensi', 'user', 'peserta_pkl.dudi'])
                 ->where('tahun_ajaran_id', $tahunAktif->id)
                 ->whereHas('kelas', function ($q) use ($kaprodi) {
                     $q->where('kompetensi_keahlian_id', $kaprodi->kompetensi_keahlian_id);
@@ -97,9 +99,9 @@ class PersertaController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'nama' => 'required|string|max:255',
+            'nama' => 'required|string|max:100',
             'jenis_kelamin' => 'required|in:1,2',
-            'tempat_lahir' => 'nullable|string|max:255',
+            'tempat_lahir' => 'nullable|string|max:50',
             'tanggal_lahir' => 'required|date',
             'email' => 'required|email|unique:users,email',
             'no_telp' => 'required|string|max:15',
@@ -138,6 +140,18 @@ class PersertaController extends Controller
         return redirect()->route('peserta.index')->with('success', 'Peserta berhasil ditambahkan.');
     }
 
+    // public function import(Request $request)
+    // {
+    //     $file = $request->file('file');
+
+    //     $filename = 'peserta_' . time() . '.' . $file->getClientOriginalExtension();
+    //     $path = $file->storeAs('imports', $filename, 'public');
+
+    //     ImportPesertaJob::dispatch($path);
+
+    //     return back()->with('success', 'Proses import sedang dijalankan di background.');
+    // } dengan job
+
     public function import(Request $request)
     {
         $file = $request->file('file');
@@ -145,9 +159,16 @@ class PersertaController extends Controller
         $filename = 'peserta_' . time() . '.' . $file->getClientOriginalExtension();
         $path = $file->storeAs('imports', $filename, 'public');
 
-        ImportPesertaJob::dispatch($path);
+        // Jalankan import secara langsung tanpa job
+        Excel::import(new \App\Imports\PesertaImport, storage_path('app/public/' . $path));
 
-        return back()->with('success', 'Proses import sedang dijalankan di background.');
+        return back()->with('success', 'Import peserta berhasil dilakukan.');
+    }
+
+    public function export()
+    {
+        $tanggal = Carbon::now()->format('Y-m-d');
+        return Excel::download(new PesertaExport, 'peserta_pkl_' . $tanggal . '.xlsx');
     }
 
     public function edit($id)
@@ -161,11 +182,11 @@ class PersertaController extends Controller
 
     public function update(Request $request, $id)
     {
-        $peserta = Peserta::with('user')->findOrFail($id);
+        $peserta = Peserta::with('user', 'peserta_pkl')->findOrFail($id);
 
         $request->validate([
             'nama' => 'required|string|max:255',
-            'jenis_kelamin' => 'required|in:1,2',
+            'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
             'tempat_lahir' => 'nullable|string|max:255',
             'email' => 'required|email|unique:users,email,' . $peserta->user->id,
             'no_telp' => 'nullable|string|max:15',
@@ -175,29 +196,30 @@ class PersertaController extends Controller
             'nisn' => 'required|string|max:50',
             'kelas_id' => 'required|exists:kelas,id',
             'tahun_ajaran_id' => 'required|exists:tahun_ajaran,id',
+            'dudi_id' => 'required|exists:dudi,id',
         ]);
 
-        $dataUser = [
-            'nama' => $request->nama,
-            'jenis_kelamin' => $request->jenis_kelamin,
-            'tempat_lahir' => $request->tempat_lahir,
-            'tanggal_lahir' => $request->tanggal_lahir,
-            'email' => $request->email,
-            'no_telp' => $request->no_telp,
-        ];
+        $dataUser = $request->only([
+            'nama',
+            'jenis_kelamin',
+            'tempat_lahir',
+            'tanggal_lahir',
+            'email',
+            'no_telp',
+        ]);
 
         if ($request->filled('password')) {
             $dataUser['password'] = Hash::make($request->password);
         }
-
         $peserta->user->update($dataUser);
+        $peserta->update(
+            $request->only(['nis', 'nisn', 'kelas_id', 'tahun_ajaran_id'])
+        );
 
-        $peserta->update([
-            'nis' => $request->nis,
-            'nisn' => $request->nisn,
-            'kelas_id' => $request->kelas_id,
-            'tahun_ajaran_id' => $request->tahun_ajaran_id,
-        ]);
+        Peserta_pkl::updateOrCreate(
+            ['peserta_id' => $peserta->id],
+            ['dudi_id' => $request->dudi_id]
+        );
 
         return redirect()
             ->route('peserta.index')

@@ -100,28 +100,11 @@
                             <p>Peserta</p>
                         </a>
                     </li>
-                    <li class="nav-item {{ request()->is('home/peserta_pkl','home/surat') ? 'menu-open' : '' }}">
-                        <a href="#" class="nav-link {{ request()->is('home/peserta_pkl','home/surat') ? 'active' : '' }}">
-                            <i class="nav-icon fa-solid fa-map-location-dot"></i>
-                            <p>
-                                PKL
-                                <i class="right fas fa-angle-left"></i>
-                            </p>
+                    <li class="nav-item">
+                        <a href="/home/surat" class="nav-link {{ request()->is('home/surat') ? 'active' : '' }}">
+                            <i class="nav-icon fa-solid fa-envelopes-bulk"></i>
+                            <p>Surat</p>
                         </a>
-                        <ul class="nav nav-treeview">
-                            <li class="nav-item">
-                                <a href="/home/peserta_pkl" class="nav-link {{ request()->is('home/peserta_pkl') ? 'active' : '' }}">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Peserta PKL</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="/home/surat" class="nav-link {{ request()->is('home/surat') ? 'active' : '' }}">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Surat</p>
-                                </a>
-                            </li>
-                        </ul>
                     </li>
                     <li class="nav-item {{ request()->is('home/logbook','home/nilai_pkl','home/nilai_sidang') ? 'menu-open' : '' }}">
                         <a href="#" class="nav-link {{ request()->is('home/logbook','home/nilai_pkl','home/nilai_sidang') ? 'active' : '' }}">
@@ -212,28 +195,11 @@
                             <p>Peserta</p>
                         </a>
                     </li>
-                    <li class="nav-item {{ request()->is('home/peserta_pkl','home/surat') ? 'menu-open' : '' }}">
-                        <a href="#" class="nav-link {{ request()->is('home/peserta_pkl','home/surat') ? 'active' : '' }}">
-                            <i class="nav-icon fa-solid fa-map-location-dot"></i>
-                            <p>
-                                PKL
-                                <i class="right fas fa-angle-left"></i>
-                            </p>
+                    <li class="nav-item">
+                        <a href="/home/surat" class="nav-link {{ request()->is('home/surat') ? 'active' : '' }}">
+                            <i class="nav-icon fa-solid fa-envelopes-bulk"></i>
+                            <p>Surat</p>
                         </a>
-                        <ul class="nav nav-treeview">
-                            <li class="nav-item">
-                                <a href="/home/peserta_pkl" class="nav-link {{ request()->is('home/peserta_pkl') ? 'active' : '' }}">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Peserta PKL</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="/home/surat" class="nav-link {{ request()->is('home/surat') ? 'active' : '' }}">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Surat</p>
-                                </a>
-                            </li>
-                        </ul>
                     </li>
                     <li class="nav-item {{ request()->is('home/logbook','home/nilai_pkl','home/nilai_sidang') ? 'menu-open' : '' }}">
                         <a href="#" class="nav-link {{ request()->is('home/logbook','home/nilai_pkl','home/nilai_sidang') ? 'active' : '' }}">
@@ -295,30 +261,12 @@
                             </li>
                         </ul>
                     </li>
-                    <li class="nav-item {{ request()->is('home/peserta_pkl','home/surat') ? 'menu-open' : '' }}">
-                        <a href="#" class="nav-link {{ request()->is('home/peserta_pkl','home/surat') ? 'active' : '' }}">
-                            <i class="nav-icon fa-solid fa-map-location-dot"></i>
-                            <p>
-                                PKL
-                                <i class="right fas fa-angle-left"></i>
-                            </p>
+                    <li class="nav-item">
+                        <a href="/home/surat" class="nav-link {{ request()->is('home/surat') ? 'active' : '' }}">
+                            <i class="nav-icon fa-solid fa-envelopes-bulk"></i>
+                            <p>Surat</p>
                         </a>
-                        <ul class="nav nav-treeview">
-                            <li class="nav-item">
-                                <a href="/home/peserta_pkl" class="nav-link {{ request()->is('home/peserta_pkl') ? 'active' : '' }}">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Peserta PKL</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="/home/surat" class="nav-link {{ request()->is('home/surat') ? 'active' : '' }}">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Surat</p>
-                                </a>
-                            </li>
-                        </ul>
                     </li>
-
                     <li class="nav-item {{ request()->is('home/logbook','home/nilai_pkl','home/nilai_sidang') ? 'menu-open' : '' }}">
                         <a href="#" class="nav-link {{ request()->is('home/logbook','home/nilai_pkl','home/nilai_sidang') ? 'active' : '' }}">
                             <i class="nav-icon fa-solid fa-book"></i>

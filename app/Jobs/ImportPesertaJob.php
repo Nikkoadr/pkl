@@ -15,21 +15,25 @@ class ImportPesertaJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $path;
+    protected string $path;
 
-    public function __construct($path)
+    public function __construct(string $path)
     {
-        $this->path = $path;
+        $this->path = ltrim($path, '/');
     }
 
     public function handle()
     {
-        $path = ltrim($this->path, '/');
+        $fullPath = storage_path('app/public/' . $this->path);
 
-        Excel::import(new PesertaImport, storage_path('app/public/' . $path));
+        Excel::queueImport(
+            new PesertaImport,
+            $fullPath
+        );
 
-        if (Storage::disk('public')->exists($path)) {
-            Storage::disk('public')->delete($path);
+
+        if (Storage::disk('public')->exists($this->path)) {
+            Storage::disk('public')->delete($this->path);
         }
     }
 }

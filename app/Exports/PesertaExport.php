@@ -12,7 +12,7 @@ use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Carbon\Carbon;
 
-class Peserta_pklExport implements FromCollection, WithHeadings
+class PesertaExport implements FromCollection, WithHeadings
 {
     public function collection()
     {
@@ -22,9 +22,6 @@ class Peserta_pklExport implements FromCollection, WithHeadings
             'peserta_pkl.dudi'
         ]);
 
-        // ============================
-        // ROLE PRODI
-        // ============================
         if (Gate::allows('prodi')) {
 
             $guru = $this->getCurrentGuru();
@@ -38,9 +35,6 @@ class Peserta_pklExport implements FromCollection, WithHeadings
             });
         }
 
-        // ============================
-        // ROLE GURU PEMBIMBING
-        // ============================
         if (Gate::allows('guru_pembimbing')) {
 
             $guru = $this->getCurrentGuru();
@@ -61,13 +55,14 @@ class Peserta_pklExport implements FromCollection, WithHeadings
                 'nis'               => "'" . ($peserta->nis ?? '-'),
                 'nisn'              => "'" . ($peserta->nisn ?? '-'),
                 'nama'              => optional($peserta->user)->nama ?? '-',
+                'jenis_kelamin'     => optional($peserta->user)->jenis_kelamin ?? '-',
                 'tempat_lahir'      => optional($peserta->user)->tempat_lahir ?? '-',
                 'tanggal_lahir'     => optional($peserta->user)->tanggal_lahir
                     ? Carbon::parse($peserta->user->tanggal_lahir)->translatedFormat('d F Y')
                     : '-',
+                'no_telp'           => optional($peserta->user)->no_telp ?? '-',
                 'kelas'             => optional($peserta->kelas)->nama_kelas ?? '-',
 
-                // ======= DATA DUDI LENGKAP =======
                 'nama_dudi'         => $dudi->nama_dudi ?? 'Belum memiliki DUDI',
                 'alamat_dudi'       => $dudi->alamat_dudi ?? '-',
                 'no_telp_dudi'      => "'" . ($dudi->no_telp_dudi ?? '-'),
@@ -89,11 +84,12 @@ class Peserta_pklExport implements FromCollection, WithHeadings
             'NIS',
             'NISN',
             'Nama',
+            'Jenis Kelamin',
             'Tempat Lahir',
             'Tanggal Lahir',
             'Kelas',
+            'No. Telp',
 
-            // ===== HEADING DUDI =====
             'Nama DUDI',
             'Alamat DUDI',
             'No. Telp DUDI',

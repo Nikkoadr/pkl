@@ -25,6 +25,9 @@
                         
                         <div class="d-flex flex-column flex-md-row align-items-md-center gap-2">
                             @can('admin')
+                                <a href="{{ route('peserta.export') }}" class="btn btn-primary btn-sm mr-2">
+                                    <i class="fas fa-file-excel"></i> Export
+                                </a>
                                 <button class="btn btn-sm btn-success mr-2" data-toggle="modal" data-target="#modalImport">
                                     <i class="fas fa-file-import"></i> Import Excel
                                 </button>
@@ -41,9 +44,10 @@
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Info (Tahun / NISN / NIS / Email)</th>
+                                <th>Info (Tahun / NISN / NIS / Email / No Telp / Jenis Kelamin)</th>
                                 <th>Nama</th>
                                 <th>Kelas</th>
+                                <th>DUDI</th>
                                 <th data-orderable="false" class="text-center">Aksi</th>
                             </tr>
                         </thead>
@@ -58,11 +62,13 @@
                                     <div><b>NISN:</b> {{ $item->nisn ?? '-' }}</div>
                                     <div><b>NIS:</b> {{ $item->nis ?? '-' }}</div>
                                     <div><b>Email:</b> {{ $item->user->email ?? '-' }}</div>
+                                    <div><b>No Telp:</b> {{ $item->user->no_telp ?? '-' }}</div>
+                                    <div><b>Jenis Kelamin:</b> {{ $item->user->jenis_kelamin ?? '-' }}</div>
                                 </td>
 
                                 <td>{{ $item->user->nama ?? '-' }}</td>
                                 <td>{{ $item->kelas->nama_kelas ?? '-' }}</td>
-
+                                <td>{{ $item->peserta_pkl->dudi->nama_dudi ?? '-' }}</td>
                                 <td class="text-center">
                                     <a href="{{ route('peserta.edit', $item->id) }}" class="btn btn-primary btn-sm">
                                         <i class="fas fa-edit"></i>

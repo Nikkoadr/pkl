@@ -76,10 +76,10 @@ class ArsipExport implements FromCollection, WithHeadings
                 'nama'              => optional($peserta->user)->nama ?? '-',
                 'jenis_kelamin'     => optional($peserta->user)->jenis_kelamin ?? '-',
                 'tempat_lahir'      => optional($peserta->user)->tempat_lahir ?? '-',
-                // 'tanggal_lahir'     => optional($peserta->user)->tanggal_lahir
-                //     ? Carbon::parse($peserta->user->tanggal_lahir)->translatedFormat('d F Y')
-                //     : '-',
-                'tanggal_lahir' => $peserta->user->tanggal_lahir ?? null,
+                'tanggal_lahir'     => optional($peserta->user)->tanggal_lahir
+                    ? Carbon::parse($peserta->user->tanggal_lahir)->translatedFormat('d F Y')
+                    : '-',
+                // 'tanggal_lahir' => $peserta->user->tanggal_lahir ?? null,
                 'no_telp'           => optional($peserta->user)->no_telp ?? '-',
                 'kelas'             => optional($peserta->kelas)->nama_kelas ?? '-',
                 'nama_dudi'         => $dudi->nama_dudi ?? 'Belum memiliki DUDI',

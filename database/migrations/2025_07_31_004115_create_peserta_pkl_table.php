@@ -16,6 +16,8 @@ return new class extends Migration
             $table->foreignId('dudi_id')->constrained('dudi')->onDelete('cascade');
             $table->foreignId('peserta_id')->constrained('peserta')->onDelete('cascade');
             $table->timestamps();
+
+            $table->unique('peserta_id');
         });
     }
 

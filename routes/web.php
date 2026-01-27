@@ -44,10 +44,6 @@ Route::get('/home/dashboard', [HomeController::class, 'index'])->name('home.dash
 Route::get('/home/profil', [HomeController::class, 'profil'])->name('home.profil');
 Route::put('/home/profil/update', [HomeController::class, 'update_profil'])->name('home.profil.update');
 
-// Route::get('/home/peserta_pkl/export', [PesertaPklController::class, 'export'])->name('peserta_pkl.export');
-// Route::post('/home/peserta_pkl/import', [PesertaPklController::class, 'import'])->name('peserta_pkl.import');
-// Route::resource('/home/peserta_pkl', PesertaPklController::class);
-
 Route::get('/home/peserta/request_dudi', [PersertaController::class, 'request_dudi'])->name('peserta.request_dudi');
 Route::post('/home/peserta/store_request_dudi', [PersertaController::class, 'store_request_dudi'])->name('peserta.store_request_dudi');
 Route::post('/home/import_peserta', [PersertaController::class, 'import'])->name('peserta.import');
