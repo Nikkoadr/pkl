@@ -90,28 +90,27 @@ class AutoCompleteController extends Controller
         return response()->json($results);
     }
 
+    // public function autoCompletePeserta(Request $request)
+    // {
+    //     $term = $request->get('term');
+    //     $tahunAktif = tahunAktif();
 
-    public function autoCompletePeserta(Request $request)
-    {
-        $term = $request->get('term');
-        $tahunAktif = tahunAktif();
+    //     $peserta = Peserta::with('user')
+    //         ->where('tahun_ajaran_id', $tahunAktif->id)
+    //         ->whereHas('user', function ($query) use ($term) {
+    //             $query->where('nama', 'like', '%' . $term . '%');
+    //         })
+    //         ->get();
 
-        $peserta = Peserta::with('user')
-            ->where('tahun_ajaran_id', $tahunAktif->id)
-            ->whereHas('user', function ($query) use ($term) {
-                $query->where('nama', 'like', '%' . $term . '%');
-            })
-            ->get();
+    //     $results = $peserta->map(function ($item) {
+    //         return [
+    //             'id' => $item->id,
+    //             'label' => $item->user->nama,
+    //         ];
+    //     });
 
-        $results = $peserta->map(function ($item) {
-            return [
-                'id' => $item->id,
-                'label' => $item->user->nama,
-            ];
-        });
-
-        return response()->json($results);
-    }
+    //     return response()->json($results);
+    // }
 
     public function autoCompletePesertaPKL(Request $request)
     {

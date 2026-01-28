@@ -137,6 +137,7 @@ class EsertifikatController extends Controller
 
         return back()->with('success', "E-sertifikat berhasil dibuat: {$berhasil}, gagal: {$gagal} {$pesanGagal}");
     }
+
     public function index(Request $request)
     {
         $tahunAktif = tahunAktif();
@@ -153,14 +154,17 @@ class EsertifikatController extends Controller
         });
 
         // ================= ROLE PRODI =================
+        $kaprodi = null;
+
         if (Gate::allows('prodi')) {
             $user = Auth::user();
             $kaprodi = Kaprodi::where('guru_id', $user->guru->id)->first();
 
             if (!$kaprodi) {
-                abort(403);
+                abort(403, 'Anda bukan Kaprodi');
             }
 
+            // Batasi data esertifikat sesuai kompetensi kaprodi
             $query->whereHas('peserta_pkl.peserta.kelas', function ($q) use ($kaprodi) {
                 $q->where('kompetensi_keahlian_id', $kaprodi->kompetensi_keahlian_id);
             });
@@ -175,7 +179,7 @@ class EsertifikatController extends Controller
             });
         }
 
-        // Filter Kelas (hanya kalau kompetensi sudah dipilih)
+        // Filter Kelas
         if ($request->filled('kompetensi') && $request->filled('kelas')) {
             $query->whereHas('peserta_pkl.peserta.kelas', function ($q) use ($request) {
                 $q->where('id', $request->kelas);
@@ -217,8 +221,20 @@ class EsertifikatController extends Controller
         });
 
         // ================= DROPDOWN =================
-        $listKompetensi = Kompetensi_keahlian::orderBy('nama_kompetensi')->get();
 
+        // 🔹 Kompetensi
+        if (Gate::allows('prodi')) {
+            // Kaprodi → hanya kompetensinya sendiri
+            $listKompetensi = Kompetensi_keahlian::where(
+                'id',
+                $kaprodi->kompetensi_keahlian_id
+            )->get();
+        } else {
+            // Admin → semua
+            $listKompetensi = Kompetensi_keahlian::orderBy('nama_kompetensi')->get();
+        }
+
+        // 🔹 Kelas
         $listKelas = collect();
         if ($request->filled('kompetensi')) {
             $listKelas = Kelas::where('kompetensi_keahlian_id', $request->kompetensi)
