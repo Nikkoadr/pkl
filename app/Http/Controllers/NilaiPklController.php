@@ -131,7 +131,7 @@ class NilaiPklController extends Controller
             'nilai_kualitas_kerja' => 'required|integer|min:0|max:100',
             'nilai_inisiatif_kreatifitas' => 'required|integer|min:0|max:100',
             'nilai_perilaku' => 'required|integer|min:0|max:100',
-            'foto_bukti_nilai_pkl' => 'required|image|mimes:jpeg,png,jpg,gif|max:5120',
+            'foto_bukti_nilai_pkl' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120',
         ]);
 
         $data = $request->only([
@@ -162,8 +162,11 @@ class NilaiPklController extends Controller
 
         Nilai_pkl::create($data);
 
-        return redirect()->route('nilai_pkl.index')->with('success', 'Data nilai PKL berhasil ditambahkan.');
+        return redirect()
+            ->route('nilai_pkl.index')
+            ->with('success', 'Data nilai PKL berhasil ditambahkan.');
     }
+
 
     public function store_peserta(Request $request)
     {
@@ -181,7 +184,10 @@ class NilaiPklController extends Controller
             return back()->withErrors(['msg' => 'Data peserta tidak ditemukan.']);
         }
 
-        $peserta_pkl = Peserta_pkl::where('peserta_id', $peserta->id)->latest()->first();
+        $peserta_pkl = Peserta_pkl::where('peserta_id', $peserta->id)
+            ->latest()
+            ->first();
+
         if (!$peserta_pkl) {
             return back()->withErrors(['msg' => 'Anda belum terdaftar PKL.']);
         }
@@ -216,8 +222,11 @@ class NilaiPklController extends Controller
 
         Nilai_pkl::create($data);
 
-        return redirect()->route('nilai_pkl.index')->with('success', 'Data nilai PKL berhasil ditambahkan.');
+        return redirect()
+            ->route('nilai_pkl.index')
+            ->with('success', 'Data nilai PKL berhasil ditambahkan.');
     }
+
 
     public function edit($id)
     {

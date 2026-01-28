@@ -47,7 +47,6 @@ class ImportFotoPesertaJob implements ShouldQueue
         $zip->extractTo($extractPath);
         $zip->close();
 
-        // === LOOP FILE (NON-REKURSIF) ===
         foreach (scandir($extractPath) as $file) {
             if (in_array($file, ['.', '..'])) {
                 continue;
@@ -63,7 +62,6 @@ class ImportFotoPesertaJob implements ShouldQueue
                 continue;
             }
 
-            // Nama file = NIS
             $nis = pathinfo($file, PATHINFO_FILENAME);
 
             $peserta = Peserta::where('nis', $nis)->first();
@@ -74,7 +72,6 @@ class ImportFotoPesertaJob implements ShouldQueue
             $user = $peserta->user;
             $filename = $nis . '.' . $ext;
 
-            // Hapus foto lama
             if (
                 $user->foto_profil &&
                 Storage::disk('public')->exists('foto_profil/' . $user->foto_profil)
@@ -82,20 +79,17 @@ class ImportFotoPesertaJob implements ShouldQueue
                 Storage::disk('public')->delete('foto_profil/' . $user->foto_profil);
             }
 
-            // Simpan foto baru
             Storage::disk('public')->putFileAs(
                 'foto_profil',
                 new File($fullFile),
                 $filename
             );
 
-            // Update DB
             $user->update([
                 'foto_profil' => $filename,
             ]);
         }
 
-        // === CLEANUP ===
         Storage::disk('public')->delete($this->path);
 
         foreach (glob($extractPath . '/*') as $file) {

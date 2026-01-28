@@ -158,17 +158,10 @@ class PesertaController extends Controller
         $request->validate([
             'zip_foto' => 'required|file|mimes:zip|max:204800',
         ]);
-
         $file = $request->file('zip_foto');
-
         $filename = 'foto_pkl_' . time() . '.zip';
-
-        // SIMPAN PERMANEN
         $path = $file->storeAs('imports', $filename, 'public');
-
-        // JALANKAN JOB
         ImportFotoPesertaJob::dispatch($path);
-
         return back()->with(
             'success',
             'Upload berhasil. Proses import foto sedang berjalan di background.'

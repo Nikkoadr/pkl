@@ -50,6 +50,49 @@
                     </div>
                 </div>
                 <div class="card-body">
+                <form method="GET" action="{{ route('logbook.index') }}">
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label>Konsentrasi Keahlian</label>
+                            <select name="kompetensi" class="form-control">
+                                <option value="">-- Semua --</option>
+                                @foreach ($listKompetensi as $k)
+                                    <option value="{{ $k->id }}"
+                                        {{ request('kompetensi') == $k->id ? 'selected' : '' }}>
+                                        {{ $k->nama_kompetensi }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label>Kelas</label>
+                            <select name="kelas" class="form-control"
+                                {{ request('kompetensi') ? '' : 'disabled' }}>
+                                <option value="">-- Semua --</option>
+                                @foreach ($listKelas as $kls)
+                                    <option value="{{ $kls->id }}"
+                                        {{ request('kelas') == $kls->id ? 'selected' : '' }}>
+                                        {{ $kls->nama_kelas }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="col-md-2 d-flex align-items-end">
+                            <button class="btn btn-primary btn-block">
+                                <i class="fas fa-filter"></i> Filter
+                            </button>
+                        </div>
+
+                        <div class="col-md-2 d-flex align-items-end">
+                            <a href="{{ route('logbook.index') }}"
+                            class="btn btn-secondary btn-block">
+                                <i class="fas fa-sync"></i> Reset
+                            </a>
+                        </div>
+                    </div>
+                </form>
                     <table id="tabelLogbook" class="table table-bordered table-striped">
                         <thead>
                             <tr>
