@@ -11,19 +11,14 @@
 @section('content')
 <div class="content-wrapper">
 
-    {{-- HEADER --}}
     <section class="content-header">
         <div class="container-fluid">
             <h1>Sertifikat PKL</h1>
         </div>
     </section>
-
-    {{-- CONTENT --}}
     <section class="content">
         <div class="container-fluid">
             <div class="card">
-
-                {{-- CARD HEADER --}}
                 <div class="card-header">
                     <div class="row align-items-center">
                         <div class="col-md-6">
@@ -44,7 +39,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="card-body">
                     <form method="GET" action="{{ route('esertifikat.index') }}">
                         <div class="row mb-3">
@@ -102,14 +96,10 @@
                         <tbody>
                             @foreach ($esertifikat as $row)
                             <tr id="row-{{ $row->id }}">
-                                {{-- Checkbox --}}
                                 <td>
                                     <input type="checkbox" class="selectItem" value="{{ $row->id }}">
                                 </td>
-
                                 <td>{{ $loop->iteration }}</td>
-
-                                {{-- Peserta --}}
                                 <td>
                                     <strong>{{ $row->nama ?? '-' }}</strong><br>
                                     <small class="text-muted">
@@ -123,13 +113,9 @@
                                         </small>
                                     </div>
                                 </td>
-
-                                {{-- DUDI --}}
                                 <td>
                                     {{ $row->nama_dudi ?? '-' }}
                                 </td>
-
-                                {{-- Nilai --}}
                                 <td>
                                     <ul class="mb-0 pl-3">
                                         <li>Rata-rata Sikap: {{ $row->rata_rata_sikap ?? '-' }}</li>
@@ -137,8 +123,6 @@
                                         <li>Nilai Akhir: {{ $row->nilai_akhir ?? '-' }}</li>
                                     </ul>
                                 </td>
-
-                                {{-- Cetak --}}
                                 <td class="text-center align-middle">
                                     <a href="{{ route('cetak.esertifikat_depan', $row->id) }}"
                                     class="btn btn-info btn-sm mr-1 mb-1"
@@ -153,8 +137,6 @@
                                         <i class="fas fa-envelope-open-text"></i>
                                     </a>
                                 </td>
-
-                                {{-- Aksi --}}
                                 <td class="text-center align-middle">
                                     <form action="{{ route('esertifikat.destroy', $row->id) }}"
                                         method="POST"
@@ -172,18 +154,18 @@
                             @endforeach
                         </tbody>
                     </table>
-                    <form id="formCetakDepan"
-                          action="{{ route('cetak.esertifikat-depan-massal') }}"
-                          method="POST" target="_blank" hidden>
-                        @csrf
-                        <input type="hidden" name="ids" id="idsCetakDepan">
-                    </form>
-                    <form id="formCetakBelakang"
-                          action="{{ route('cetak.esertifikat-belakang-massal') }}"
-                          method="POST" target="_blank" hidden>
-                        @csrf
-                        <input type="hidden" name="ids" id="idsCetakBelakang">
-                    </form>
+                        <form id="formCetakDepan"
+                            action="{{ route('cetak.esertifikat-depan-massal') }}"
+                            method="POST" target="_blank" hidden>
+                            @csrf
+                            <input type="hidden" name="ids" id="idsCetakDepan">
+                        </form>
+                        <form id="formCetakBelakang"
+                            action="{{ route('cetak.esertifikat-belakang-massal') }}"
+                            method="POST" target="_blank" hidden>
+                            @csrf
+                            <input type="hidden" name="ids" id="idsCetakBelakang">
+                        </form>
                 </div>
             </div>
         </div>

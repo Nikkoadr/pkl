@@ -29,7 +29,7 @@
                 </div>
 
                 <div class="card-body">
-                    <table id="dataTable" class="table table-bordered table-striped">
+                    <table id="tabel_arsip" class="table table-bordered table-striped">
                         <thead>
                             <tr>
                                 <th style="width:60px;">No</th>
@@ -72,11 +72,12 @@
 
 <script>
 $(function () {
-    $('#dataTable').DataTable({
+    $('#tabel_arsip').DataTable({
         responsive: true,
         lengthChange: true,
-        autoWidth: false,
-        pageLength: 10
+        autoWidth: true,
+        pageLength: 10,
+        lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]]
     });
 });
 </script>
