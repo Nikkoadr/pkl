@@ -319,7 +319,6 @@ class NilaiPklController extends Controller
         return redirect()->route('nilai_pkl.index')->with('success', 'Data nilai PKL berhasil diperbarui.');
     }
 
-
     public function destroy($id)
     {
         $nilai_pkl = Nilai_pkl::findOrFail($id);

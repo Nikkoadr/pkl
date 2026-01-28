@@ -35,7 +35,7 @@
                                                 class="btn btn-info btn-sm"
                                                 data-toggle="modal"
                                                 data-target="#modalImport">
-                                            <i class="fas fa-file-import"></i> Import Excel
+                                            <i class="fas fa-file-import"></i> Import DUDI
                                         </button>
                                     @endcan
 

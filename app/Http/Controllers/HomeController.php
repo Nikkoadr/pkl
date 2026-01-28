@@ -116,14 +116,15 @@ class HomeController extends Controller
 
         if ($user->peserta) {
             $rules = array_merge($rules, [
-                'nis' => 'nullable|string|max:50',
-                'nisn' => 'nullable|string|max:50',
+                'nis'      => 'nullable|string|max:50',
+                'nisn'     => 'nullable|string|max:50',
                 'kelas_id' => 'nullable|exists:kelas,id',
             ]);
         }
 
         $validated = $request->validate($rules);
 
+        // ================= UPDATE USER =================
         $user->fill([
             'nama'          => $validated['nama'],
             'jenis_kelamin' => $validated['jenis_kelamin'] ?? $user->jenis_kelamin,
@@ -136,28 +137,45 @@ class HomeController extends Controller
             $user->password = Hash::make($validated['password']);
         }
 
+        // ================= FOTO PROFIL =================
         if ($request->hasFile('foto_profil')) {
             $ext = $request->file('foto_profil')->getClientOriginalExtension();
-            $filename = Str::slug($user->nama) . '.' . $ext;
 
-            if (!empty($user->foto_profil) && Storage::disk('public')->exists('foto_profil/' . $user->foto_profil)) {
+            // 🔥 PESERTA → NIS | NON PESERTA → slug + user_id
+            if ($user->peserta && !empty($user->peserta->nis)) {
+                $filename = $user->peserta->nis . '.' . $ext;
+            } else {
+                $filename = Str::slug($user->nama) . '-' . $user->id . '.' . $ext;
+            }
+
+            // hapus foto lama
+            if (
+                $user->foto_profil &&
+                Storage::disk('public')->exists('foto_profil/' . $user->foto_profil)
+            ) {
                 Storage::disk('public')->delete('foto_profil/' . $user->foto_profil);
             }
 
-            $request->file('foto_profil')->storeAs('foto_profil', $filename, 'public');
+            // simpan foto (konsisten)
+            $request->file('foto_profil')
+                ->storeAs('foto_profil', $filename, 'public');
+
             $user->foto_profil = $filename;
         }
 
         $user->save();
 
+        // ================= UPDATE PESERTA =================
         if ($user->peserta) {
             $user->peserta()->update([
-                'nis' => $validated['nis'] ?? $user->peserta->nis,
-                'nisn' => $validated['nisn'] ?? $user->peserta->nisn,
+                'nis'      => $validated['nis'] ?? $user->peserta->nis,
+                'nisn'     => $validated['nisn'] ?? $user->peserta->nisn,
                 'kelas_id' => $validated['kelas_id'] ?? $user->peserta->kelas_id,
             ]);
         }
 
-        return redirect()->route('home.profil')->with('success', 'Profil berhasil diperbarui.');
+        return redirect()
+            ->route('home.profil')
+            ->with('success', 'Profil berhasil diperbarui.');
     }
 }

@@ -33,7 +33,13 @@
                                             class="btn btn-success btn-sm"
                                             data-toggle="modal"
                                             data-target="#modalImport">
-                                        <i class="fas fa-file-import"></i> Import Excel
+                                        <i class="fas fa-file-import"></i> Import Peserta
+                                    </button>
+                                    <button type="button"
+                                            class="btn btn-warning btn-sm"
+                                            data-toggle="modal"
+                                            data-target="#modalImportFoto">
+                                        <i class="fas fa-file-import"></i> Import Foto
                                     </button>
                                 @endcan
                                 <a href="{{ route('peserta.create') }}"
@@ -97,7 +103,10 @@
     </section>
 </div>
 @can('admin')
-    @include('home.peserta.import')
+    @include('home.peserta.import_peserta')
+@endcan
+@can('admin')
+    @include('home.peserta.import_foto_peserta')
 @endcan
 @endsection
 
@@ -148,36 +157,72 @@
     });
 </script>
 
-@if (session('success'))
-<script>
-    Swal.fire({
-        toast: true,
-        position: 'top-end',
-        icon: 'success',
-        title: '{{ session('success') }}',
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true
-    });
-</script>
-@endif
-
-@if ($errors->any())
-<script>
-    Swal.fire({
-        toast: true,
-        position: 'top-end',
-        icon: 'error',
-        title: 'Terjadi kesalahan validasi!',
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true
-    });
-</script>
-@endif
 <script>
 $(function () {
     bsCustomFileInput.init();
 });
 </script>
+{{-- SUCCESS --}}
+@if (session('success'))
+<script>
+Swal.fire({
+    toast: true,
+    position: 'top-end',
+    icon: 'success',
+    title: '{{ session('success') }}',
+    showConfirmButton: false,
+    timer: 3000,
+    timerProgressBar: true
+});
+</script>
+@endif
+
+{{-- WARNING --}}
+@if (session('warning'))
+<script>
+Swal.fire({
+    toast: true,
+    position: 'top-end',
+    icon: 'warning',
+    title: '{{ session('warning') }}',
+    showConfirmButton: false,
+    timer: 4000,
+    timerProgressBar: true
+});
+</script>
+@endif
+
+{{-- DETAIL GAGAL --}}
+@if (session('failed'))
+<script>
+Swal.fire({
+    icon: 'warning',
+    title: 'Data gagal diproses',
+    html: `
+        <div style="text-align:left;max-height:200px;overflow:auto">
+            <ul>
+                @foreach(session('failed') as $nis)
+                    <li>NIS {{ $nis }}</li>
+                @endforeach
+            </ul>
+        </div>
+    `,
+    confirmButtonText: 'OK'
+});
+</script>
+@endif
+
+{{-- ERROR --}}
+@if (session('error') || $errors->any())
+<script>
+Swal.fire({
+    toast: true,
+    position: 'top-end',
+    icon: 'error',
+    title: '{{ session('error') ?? 'Terjadi kesalahan validasi' }}',
+    showConfirmButton: false,
+    timer: 3000
+});
+</script>
+@endif
 @endsection

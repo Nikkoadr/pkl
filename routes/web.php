@@ -6,8 +6,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\DudiController;
 use App\Http\Controllers\GuruPembimbingController;
 use App\Http\Controllers\GuruController;
-use App\Http\Controllers\PersertaController;
-use App\Http\Controllers\PesertaPklController;
+use App\Http\Controllers\PesertaController;
 use App\Http\Controllers\SuratController;
 use App\Http\Controllers\EsertifikatController;
 use App\Http\Controllers\PengaturanController;
@@ -35,7 +34,7 @@ Route::prefix('autocomplete')->group(function () {
     Route::get('/users', [AutoCompleteController::class, 'autoCompleteUser']);
     Route::get('/guru', [AutoCompleteController::class, 'autoCompleteGuru']);
     Route::get('/guru_pembimbing', [AutoCompleteController::class, 'autoCompleteGuruPembimbing']);
-    Route::get('/peserta', [AutoCompleteController::class, 'autoCompletePeserta']);
+    // Route::get('/peserta', [AutoCompleteController::class, 'autoCompletePeserta']);
     Route::get('/peserta_pkl', [AutoCompleteController::class, 'autoCompletePesertaPKL']);
     Route::get('/kompetensi', [AutoCompleteController::class, 'autoCompleteKompetensi']);
 });
@@ -44,11 +43,12 @@ Route::get('/home/dashboard', [HomeController::class, 'index'])->name('home.dash
 Route::get('/home/profil', [HomeController::class, 'profil'])->name('home.profil');
 Route::put('/home/profil/update', [HomeController::class, 'update_profil'])->name('home.profil.update');
 
-Route::get('/home/peserta/request_dudi', [PersertaController::class, 'request_dudi'])->name('peserta.request_dudi');
-Route::post('/home/peserta/store_request_dudi', [PersertaController::class, 'store_request_dudi'])->name('peserta.store_request_dudi');
-Route::post('/home/import_peserta', [PersertaController::class, 'import'])->name('peserta.import');
-Route::get('/home/peserta/export', [PersertaController::class, 'export'])->name('peserta.export');
-Route::resource('/home/peserta', PersertaController::class);
+Route::get('/home/peserta/request_dudi', [PesertaController::class, 'request_dudi'])->name('peserta.request_dudi');
+Route::post('/home/peserta/store_request_dudi', [PesertaController::class, 'store_request_dudi'])->name('peserta.store_request_dudi');
+Route::post('/home/import_peserta', [PesertaController::class, 'import'])->name('peserta.import');
+Route::get('/home/peserta/export', [PesertaController::class, 'export'])->name('peserta.export');
+Route::resource('/home/peserta', PesertaController::class);
+Route::post('/admin/upload-foto-massal', [PesertaController::class, 'uploadFotoMassal'])->name('peserta.import_foto_peserta');
 
 Route::get('/home/logbook/cetak_rekap', [LogbookController::class, 'cetak_rekap'])->name('logbook.cetak.rekap');
 Route::post('/home/logbook/store_siswa', [LogbookController::class, 'store_siswa'])->name('logbook.store_siswa');

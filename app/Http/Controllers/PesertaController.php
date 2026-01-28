@@ -17,8 +17,9 @@ use App\Models\Dudi;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\PesertaExport;
 use Illuminate\Support\Carbon;
+use App\Jobs\ImportFotoPesertaJob;
 
-class PersertaController extends Controller
+class PesertaController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -140,18 +141,6 @@ class PersertaController extends Controller
         return redirect()->route('peserta.index')->with('success', 'Peserta berhasil ditambahkan.');
     }
 
-    // public function import(Request $request)
-    // {
-    //     $file = $request->file('file');
-
-    //     $filename = 'peserta_' . time() . '.' . $file->getClientOriginalExtension();
-    //     $path = $file->storeAs('imports', $filename, 'public');
-
-    //     ImportPesertaJob::dispatch($path);
-
-    //     return back()->with('success', 'Proses import sedang dijalankan di background.');
-    // } dengan job
-
     public function import(Request $request)
     {
         $file = $request->file('file');
@@ -159,10 +148,31 @@ class PersertaController extends Controller
         $filename = 'peserta_' . time() . '.' . $file->getClientOriginalExtension();
         $path = $file->storeAs('imports', $filename, 'public');
 
-        // Jalankan import secara langsung tanpa job
-        Excel::import(new \App\Imports\PesertaImport, storage_path('app/public/' . $path));
+        ImportPesertaJob::dispatch($path);
 
-        return back()->with('success', 'Import peserta berhasil dilakukan.');
+        return back()->with('success', 'Proses import sedang dijalankan di background.');
+    }
+
+    public function uploadFotoMassal(Request $request)
+    {
+        $request->validate([
+            'zip_foto' => 'required|file|mimes:zip|max:204800',
+        ]);
+
+        $file = $request->file('zip_foto');
+
+        $filename = 'foto_pkl_' . time() . '.zip';
+
+        // SIMPAN PERMANEN
+        $path = $file->storeAs('imports', $filename, 'public');
+
+        // JALANKAN JOB
+        ImportFotoPesertaJob::dispatch($path);
+
+        return back()->with(
+            'success',
+            'Upload berhasil. Proses import foto sedang berjalan di background.'
+        );
     }
 
     public function export()
