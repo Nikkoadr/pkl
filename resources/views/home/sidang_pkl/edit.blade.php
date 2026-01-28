@@ -12,31 +12,58 @@
         <h1>Nilai PKL Saya</h1>
     </section>
 
-    <section class="content">
-        <div class="card">
-            <div class="card-body">
-                <form action="{{ route('sidang_pkl.update', $nilai_sidang_pkl->id) }}" method="POST">
-                    @csrf
-                    @method('PUT')
-                    <div class="form-group">
-                        <label for="nilai_sidang_pkl">Nilai Sidang</label>
-                        <input type="number" name="nilai_sidang_pkl" id="nilai_sidang"
-                            class="form-control @error('nilai_sidang_pkl') is-invalid @enderror"
-                            value="{{ old('nilai_sidang_pkl', $nilai_sidang_pkl->nilai_sidang_pkl) }}" min="0" max="100"
-                            placeholder="Masukkan nilai sidang...">
-                        @error('nilai_sidang_pkl')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
+<section class="content">
+    <div class="card">
+        <div class="card-body">
+            <form action="{{ route('sidang_pkl.update', $nilai_sidang_pkl->id) }}" method="POST">
+                @csrf
+                @method('PUT')
 
-                    <a href="{{ route('sidang_pkl.index') }}" class="btn btn-secondary">Kembali</a>
-                    <button type="submit" class="btn btn-primary">Simpan</button>
+                {{-- Nama Peserta --}}
+                <div class="form-group">
+                    <label>Nama Peserta</label>
+                    <input type="text"
+                           class="form-control"
+                           value="{{ $nilai_sidang_pkl->peserta_pkl->peserta->user->nama ?? '-' }}"
+                           readonly>
+                </div>
 
-                </form>
+                {{-- Kelas --}}
+                <div class="form-group">
+                    <label>Kelas</label>
+                    <input type="text"
+                           class="form-control"
+                           value="{{ $nilai_sidang_pkl->peserta_pkl->peserta->kelas->nama_kelas ?? '-' }}"
+                           readonly>
+                </div>
 
-            </div>
+                {{-- Nilai Sidang --}}
+                <div class="form-group">
+                    <label for="nilai_sidang_pkl">Nilai Sidang</label>
+                    <input type="number"
+                           name="nilai_sidang_pkl"
+                           id="nilai_sidang_pkl"
+                           class="form-control @error('nilai_sidang_pkl') is-invalid @enderror"
+                           value="{{ old('nilai_sidang_pkl', $nilai_sidang_pkl->nilai_sidang_pkl) }}"
+                           min="0" max="100"
+                           placeholder="Masukkan nilai sidang...">
+
+                    @error('nilai_sidang_pkl')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <a href="{{ route('sidang_pkl.index') }}" class="btn btn-secondary">
+                    Kembali
+                </a>
+                <button type="submit" class="btn btn-primary">
+                    Simpan
+                </button>
+            </form>
         </div>
-    </section>
+    </div>
+</section>
+
 
 </div>
 @endsection

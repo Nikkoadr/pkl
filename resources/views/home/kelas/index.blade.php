@@ -52,11 +52,14 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $item->nama_kelas }}</td>
                                 <td>{{ $item->kompetensi->nama_kompetensi}}</td>
-                                <td>
-                                    <a href="{{ route('kelas.edit', $item->id) }}" class="btn btn-sm btn-warning">
+                                <td class="text-center">
+                                    <a href="{{ route('kelas.edit', $item->id) }}" class="btn btn-primary btn-sm">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <form action="{{ route('kelas.destroy', $item->id) }}" method="POST" class="d-inline form-hapus">
+
+                                    <form action="{{ route('kelas.destroy', $item->id) }}"
+                                        method="POST"
+                                        class="d-inline form-hapus">
                                         @csrf
                                         @method('DELETE')
                                         <button type="button" class="btn btn-danger btn-sm btn-konfirmasi-hapus">

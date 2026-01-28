@@ -42,7 +42,7 @@
                                 <th style="width: 5%">No</th>
                                 <th>Status</th>
                                 <th>Nama Tahun Ajaran</th>
-                                <th style="width: 20%">Aksi</th>
+                                <th data-orderable="false" class="text-center">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -51,16 +51,19 @@
                                     <td>{{ $loop->iteration }}</td>
                                     <td class="text-capitalize">{{ $item->status }}</td>
                                     <td>{{ $item->nama_tahun_ajaran }}</td>
-                                    <td>
-                                        <a href="{{ route('tahun_ajaran.edit', $item->id) }}" class="btn btn-warning btn-sm">
+                                    <td class="text-center">
+                                        <a href="{{ route('tahun_ajaran.edit', $item->id) }}" class="btn btn-primary btn-sm">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <button class="btn btn-danger btn-sm btn-delete" data-id="{{ $item->id }}">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                        <form id="delete-form-{{ $item->id }}" action="{{ route('tahun_ajaran.destroy', $item->id) }}" method="POST" style="display: none;">
+
+                                        <form action="{{ route('tahun_ajaran.destroy', $item->id) }}"
+                                            method="POST"
+                                            class="d-inline form-hapus">
                                             @csrf
                                             @method('DELETE')
+                                            <button type="button" class="btn btn-danger btn-sm btn-konfirmasi-hapus">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
                                         </form>
                                     </td>
                                 </tr>
@@ -94,21 +97,21 @@ $(function () {
         lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]]
     });
 
-    // Delete confirmation
-    $(document).on('click', '.btn-delete', function () {
-        const id = $(this).data('id');
+    $(document).on('click', '.btn-konfirmasi-hapus', function () {
+        const form = $(this).closest('form');
+
         Swal.fire({
             title: 'Apakah Anda yakin?',
-            text: "Data yang dihapus tidak dapat dikembalikan!",
+            text: 'Data yang dihapus tidak dapat dikembalikan!',
             icon: 'warning',
             showCancelButton: true,
+            confirmButtonText: 'Ya, hapus!',
+            cancelButtonText: 'Batal',
             confirmButtonColor: '#d33',
             cancelButtonColor: '#6c757d',
-            confirmButtonText: 'Ya, hapus!',
-            cancelButtonText: 'Batal'
         }).then((result) => {
             if (result.isConfirmed) {
-                document.getElementById('delete-form-' + id).submit();
+                form.submit();
             }
         });
     });

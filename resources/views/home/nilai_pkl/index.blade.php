@@ -70,13 +70,9 @@
                         <tr>
                             <th><input type="checkbox" id="checkAll"></th>
                             <th>No</th>
-                            <th>Nama Peserta</th>
-                            <th>Disiplin</th>
-                            <th>Kemajuan</th>
-                            <th>Kualitas</th>
-                            <th>Inisiatif</th>
-                            <th>Perilaku</th>
-                            <th>Sidang</th>
+                            <th>Peserta</th>
+                            <th>Nilai PKL</th>
+                            <th class="text-center">Sidang</th>
                             <th class="text-center" data-orderable="false">Aksi</th>
                         </tr>
                     </thead>
@@ -84,36 +80,79 @@
                         @foreach($nilai_pkl as $key => $nilai)
                         <tr>
                             <td>
-                                <input type="checkbox" name="selected_ids[]" value="{{ $nilai->id }}" form="formGenerateSertifikat" class="row-check">
+                                <input type="checkbox"
+                                    name="selected_ids[]"
+                                    value="{{ $nilai->id }}"
+                                    form="formGenerateSertifikat"
+                                    class="row-check">
                             </td>
+
                             <td>{{ $key + 1 }}</td>
-                            <td>{{ $nilai->peserta_pkl->peserta->user->nama ?? '-' }}</td>
-                            <td>{{ $nilai->nilai_disiplin_kerja }}</td>
-                            <td>{{ $nilai->nilai_kemajuan_kerja }}</td>
-                            <td>{{ $nilai->nilai_kualitas_kerja }}</td>
-                            <td>{{ $nilai->nilai_inisiatif_kreatifitas }}</td>
-                            <td>{{ $nilai->nilai_perilaku }}</td>
-                            <td>{{ $nilai->nilai_sidang_pkl }}</td>
+
+                            <td>
+                                <strong>
+                                    {{ $nilai->peserta_pkl->peserta->user->nama ?? '-' }}
+                                </strong><br>
+
+                                <small class="text-muted">
+                                    Kelas:
+                                    {{ $nilai->peserta_pkl->peserta->kelas->nama_kelas ?? '-' }}
+                                </small><br>
+
+                                <small class="text-muted">
+                                    DUDI:
+                                    {{ $nilai->peserta_pkl->dudi->nama_dudi ?? '-' }}
+                                </small>
+                            </td>
+
+                            <td>
+                                <ul class="mb-0 pl-3">
+                                    <li>Disiplin: {{ $nilai->nilai_disiplin_kerja }}</li>
+                                    <li>Kemajuan: {{ $nilai->nilai_kemajuan_kerja }}</li>
+                                    <li>Kualitas: {{ $nilai->nilai_kualitas_kerja }}</li>
+                                    <li>Inisiatif: {{ $nilai->nilai_inisiatif_kreatifitas }}</li>
+                                    <li>Perilaku: {{ $nilai->nilai_perilaku }}</li>
+                                </ul>
+                            </td>
+
                             <td class="text-center">
-                                <a href="{{ route('nilai_pkl.edit', $nilai->id) }}" class="btn btn-warning btn-sm">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                                <form action="{{ route('nilai_pkl.destroy', $nilai->id) }}" method="POST" class="d-inline form-delete">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
-                                </form>
-                                <form action="{{ route('esertifikat.generate', $nilai->id) }}" method="POST" class="d-inline">
-                                    @csrf
-                                    <button class="btn btn-success btn-sm">
-                                        <i class="fas fa-certificate"></i>
-                                    </button>
-                                </form>
+                                {{ $nilai->nilai_sidang_pkl }}
+                            </td>
+                            <td class="text-center align-middle">
+                                <div class="d-inline-flex">
+                                    <a href="{{ route('nilai_pkl.edit', $nilai->id) }}"
+                                    class="btn btn-primary btn-sm mr-1"
+                                    title="Edit">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+
+                                    <form action="{{ route('nilai_pkl.destroy', $nilai->id) }}"
+                                        method="POST"
+                                        class="mr-1">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="button"
+                                                class="btn btn-danger btn-sm btn-konfirmasi-hapus"
+                                                title="Hapus">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
+
+                                    <form action="{{ route('esertifikat.generate', $nilai->id) }}"
+                                        method="POST">
+                                        @csrf
+                                        <button class="btn btn-success btn-sm"
+                                                title="Generate Sertifikat">
+                                            <i class="fas fa-certificate"></i>
+                                        </button>
+                                    </form>
+                                </div>
                             </td>
                         </tr>
                         @endforeach
                     </tbody>
                 </table>
+
             </div>
         </div>
     </section>

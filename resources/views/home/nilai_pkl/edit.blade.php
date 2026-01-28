@@ -15,88 +15,134 @@
     <section class="content">
         <div class="card">
             <div class="card-body">
-
-                <form action="{{ route('nilai_pkl.update', $nilai_pkl->id) }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('nilai_pkl.update', $nilai_pkl->id) }}"
+                    method="POST"
+                    enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
 
+                    {{-- IDENTITAS PESERTA --}}
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Nama Peserta</label>
+                                <input type="text"
+                                    class="form-control"
+                                    value="{{ $nilai_pkl->peserta_pkl->peserta->user->nama ?? '-' }}"
+                                    readonly>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Kelas</label>
+                                <input type="text"
+                                    class="form-control"
+                                    value="{{ $nilai_pkl->peserta_pkl->peserta->kelas->nama_kelas ?? '-' }}"
+                                    readonly>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>DUDI</label>
+                                <input type="text"
+                                    class="form-control"
+                                    value="{{ $nilai_pkl->peserta_pkl->dudi->nama_dudi ?? '-' }}"
+                                    readonly>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    {{-- NILAI PKL --}}
                     <div class="form-group">
-                        <label for="nilai_disiplin_kerja">Nilai Disiplin Kerja</label>
-                        <input type="number" name="nilai_disiplin_kerja" id="nilai_disiplin_kerja"
+                        <label>Nilai Disiplin Kerja</label>
+                        <input type="number"
+                            name="nilai_disiplin_kerja"
                             class="form-control @error('nilai_disiplin_kerja') is-invalid @enderror"
-                            value="{{ old('nilai_disiplin_kerja', $nilai_pkl->nilai_disiplin_kerja) }}" min="0" max="100"
-                            placeholder="Masukkan nilai disiplin kerja...">
+                            value="{{ old('nilai_disiplin_kerja', $nilai_pkl->nilai_disiplin_kerja) }}"
+                            min="0" max="100">
                         @error('nilai_disiplin_kerja')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
+
                     <div class="form-group">
-                        <label for="nilai_kemajuan_kerja">Nilai Kemajuan Kerja</label>
-                        <input type="number" name="nilai_kemajuan_kerja" id="nilai_kemajuan_kerja"
+                        <label>Nilai Kemajuan Kerja</label>
+                        <input type="number"
+                            name="nilai_kemajuan_kerja"
                             class="form-control @error('nilai_kemajuan_kerja') is-invalid @enderror"
-                            value="{{ old('nilai_kemajuan_kerja', $nilai_pkl->nilai_kemajuan_kerja) }}" min="0" max="100"
-                            placeholder="Masukkan nilai kemajuan kerja...">
+                            value="{{ old('nilai_kemajuan_kerja', $nilai_pkl->nilai_kemajuan_kerja) }}"
+                            min="0" max="100">
                         @error('nilai_kemajuan_kerja')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
+
                     <div class="form-group">
-                        <label for="nilai_kualitas_kerja">Nilai Kualitas Kerja</label>
-                        <input type="number" name="nilai_kualitas_kerja" id="nilai_kualitas_kerja"
+                        <label>Nilai Kualitas Kerja</label>
+                        <input type="number"
+                            name="nilai_kualitas_kerja"
                             class="form-control @error('nilai_kualitas_kerja') is-invalid @enderror"
-                            value="{{ old('nilai_kualitas_kerja', $nilai_pkl->nilai_kualitas_kerja) }}" min="0" max="100"
-                            placeholder="Masukkan nilai kualitas kerja...">
+                            value="{{ old('nilai_kualitas_kerja', $nilai_pkl->nilai_kualitas_kerja) }}"
+                            min="0" max="100">
                         @error('nilai_kualitas_kerja')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
+
                     <div class="form-group">
-                        <label for="nilai_inisiatif_kreatifitas">Nilai Inisiatif & Kreatifitas</label>
-                        <input type="number" name="nilai_inisiatif_kreatifitas" id="nilai_inisiatif_kreatifitas"
+                        <label>Nilai Inisiatif & Kreatifitas</label>
+                        <input type="number"
+                            name="nilai_inisiatif_kreatifitas"
                             class="form-control @error('nilai_inisiatif_kreatifitas') is-invalid @enderror"
-                            value="{{ old('nilai_inisiatif_kreatifitas', $nilai_pkl->nilai_inisiatif_kreatifitas) }}" min="0" max="100"
-                            placeholder="Masukkan nilai inisiatif & kreatifitas...">
+                            value="{{ old('nilai_inisiatif_kreatifitas', $nilai_pkl->nilai_inisiatif_kreatifitas) }}"
+                            min="0" max="100">
                         @error('nilai_inisiatif_kreatifitas')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
+
                     <div class="form-group">
-                        <label for="nilai_perilaku">Nilai Perilaku</label>
-                        <input type="number" name="nilai_perilaku" id="nilai_perilaku"
+                        <label>Nilai Perilaku</label>
+                        <input type="number"
+                            name="nilai_perilaku"
                             class="form-control @error('nilai_perilaku') is-invalid @enderror"
-                            value="{{ old('nilai_perilaku', $nilai_pkl->nilai_perilaku) }}" min="0" max="100"
-                            placeholder="Masukkan nilai perilaku...">
+                            value="{{ old('nilai_perilaku', $nilai_pkl->nilai_perilaku) }}"
+                            min="0" max="100">
                         @error('nilai_perilaku')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
 
+                    {{-- BUKTI --}}
                     <div class="form-group">
-                        <label for="foto_bukti_nilai_pkl">Foto Bukti Nilai PKL</label>
+                        <label>Foto Bukti Nilai PKL</label>
                         <div class="custom-file">
-                            <input type="file" name="foto_bukti_nilai_pkl" id="foto_bukti_nilai_pkl"
+                            <input type="file"
+                                name="foto_bukti_nilai_pkl"
                                 class="custom-file-input @error('foto_bukti_nilai_pkl') is-invalid @enderror">
-                            <label class="custom-file-label" for="foto_bukti_nilai_pkl">Pilih file...</label>
-
-                            @error('foto_bukti_nilai_pkl')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
+                            <label class="custom-file-label">Pilih file...</label>
                         </div>
 
                         @if ($nilai_pkl->foto_bukti_nilai_pkl)
                             <div class="mt-2">
-                                <a href="{{ asset('storage/bukti_nilai_pkl/'.$nilai_pkl->foto_bukti_nilai_pkl) }}" target="_blank">
-                                    <img src="{{ asset('storage/bukti_nilai_pkl/'.$nilai_pkl->foto_bukti_nilai_pkl) }}"
-                                        alt="Bukti Nilai PKL"
-                                        class="img-thumbnail" style="max-width:150px;">
+                                <a href="{{ asset('storage/bukti_nilai_pkl/'.$nilai_pkl->foto_bukti_nilai_pkl) }}"
+                                target="_blank">
+                                    Lihat Bukti
                                 </a>
                             </div>
                         @endif
                     </div>
 
-                    <a href="{{ route('nilai_pkl.index') }}" class="btn btn-secondary">Kembali</a>
-                    <button type="submit" class="btn btn-primary">Simpan</button>
-
+                    <a href="{{ route('nilai_pkl.index') }}" class="btn btn-secondary">
+                        Kembali
+                    </a>
+                    <button type="submit" class="btn btn-primary">
+                        Simpan
+                    </button>
                 </form>
 
             </div>

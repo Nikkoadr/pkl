@@ -350,7 +350,7 @@ class EsertifikatController extends Controller
         $esertifikat = Esertifikat::findOrFail($id);
         $esertifikat->delete();
 
-        return redirect()->route('home.esertifikat')->with('success', 'E-sertifikat berhasil dihapus.');
+        return redirect()->route('esertifikat.index')->with('success', 'E-sertifikat berhasil dihapus.');
     }
 
     public function destroy_massal(Request $request)

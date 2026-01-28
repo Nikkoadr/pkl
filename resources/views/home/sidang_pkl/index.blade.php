@@ -53,77 +53,91 @@
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Guru Penguji</th>
-                                <th>Nama Peserta</th>
-                                <th>Kelas</th>
-                                <th>DUDI</th>
-                                <th>Foto Bukti PKL</th>
-                                <th>Semua Nilai PKL</th>
-                                <th>Nilai Sidang</th>
-                                <th>Nilai Akhir</th>
+                                <th>Peserta</th>
+                                <th>DUDI & Penguji</th>
+                                <th>Nilai PKL</th>
+                                <th class="text-center">Sidang</th>
+                                <th class="text-center">Akhir</th>
                                 <th class="text-center">Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
                         @foreach ($sidang_pkl as $item)
-                        <tr>
-                            <td>{{ $loop->iteration }}</td>
+                            <tr>
+                                <td>{{ $loop->iteration }}</td>
 
-                            <td>{{ $item->guru->user->nama ?? '-' }}</td>
+                                {{-- Peserta --}}
+                                <td>
+                                    <strong>{{ $item->peserta_pkl->peserta->user->nama ?? '-' }}</strong><br>
+                                    <small class="text-muted">
+                                        {{ $item->peserta_pkl->peserta->kelas->nama_kelas ?? '-' }}
+                                    </small>
+                                </td>
 
-                            <td>{{ $item->peserta_pkl->peserta->user->nama ?? '-' }}</td>
+                                {{-- DUDI & Penguji --}}
+                                <td>
+                                    <div>
+                                        <strong>DUDI:</strong> {{ $item->peserta_pkl->dudi->nama_dudi ?? '-' }}
+                                    </div>
+                                    <div>
+                                        <strong>Penguji:</strong> {{ $item->guru->user->nama ?? '-' }}
+                                    </div>
+                                </td>
 
-                            <td>{{ $item->peserta_pkl->peserta->kelas->nama_kelas ?? '-' }}</td>
-
-                            <td>{{ $item->peserta_pkl->dudi->nama_dudi ?? '-' }}</td>
-
-                            <td class="text-center">
-                                @if ($item->peserta_pkl->nilai_pkl->foto_bukti_nilai_pkl)
-                                    <a href="{{ asset('storage/bukti_nilai_pkl/'.$item->peserta_pkl->nilai_pkl->foto_bukti_nilai_pkl) }}"
-                                    target="_blank">
-                                        <img src="{{ asset('storage/bukti_nilai_pkl/'.$item->peserta_pkl->nilai_pkl->foto_bukti_nilai_pkl) }}"
-                                            width="60" class="img-thumbnail">
-                                    </a>
-                                @else
-                                    -
-                                @endif
-                            </td>
-                            <td>
-                                    <ul class="mb-0 pl-3">
+                                {{-- Nilai PKL --}}
+                                <td>
+                                    <ul class="mb-1 pl-3">
                                         <li>Disiplin: {{ $item->peserta_pkl->nilai_pkl->nilai_disiplin_kerja ?? '-' }}</li>
                                         <li>Kemajuan: {{ $item->peserta_pkl->nilai_pkl->nilai_kemajuan_kerja ?? '-' }}</li>
                                         <li>Kualitas: {{ $item->peserta_pkl->nilai_pkl->nilai_kualitas_kerja ?? '-' }}</li>
                                         <li>Inisiatif: {{ $item->peserta_pkl->nilai_pkl->nilai_inisiatif_kreatifitas ?? '-' }}</li>
                                         <li>Perilaku: {{ $item->peserta_pkl->nilai_pkl->nilai_perilaku ?? '-' }}</li>
                                     </ul>
-                            </td>
 
-                            <td class="text-center">
-                                {{ $item->peserta_pkl->nilai_pkl->nilai_sidang_pkl ?? '-' }}
-                            </td>
-                            <td class="text-center">
-                                {{ $item->peserta_pkl->nilai_pkl->nilai_akhir_pkl ?? '-' }}
-                            </td>
+                                    <div class="mt-1">
+                                        <strong>Bukti:</strong>
+                                        @if ($item->peserta_pkl->nilai_pkl->foto_bukti_nilai_pkl)
+                                            <a href="{{ asset('storage/bukti_nilai_pkl/'.$item->peserta_pkl->nilai_pkl->foto_bukti_nilai_pkl) }}"
+                                            target="_blank">
+                                                Lihat
+                                            </a>
+                                        @else
+                                            <span class="text-muted">-</span>
+                                        @endif
+                                    </div>
+                                </td>
 
-                            <td class="text-center">
-                                <a href="{{ route('sidang_pkl.edit', $item->peserta_pkl->nilai_pkl->id) }}"
-                                class="btn btn-primary btn-sm">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                                @canany(['admin', 'prodi'])
-                                <form action="{{ route('sidang_pkl.destroy', $item->id) }}"
-                                    method="POST"
-                                    class="d-inline form-delete">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="button"
-                                            class="btn btn-danger btn-sm btn-konfirmasi-hapus">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </form>
-                                @endcanany
-                            </td>
-                        </tr>
+                                {{-- Nilai Sidang --}}
+                                <td class="text-center">
+                                    {{ $item->peserta_pkl->nilai_pkl->nilai_sidang_pkl ?? '-' }}
+                                </td>
+
+                                {{-- Nilai Akhir --}}
+                                <td class="text-center">
+                                    {{ $item->peserta_pkl->nilai_pkl->nilai_akhir_pkl ?? '-' }}
+                                </td>
+
+                                {{-- Aksi --}}
+                                <td class="text-center align-middle">
+                                    <a href="{{ route('sidang_pkl.edit', $item->peserta_pkl->nilai_pkl->id) }}"
+                                    class="btn btn-primary btn-sm mr-1 mb-1">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+
+                                    @canany(['admin', 'prodi'])
+                                    <form action="{{ route('sidang_pkl.destroy', $item->id) }}"
+                                        method="POST"
+                                        class="d-inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="button"
+                                                class="btn btn-danger btn-sm btn-konfirmasi-hapus mb-1">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
+                                    @endcanany
+                                </td>
+                            </tr>
                         @endforeach
                         </tbody>
                     </table>

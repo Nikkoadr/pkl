@@ -92,15 +92,9 @@
                             <tr>
                                 <th><input type="checkbox" id="selectAll"></th>
                                 <th>No</th>
-                                <th>Nomor Sertifikat</th>
-                                <th>NISN</th>
-                                <th>Nama Peserta</th>
-                                <th>Kelas</th>
-                                <th>Konsentrasi Keahlian</th>
-                                <th>Nama DUDI</th>
-                                <th>Rata-rata Sikap</th>
-                                <th>Nilai Sidang</th>
-                                <th>Nilai Akhir</th>
+                                <th>Peserta</th>
+                                <th>DUDI</th>
+                                <th>Nilai</th>
                                 <th class="text-center">Cetak</th>
                                 <th class="text-center">Aksi</th>
                             </tr>
@@ -108,38 +102,68 @@
                         <tbody>
                             @foreach ($esertifikat as $row)
                             <tr id="row-{{ $row->id }}">
+                                {{-- Checkbox --}}
                                 <td>
                                     <input type="checkbox" class="selectItem" value="{{ $row->id }}">
                                 </td>
-                                <td>{{ $loop->iteration }}</td>
-                                <td>{{ $row->nomor_sertifikat ?? '-' }}</td>
-                                <td>{{ $row->nisn ?? '-' }}</td>
-                                <td>{{ $row->nama ?? '-' }}</td>
-                                <td>{{ $row->kelas ?? '-' }}</td>
-                                <td>{{ $row->kompetensi ?? '-' }}</td>
-                                <td>{{ $row->nama_dudi ?? '-' }}</td>
-                                <td>{{ $row->rata_rata_sikap ?? '-' }}</td>
-                                <td>{{ $row->nilai_sidang_pkl ?? '-' }}</td>
-                                <td>{{ $row->nilai_akhir ?? '-' }}</td>
 
-                                <td class="text-center">
+                                <td>{{ $loop->iteration }}</td>
+
+                                {{-- Peserta --}}
+                                <td>
+                                    <strong>{{ $row->nama ?? '-' }}</strong><br>
+                                    <small class="text-muted">
+                                        NISN: {{ $row->nisn ?? '-' }} |
+                                        {{ $row->kelas ?? '-' }} |
+                                        {{ $row->kompetensi ?? '-' }}
+                                    </small>
+                                    <div>
+                                        <small class="text-muted">
+                                            No. Sertifikat: {{ $row->nomor_sertifikat ?? '-' }}
+                                        </small>
+                                    </div>
+                                </td>
+
+                                {{-- DUDI --}}
+                                <td>
+                                    {{ $row->nama_dudi ?? '-' }}
+                                </td>
+
+                                {{-- Nilai --}}
+                                <td>
+                                    <ul class="mb-0 pl-3">
+                                        <li>Rata-rata Sikap: {{ $row->rata_rata_sikap ?? '-' }}</li>
+                                        <li>Nilai Sidang: {{ $row->nilai_sidang_pkl ?? '-' }}</li>
+                                        <li>Nilai Akhir: {{ $row->nilai_akhir ?? '-' }}</li>
+                                    </ul>
+                                </td>
+
+                                {{-- Cetak --}}
+                                <td class="text-center align-middle">
                                     <a href="{{ route('cetak.esertifikat_depan', $row->id) }}"
-                                       class="btn btn-info btn-sm mb-1" target="_blank">
-                                        <i class="fas fa-file-alt"></i> Depan
+                                    class="btn btn-info btn-sm mr-1 mb-1"
+                                    target="_blank"
+                                    title="Cetak Depan">
+                                        <i class="fas fa-file-alt"></i>
                                     </a>
                                     <a href="{{ route('cetak.esertifikat_belakang', $row->id) }}"
-                                       class="btn btn-success btn-sm" target="_blank">
-                                        <i class="fas fa-envelope-open-text"></i> Belakang
+                                    class="btn btn-success btn-sm mb-1"
+                                    target="_blank"
+                                    title="Cetak Belakang">
+                                        <i class="fas fa-envelope-open-text"></i>
                                     </a>
                                 </td>
 
-                                <td class="text-center">
+                                {{-- Aksi --}}
+                                <td class="text-center align-middle">
                                     <form action="{{ route('esertifikat.destroy', $row->id) }}"
-                                          method="POST" class="form-hapus d-inline">
+                                        method="POST"
+                                        class="d-inline form-hapus">
                                         @csrf
                                         @method('DELETE')
                                         <button type="button"
-                                                class="btn btn-danger btn-sm btn-konfirmasi-hapus">
+                                                class="btn btn-danger btn-sm btn-konfirmasi-hapus mb-1"
+                                                title="Hapus">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </form>

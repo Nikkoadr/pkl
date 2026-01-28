@@ -60,14 +60,19 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $item->guru->user->nama ?? '-' }}</td>
                                 <td>{{ $item->kompetensi_keahlian->nama_kompetensi ?? '-' }}</td>
-                                <td class="text-center">
-                                    <a href="{{ route('kaprodi.edit', $item->id) }}" class="btn btn-warning btn-sm">
+                                <td class="text-center align-middle">
+                                    <a href="{{ route('kaprodi.edit', $item->id) }}"
+                                    class="btn btn-primary btn-sm mr-1 mb-1">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <form action="{{ route('kaprodi.destroy', $item->id) }}" method="POST" class="d-inline form-hapus">
+
+                                    <form action="{{ route('kaprodi.destroy', $item->id) }}"
+                                        method="POST"
+                                        class="d-inline">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="button" class="btn btn-danger btn-sm btn-konfirmasi-hapus">
+                                        <button type="button"
+                                                class="btn btn-danger btn-sm btn-konfirmasi-hapus mb-1">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </form>

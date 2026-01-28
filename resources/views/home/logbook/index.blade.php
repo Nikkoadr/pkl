@@ -55,11 +55,9 @@
                             <tr>
                                 <th>No</th>
                                 <th>Tanggal</th>
-                                <th>Jam</th>
                                 <th>Peserta</th>
                                 <th>DUDI</th>
-                                <th>Foto</th>
-                                <th>Keterangan</th>
+                                <th>Aktivitas</th>
                                 <th data-orderable="false" class="text-center">Aksi</th>
                             </tr>
                         </thead>
@@ -67,30 +65,59 @@
                             @foreach($logbook as $log)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ \Carbon\Carbon::parse($log->tanggal)->format('d-m-Y') }}</td>
-                                <td>{{ $log->jam }}</td>
-                                <td>{{ $log->peserta_pkl->peserta->user->nama ?? '-'}}</td>
-                                <td>{{ $log->peserta_pkl->dudi->nama_dudi ?? '-' }}</td>
+
+                                {{-- Tanggal & Jam --}}
                                 <td>
-                                    @if($log->foto_bukti)
-                                    <a href="{{ asset('storage/bukti_logbook/'.$log->foto_bukti) }}" target="_blank">
-                                        <img src="{{ asset('storage/bukti_logbook/'.$log->foto_bukti) }}" alt="Foto" width="60">
-                                    </a>
-                                    @else
-                                    -
-                                    @endif
+                                    {{ \Carbon\Carbon::parse($log->tanggal)->format('d-m-Y') }}<br>
+                                    <small class="text-muted">{{ $log->jam }}</small>
                                 </td>
-                                <td>{{ $log->keterangan }}</td>
-                                <td class="text-center">
+
+                                {{-- Peserta & Kelas --}}
+                                <td>
+                                    <strong>{{ $log->peserta_pkl->peserta->user->nama ?? '-' }}</strong><br>
+                                    <small class="text-muted">
+                                        {{ $log->peserta_pkl->peserta->kelas->nama_kelas ?? '-' }}
+                                    </small>
+                                </td>
+
+                                {{-- DUDI --}}
+                                <td>
+                                    {{ $log->peserta_pkl->dudi->nama_dudi ?? '-' }}
+                                </td>
+
+                                {{-- Aktivitas + Bukti --}}
+                                <td>
+                                    {{ $log->keterangan }}
+
+                                    <div class="mt-1">
+                                        <strong>Bukti:</strong>
+                                        @if($log->foto_bukti)
+                                            <a href="{{ asset('storage/bukti_logbook/'.$log->foto_bukti) }}"
+                                            target="_blank">
+                                                Lihat
+                                            </a>
+                                        @else
+                                            <span class="text-muted">-</span>
+                                        @endif
+                                    </div>
+                                </td>
+
+                                {{-- Aksi --}}
+                                <td class="text-center align-middle">
                                     @can('admin')
-                                        <a href="{{ route('logbook.edit', $log->id) }}" class="btn btn-warning btn-sm">
+                                        <a href="{{ route('logbook.edit', $log->id) }}"
+                                        class="btn btn-primary btn-sm mr-1 mb-1">
                                             <i class="fas fa-edit"></i>
                                         </a>
                                     @endcan
-                                    <form action="{{ route('logbook.destroy', $log->id) }}" method="POST" class="d-inline form-hapus">
+
+                                    <form action="{{ route('logbook.destroy', $log->id) }}"
+                                        method="POST"
+                                        class="d-inline">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="button" class="btn btn-danger btn-sm btn-konfirmasi-hapus">
+                                        <button type="button"
+                                                class="btn btn-danger btn-sm btn-konfirmasi-hapus mb-1">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </form>
@@ -99,6 +126,7 @@
                             @endforeach
                         </tbody>
                     </table>
+
                 </div>
             </div>
         </div>

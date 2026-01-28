@@ -51,17 +51,13 @@
                             </div>
                     </div>
                 </div>
-
                 <div class="card-body">
                     <table id="tabel_dudi" class="table table-bordered table-striped">
                         <thead>
                             <tr>
                                 <th>No</th>
                                 <th>Nama DUDI</th>
-                                <th>Alamat</th>
-                                <th>Jabatan Pimpinan</th>
-                                <th>Nomor Kepegawaian</th>
-                                <th>Pimpinan</th>
+                                <th>Info DUDI</th>
                                 <th>Kuota</th>
                                 <th>Kompetensi Keahlian</th>
                                 <th data-orderable="false" class="text-center">Aksi</th>
@@ -71,24 +67,52 @@
                             @foreach($dudi as $item)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $item->nama_dudi }}</td>
-                                <td>{{ $item->alamat_dudi }}</td>
-                                <td>{{ $item->jabatan_pimpinan }}</td>
-                                <td>{{ $item->nomor_kepegawaian }}</td>
-                                <td>{{ $item->nama_pimpinan_dudi }}</td>
-                                <td>{{ $item->kuota }}</td>
-                                <td>{{ $item->kompetensi_keahlian->nama_kompetensi }}</td>
+
+                                <td>
+                                    <strong>{{ $item->nama_dudi }}</strong>
+                                </td>
+
+                                <td>
+                                    <div>
+                                        <strong>Pimpinan:</strong> {{ $item->nama_pimpinan_dudi }}
+                                    </div>
+                                    <div>
+                                        <strong>Jabatan:</strong> {{ $item->jabatan_pimpinan }}
+                                    </div>
+                                    <div>
+                                        <strong>No. Kepegawaian:</strong> {{ $item->nomor_kepegawaian }}
+                                    </div>
+                                    <div>
+                                        <strong>Alamat:</strong> {{ $item->alamat_dudi }}
+                                    </div>
+                                </td>
+
                                 <td class="text-center">
-                                        <a href="{{ route('surat.booking', $item->id) }}" class="btn btn-info btn-sm" target="_blank">
-                                            <i class="fas fa-file-alt"></i>
-                                        </a>
-                                    <a href="{{ route('dudi.edit', $item->id) }}" class="btn btn-primary btn-sm">
+                                    {{ $item->kuota }}
+                                </td>
+
+                                <td>
+                                    {{ $item->kompetensi_keahlian->nama_kompetensi }}
+                                </td>
+                                <td class="text-center align-middle">
+                                    <a href="{{ route('surat.booking', $item->id) }}"
+                                    class="btn btn-info btn-sm mr-1 mb-1"
+                                    target="_blank">
+                                        <i class="fas fa-file-alt"></i>
+                                    </a>
+
+                                    <a href="{{ route('dudi.edit', $item->id) }}"
+                                    class="btn btn-primary btn-sm mr-1 mb-1">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <form action="{{ route('dudi.destroy', $item->id) }}" method="POST" class="d-inline form-hapus">
+
+                                    <form action="{{ route('dudi.destroy', $item->id) }}"
+                                        method="POST"
+                                        class="d-inline">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="button" class="btn btn-danger btn-sm btn-konfirmasi-hapus">
+                                        <button type="button"
+                                                class="btn btn-danger btn-sm btn-konfirmasi-hapus mb-1">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </form>
