@@ -16,29 +16,6 @@
 </head>
 
 <body>
-@php
-    $user      = $esertifikat->peserta_pkl->peserta->user ?? null;
-    $peserta   = $esertifikat->peserta_pkl->peserta ?? null;
-    $kelas     = $peserta->kelas ?? null;
-    $kompetensi= $kelas->kompetensi ?? null;
-    $dudi      = $esertifikat->peserta_pkl->dudi ?? null;
-
-    $nama = $user?->nama ?? '-';
-    $foto = $user?->foto_profil
-        ? asset('storage/foto_profil/' . $user->foto_profil)
-        : asset('assets/dist/img/foto-default.jpeg');
-
-    $qrWithLogo = base64_encode(
-        QrCode::format('png')
-            ->size(220)
-            ->margin(1)
-            ->errorCorrection('H')
-            ->merge(public_path('assets/dist/img/logo_barcode.png'), 0.25, true)
-            ->generate(url('/esertifikat/scan/' . $esertifikat->hash))
-    );
-
-    $nomorFallback = '086.' . str_pad($esertifikat->id, 3, '0', STR_PAD_LEFT) . '/KET/III.4/AU/F/' . date('Y');
-@endphp
 
 <div class="wrapper">
 

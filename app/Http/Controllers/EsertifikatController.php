@@ -12,6 +12,7 @@ use App\Models\Nilai_pkl;
 use App\Models\Kelas;
 use App\Models\Kompetensi_keahlian;
 use App\Helpers\EsertifikatHelper;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class EsertifikatController extends Controller
 {
@@ -148,12 +149,10 @@ class EsertifikatController extends Controller
                 ->with('error', 'Tidak ada tahun ajaran aktif.');
         }
 
-        // ================= QUERY DASAR =================
         $query = Esertifikat::whereHas('peserta_pkl.peserta', function ($q) use ($tahunAktif) {
             $q->where('tahun_ajaran_id', $tahunAktif->id);
         });
 
-        // ================= ROLE PRODI =================
         $kaprodi = null;
 
         if (Gate::allows('prodi')) {
@@ -164,29 +163,24 @@ class EsertifikatController extends Controller
                 abort(403, 'Anda bukan Kaprodi');
             }
 
-            // Batasi data esertifikat sesuai kompetensi kaprodi
             $query->whereHas('peserta_pkl.peserta.kelas', function ($q) use ($kaprodi) {
                 $q->where('kompetensi_keahlian_id', $kaprodi->kompetensi_keahlian_id);
             });
         }
 
-        // ================= FILTER =================
 
-        // Filter Kompetensi
         if ($request->filled('kompetensi')) {
             $query->whereHas('peserta_pkl.peserta.kelas', function ($q) use ($request) {
                 $q->where('kompetensi_keahlian_id', $request->kompetensi);
             });
         }
 
-        // Filter Kelas
         if ($request->filled('kompetensi') && $request->filled('kelas')) {
             $query->whereHas('peserta_pkl.peserta.kelas', function ($q) use ($request) {
                 $q->where('id', $request->kelas);
             });
         }
 
-        // ================= LOAD DATA =================
         $esertifikat = $query->with([
             'peserta_pkl.peserta.user',
             'peserta_pkl.peserta.kelas.kompetensi',
@@ -194,7 +188,6 @@ class EsertifikatController extends Controller
             'peserta_pkl.nilai_pkl',
         ])->get();
 
-        // ================= OLAH DATA =================
         $esertifikat->each(function ($item) {
             $peserta = $item->peserta_pkl->peserta ?? null;
             $nilai   = $item->peserta_pkl->nilai_pkl ?? null;
@@ -220,21 +213,15 @@ class EsertifikatController extends Controller
             }
         });
 
-        // ================= DROPDOWN =================
-
-        // 🔹 Kompetensi
         if (Gate::allows('prodi')) {
-            // Kaprodi → hanya kompetensinya sendiri
             $listKompetensi = Kompetensi_keahlian::where(
                 'id',
                 $kaprodi->kompetensi_keahlian_id
             )->get();
         } else {
-            // Admin → semua
             $listKompetensi = Kompetensi_keahlian::orderBy('nama_kompetensi')->get();
         }
 
-        // 🔹 Kelas
         $listKelas = collect();
         if ($request->filled('kompetensi')) {
             $listKelas = Kelas::where('kompetensi_keahlian_id', $request->kompetensi)
@@ -257,8 +244,24 @@ class EsertifikatController extends Controller
             'peserta_pkl.dudi',
         ])->findOrFail($id);
 
-        return view('partials.esertifikat.depan', compact('esertifikat'));
+        $user = $esertifikat->peserta_pkl->peserta->user ?? null;
+
+        $foto = $user?->foto_profil
+            ? asset('storage/foto_profil/' . $user->foto_profil)
+            : asset('assets/dist/img/foto-default.jpeg');
+
+        $qrWithLogo = base64_encode(
+            QrCode::format('png')
+                ->size(220)
+                ->margin(1)
+                ->errorCorrection('H')
+                ->merge(public_path('assets/dist/img/logo_barcode.png'), 0.25, true)
+                ->generate(url('/esertifikat/scan/' . $esertifikat->hash))
+        );
+
+        return view('partials.esertifikat.depan', compact('esertifikat', 'user', 'foto', 'qrWithLogo'));
     }
+
 
     public function cetak_belakang($id)
     {
@@ -268,7 +271,6 @@ class EsertifikatController extends Controller
             'peserta_pkl.dudi',
             'peserta_pkl.nilai_pkl'
         ])->findOrFail($id);
-
 
         $nilai = $esertifikat->peserta_pkl->nilai_pkl;
 
@@ -306,7 +308,29 @@ class EsertifikatController extends Controller
             'peserta_pkl.dudi',
         ])->find($ids)->filter()->values();
 
-        return view('partials.esertifikat.depan_massal', compact('data',));
+        $data->transform(function ($row) {
+            $user = $row->peserta_pkl->peserta->user ?? null;
+
+            $row->nama = $user?->nama ?? '-';
+            $row->foto = $user?->foto_profil
+                ? asset('storage/foto_profil/' . $user->foto_profil)
+                : asset('assets/dist/img/foto-default.jpeg');
+
+            $qrSize = 600;
+            $logoScale = 0.30;
+            $row->qrWithLogo = base64_encode(
+                QrCode::format('png')
+                    ->size($qrSize)
+                    ->margin(1)
+                    ->errorCorrection('H')
+                    ->merge(public_path('assets/dist/img/logo_barcode.png'), $logoScale, true)
+                    ->generate(url('/esertifikat/scan/' . $row->hash))
+            );
+
+            return $row;
+        });
+
+        return view('partials.esertifikat.depan_massal', compact('data'));
     }
 
     public function cetak_belakang_massal(Request $request)
@@ -393,18 +417,41 @@ class EsertifikatController extends Controller
             'peserta_pkl.peserta.kelas.kompetensi',
             'peserta_pkl.dudi',
             'peserta_pkl.nilai_pkl',
-        ])
-            ->where('hash', $hash)
-            ->first();
+        ])->where('hash', $hash)->first();
 
         if (!$esertifikat) {
             return view('home.esertifikat.invalid');
         }
 
+        // Ambil data peserta dan user
+        $user       = $esertifikat->peserta_pkl->peserta->user ?? null;
+        $peserta    = $esertifikat->peserta_pkl->peserta ?? null;
+        $kelas      = $peserta->kelas ?? null;
+        $kompetensi = $kelas->kompetensi ?? null;
+        $dudi       = $esertifikat->peserta_pkl->dudi ?? null;
+
+        // Nama dan foto
+        $nama = $user?->nama ?? '-';
+        $foto = $user?->foto_profil
+            ? asset('storage/foto_profil/' . $user->foto_profil)
+            : asset('assets/dist/img/foto-default.jpeg');
+
+        // QR Code dengan logo
+        $qrWithLogo = base64_encode(
+            QrCode::format('png')
+                ->size(220)
+                ->margin(1)
+                ->errorCorrection('H')
+                ->merge(public_path('assets/dist/img/logo_barcode.png'), 0.25, true)
+                ->generate(url('/esertifikat/scan/' . $esertifikat->hash))
+        );
+
+        // Nomor fallback
+        $nomorFallback = '086.' . str_pad($esertifikat->id, 3, '0', STR_PAD_LEFT) . '/KET/III.4/AU/F/' . date('Y');
+
+        // Hitung nilai jika ada
         $nilai = $esertifikat->peserta_pkl->nilai_pkl;
-
         if ($nilai) {
-
             $nilai_aspek = [
                 'Disiplin Kerja'        => $nilai->nilai_disiplin_kerja,
                 'Kemajuan Kerja'        => $nilai->nilai_kemajuan_kerja,
@@ -413,8 +460,7 @@ class EsertifikatController extends Controller
                 'Perilaku'              => $nilai->nilai_perilaku,
             ];
 
-            $rata_rata = round(array_sum($nilai_aspek) / count($nilai_aspek), 2);
-
+            $rata_rata    = round(array_sum($nilai_aspek) / count($nilai_aspek), 2);
             $nilai_sidang = $nilai->nilai_sidang_pkl;
             $nilai_akhir  = round(($rata_rata + $nilai_sidang) / 2, 2);
 
@@ -434,9 +480,19 @@ class EsertifikatController extends Controller
             $esertifikat->catatan_sikap    = null;
         }
 
+        // Kirim semua data ke view
         return view('home.esertifikat.show', compact(
             'esertifikat',
-            'nilai'
+            'nilai',
+            'user',
+            'peserta',
+            'kelas',
+            'kompetensi',
+            'dudi',
+            'nama',
+            'foto',
+            'qrWithLogo',
+            'nomorFallback'
         ));
     }
 }
