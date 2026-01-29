@@ -37,7 +37,6 @@
     </div>
 
     <div class="foto">
-        <img src="{{ $foto }}" style="width: 100%; height: 100%; object-fit: cover;">
     </div>
 
         <div class="area-ttd">

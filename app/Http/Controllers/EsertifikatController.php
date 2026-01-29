@@ -244,12 +244,6 @@ class EsertifikatController extends Controller
             'peserta_pkl.dudi',
         ])->findOrFail($id);
 
-        $user = $esertifikat->peserta_pkl->peserta->user ?? null;
-
-        $foto = $user?->foto_profil
-            ? asset('storage/foto_profil/' . $user->foto_profil)
-            : asset('assets/dist/img/foto-default.jpeg');
-
         $qrWithLogo = base64_encode(
             QrCode::format('png')
                 ->size(220)
@@ -259,7 +253,7 @@ class EsertifikatController extends Controller
                 ->generate(url('/esertifikat/scan/' . $esertifikat->hash))
         );
 
-        return view('partials.esertifikat.depan', compact('esertifikat', 'user', 'foto', 'qrWithLogo'));
+        return view('partials.esertifikat.depan', compact('esertifikat', 'qrWithLogo'));
     }
 
 
@@ -309,13 +303,6 @@ class EsertifikatController extends Controller
         ])->find($ids)->filter()->values();
 
         $data->transform(function ($row) {
-            $user = $row->peserta_pkl->peserta->user ?? null;
-
-            $row->nama = $user?->nama ?? '-';
-            $row->foto = $user?->foto_profil
-                ? asset('storage/foto_profil/' . $user->foto_profil)
-                : asset('assets/dist/img/foto-default.jpeg');
-
             $qrSize = 600;
             $logoScale = 0.30;
             $row->qrWithLogo = base64_encode(
