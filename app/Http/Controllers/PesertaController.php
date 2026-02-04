@@ -101,7 +101,7 @@ class PesertaController extends Controller
     {
         $validated = $request->validate([
             'nama' => 'required|string|max:100',
-            'jenis_kelamin' => 'required|in:1,2',
+            'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
             'tempat_lahir' => 'nullable|string|max:50',
             'tanggal_lahir' => 'required|date',
             'email' => 'required|email|unique:users,email',
