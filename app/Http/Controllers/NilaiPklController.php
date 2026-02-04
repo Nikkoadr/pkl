@@ -48,7 +48,7 @@ class NilaiPklController extends Controller
             $nilai_pkl = Nilai_pkl::whereHas('peserta_pkl.peserta', function ($q) use ($tahunAktif) {
                 $q->where('tahun_ajaran_id', $tahunAktif->id);
             })
-                ->whereDoesntHave('esertifikat') // ✅ sudah generate -> tidak ditampilkan
+                ->whereDoesntHave('esertifikat')
                 ->with('peserta_pkl.peserta.user', 'peserta_pkl.dudi')
                 ->get();
 
@@ -65,7 +65,7 @@ class NilaiPklController extends Controller
                 $q->where('kompetensi_keahlian_id', $kaprodi->kompetensi_keahlian_id)
                     ->where('tahun_ajaran_id', $tahunAktif->id);
             })
-                ->whereDoesntHave('esertifikat') // ✅ sudah generate -> tidak ditampilkan
+                ->whereDoesntHave('esertifikat')
                 ->with('peserta_pkl.peserta.user', 'peserta_pkl.dudi')
                 ->get();
 
@@ -86,7 +86,7 @@ class NilaiPklController extends Controller
                         $qq->where('tahun_ajaran_id', $tahunAktif->id);
                     });
             })
-                ->whereDoesntHave('esertifikat') // ✅ sudah generate -> tidak ditampilkan
+                ->whereDoesntHave('esertifikat')
                 ->with('peserta_pkl.peserta.user', 'peserta_pkl.dudi')
                 ->get();
 
@@ -109,7 +109,6 @@ class NilaiPklController extends Controller
                     ->with('error', 'Anda belum mengikuti PKL di tahun ajaran aktif.');
             }
 
-            // peserta tetap bisa lihat nilainya sendiri (tidak perlu disembunyikan)
             $nilai_pkl = Nilai_pkl::where('peserta_pkl_id', $pesertaPkl->id)
                 ->with('peserta_pkl.peserta.user', 'peserta_pkl.dudi')
                 ->first() ?? new Nilai_pkl();

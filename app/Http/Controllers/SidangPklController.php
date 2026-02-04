@@ -60,7 +60,9 @@ class SidangPklController extends Controller
                 ->whereHas('peserta_pkl.peserta', function ($q) use ($tahunAktif) {
                     $q->where('tahun_ajaran_id', $tahunAktif->id);
                 })
+                ->whereDoesntHave('peserta_pkl.esertifikat')
                 ->get();
+
 
             $sidang_pkl->each(function ($item) {
                 if ($item->peserta_pkl && $item->peserta_pkl->nilai_pkl) {
@@ -71,6 +73,7 @@ class SidangPklController extends Controller
 
             $peserta_pkl = Peserta_pkl::whereNotIn('id', $pesertaSudahSidang)
                 ->whereHas('nilai_pkl')
+                ->whereDoesntHave('esertifikat')
                 ->whereHas('peserta', function ($q) use ($tahunAktif) {
                     $q->where('tahun_ajaran_id', $tahunAktif->id);
                 })
@@ -80,6 +83,7 @@ class SidangPklController extends Controller
                     'dudi'
                 ])
                 ->get();
+
 
             return view('home.sidang_pkl.index', compact('sidang_pkl', 'peserta_pkl'));
         }
@@ -97,6 +101,7 @@ class SidangPklController extends Controller
                     $q->where('kompetensi_keahlian_id', $kaprodi->kompetensi_keahlian_id)
                         ->where('tahun_ajaran_id', $tahunAktif->id);
                 })
+                ->whereDoesntHave('peserta_pkl.esertifikat')
                 ->with([
                     'guru.user',
                     'peserta_pkl.peserta.user',
@@ -105,6 +110,7 @@ class SidangPklController extends Controller
                     'peserta_pkl.dudi'
                 ])
                 ->get();
+
 
             $sidang_pkl->each(function ($item) {
                 if ($item->peserta_pkl && $item->peserta_pkl->nilai_pkl) {
@@ -119,6 +125,7 @@ class SidangPklController extends Controller
             })
                 ->whereNotIn('id', $pesertaSudahSidang)
                 ->whereHas('nilai_pkl')
+                ->whereDoesntHave('esertifikat')
                 ->with([
                     'peserta.user',
                     'peserta.kelas',
@@ -138,6 +145,7 @@ class SidangPklController extends Controller
                 ->whereHas('peserta_pkl.peserta', function ($q) use ($tahunAktif) {
                     $q->where('tahun_ajaran_id', $tahunAktif->id);
                 })
+                ->whereDoesntHave('peserta_pkl.esertifikat')
                 ->with([
                     'guru.user',
                     'peserta_pkl.peserta.user',
