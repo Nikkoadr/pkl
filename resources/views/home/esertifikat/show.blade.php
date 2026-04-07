@@ -307,7 +307,8 @@
                                 <hr>
                                 {!! $dudi?->nama_pimpinan_dudi
                                     ? '<strong>' . e($dudi->nama_pimpinan_dudi) . '</strong>'
-                                    : '............................................' !!}
+                                    : '............................................' !!}<br>
+                                    {{ $dudi->nomor_kepegawaian }}
                             </div>
                         </div>
                     @endif

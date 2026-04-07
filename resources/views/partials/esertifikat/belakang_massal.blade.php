@@ -266,7 +266,8 @@ if (!function_exists('catatan_sikap')) {
             {{ $esertifikat->peserta_pkl->dudi->nama_dudi }}<br><br><br><br><br>
             {!! $esertifikat->peserta_pkl->dudi->nama_pimpinan_dudi
                 ? '<strong>' . e($esertifikat->peserta_pkl->dudi->nama_pimpinan_dudi) . '</strong>'
-                : '............................................' !!}
+                : '............................................' !!}<br>
+                    {{ $esertifikat->peserta_pkl->dudi->nomor_kepegawaian }}
         </div>
     </div>
 
