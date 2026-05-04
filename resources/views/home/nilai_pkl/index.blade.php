@@ -118,36 +118,40 @@
                             <td class="text-center">
                                 {{ $nilai->nilai_sidang_pkl }}
                             </td>
-                            <td class="text-center align-middle">
-                                <div class="d-inline-flex">
-                                    <a href="{{ route('nilai_pkl.edit', $nilai->id) }}"
-                                    class="btn btn-primary btn-sm mr-1"
-                                    title="Edit">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
+                        <td class="text-center align-middle">
+                            <div class="d-flex justify-content-center align-items-center gap-2">
 
-                                    <form action="{{ route('nilai_pkl.destroy', $nilai->id) }}"
-                                        method="POST"
-                                        class="mr-1">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="button"
-                                                class="btn btn-danger btn-sm btn-konfirmasi-hapus"
-                                                title="Hapus">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </form>
+                                <a href="{{ route('nilai_pkl.edit', $nilai->id) }}"
+                                class="btn btn-primary btn-sm"
+                                title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </a>
 
-                                    <form action="{{ route('esertifikat.generate', $nilai->id) }}"
-                                        method="POST">
-                                        @csrf
-                                        <button class="btn btn-success btn-sm"
-                                                title="Generate Sertifikat">
-                                            <i class="fas fa-certificate"></i>
-                                        </button>
-                                    </form>
-                                </div>
-                            </td>
+                                <form action="{{ route('nilai_pkl.destroy', $nilai->id) }}"
+                                    method="POST"
+                                    class="form-delete">
+                                    @csrf
+                                    @method('DELETE')
+
+                                    <button type="button"
+                                            class="btn btn-danger btn-sm btn-hapus"
+                                            title="Hapus">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+
+                                <form action="{{ route('esertifikat.generate', $nilai->id) }}"
+                                    method="POST">
+                                    @csrf
+                                    <button type="submit"
+                                            class="btn btn-success btn-sm"
+                                            title="Generate Sertifikat">
+                                        <i class="fas fa-certificate"></i>
+                                    </button>
+                                </form>
+
+                            </div>
+                        </td>
                         </tr>
                         @endforeach
                     </tbody>
@@ -241,8 +245,11 @@ $(function () {
     $('#datatable').DataTable();
 
     // Fix: Event delegation untuk konfirmasi delete agar aktif di semua halaman DataTables
-    $(document).on('submit', '.form-delete', function(e) {
+    $(document).on('click', '.btn-hapus', function(e) {
         e.preventDefault();
+
+        let form = $(this).closest('form');
+
         Swal.fire({
             title: 'Yakin ingin menghapus?',
             text: "Data yang dihapus tidak dapat dikembalikan!",
@@ -252,7 +259,7 @@ $(function () {
             cancelButtonText: 'Batal'
         }).then((result) => {
             if (result.isConfirmed) {
-                e.target.submit();
+                form.submit();
             }
         });
     });

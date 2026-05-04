@@ -13,6 +13,8 @@ use App\Models\Kelas;
 use App\Models\Kompetensi_keahlian;
 use App\Helpers\EsertifikatHelper;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 
 class EsertifikatController extends Controller
 {
@@ -35,45 +37,107 @@ class EsertifikatController extends Controller
     {
         $tahun = date('Y');
 
-        $count = Esertifikat::whereYear('tanggal_diterbitkan', $tahun)->count() + 1;
+        $last = Esertifikat::whereYear('tanggal_diterbitkan', $tahun)
+            ->lockForUpdate()
+            ->orderBy('nomor_sertifikat', 'desc')
+            ->first();
 
-        return '086.' . str_pad($count, 3, '0', STR_PAD_LEFT)
+        if ($last) {
+            preg_match('/086\.(\d+)\//', $last->nomor_sertifikat, $matches);
+            $lastNumber = (int)($matches[1] ?? 0);
+            $next = $lastNumber + 1;
+        } else {
+            $next = 1;
+        }
+
+        return '086.' . str_pad($next, 3, '0', STR_PAD_LEFT)
             . '/KET/III.4/AU/F/' . $tahun;
     }
 
+    /**
+     * Validasi nilai lengkap
+     */
+    private function isLengkap($nilai)
+    {
+        return !(
+            $nilai->nilai_disiplin_kerja === null ||
+            $nilai->nilai_kemajuan_kerja === null ||
+            $nilai->nilai_kualitas_kerja === null ||
+            $nilai->nilai_inisiatif_kreatifitas === null ||
+            $nilai->nilai_perilaku === null ||
+            $nilai->nilai_sidang_pkl === null
+        );
+    }
+
+    /**
+     * Proses generate 1 data (dipakai ulang)
+     */
+    private function prosesGenerate($nilai)
+    {
+        // cek sudah ada
+        if (Esertifikat::where('peserta_pkl_id', $nilai->peserta_pkl_id)->exists()) {
+            return 'sudah';
+        }
+
+        // retry max 3x
+        for ($i = 0; $i < 3; $i++) {
+            try {
+                $nomor = $this->generateNomor();
+
+                Esertifikat::create([
+                    'peserta_pkl_id'       => $nilai->peserta_pkl_id,
+                    'nomor_sertifikat'     => $nomor,
+                    'kepala_sekolah'       => Pengaturan::value('kepala_sekolah') ?? '',
+                    'tanggal_mulai_pkl'    => Pengaturan::value('tanggal_mulai_pkl') ?? null,
+                    'tanggal_selesai_pkl'  => Pengaturan::value('tanggal_selesai_pkl') ?? null,
+                    'tanggal_diterbitkan'  => now(),
+                    'hash'                 => Str::uuid(),
+                ]);
+
+                return 'berhasil';
+            } catch (\Illuminate\Database\QueryException $e) {
+                if ($i == 2) {
+                    return 'error';
+                }
+            }
+        }
+
+        return 'error';
+    }
+
+    /**
+     * Generate single
+     */
     public function generate($id)
     {
-        $nilai_pkl = Nilai_pkl::with('peserta_pkl.peserta.user')->findOrFail($id);
+        $nilai = Nilai_pkl::with('peserta_pkl.peserta.user')->findOrFail($id);
 
-        $lengkap = !(
-            $nilai_pkl->nilai_disiplin_kerja === null ||
-            $nilai_pkl->nilai_kemajuan_kerja === null ||
-            $nilai_pkl->nilai_kualitas_kerja === null ||
-            $nilai_pkl->nilai_inisiatif_kreatifitas === null ||
-            $nilai_pkl->nilai_perilaku === null ||
-            $nilai_pkl->nilai_sidang_pkl === null
-        );
-
-        if (!$lengkap) {
-            return back()->with('error', 'Tidak dapat membuat e-sertifikat. Nilai peserta belum lengkap.');
+        if (!$this->isLengkap($nilai)) {
+            return back()->with('error', 'Tidak dapat membuat e-sertifikat. Nilai belum lengkap.');
         }
 
-        $sudahAda = Esertifikat::where('peserta_pkl_id', $nilai_pkl->peserta_pkl_id)->exists();
-        if ($sudahAda) {
-            return back()->with('error', 'Sertifikat peserta tersebut sudah pernah digenerate.');
+        try {
+            DB::transaction(function () use ($nilai, &$result) {
+                $result = $this->prosesGenerate($nilai);
+            });
+
+            if ($result === 'sudah') {
+                return back()->with('error', 'Sertifikat sudah pernah dibuat.');
+            }
+
+            if ($result === 'error') {
+                return back()->with('error', 'Terjadi kesalahan saat generate.');
+            }
+        } catch (\Exception $e) {
+            return back()->with('error', 'Gagal generate sertifikat.');
         }
-        Esertifikat::create([
-            'peserta_pkl_id'       => $nilai_pkl->peserta_pkl_id,
-            'nomor_sertifikat'     => $this->generateNomor(),
-            'kepala_sekolah'       => Pengaturan::value('kepala_sekolah') ?? '',
-            'tanggal_mulai_pkl'    => Pengaturan::value('tanggal_mulai_pkl') ?? null,
-            'tanggal_selesai_pkl'  => Pengaturan::value('tanggal_selesai_pkl') ?? null,
-            'tanggal_diterbitkan'  => now(),
-        ]);
 
         return back()->with('success', 'E-sertifikat berhasil digenerate.');
     }
 
+    /**
+     * Generate massal (AMAN)
+     */
     public function generate_massal(Request $request)
     {
         $ids = $request->input('selected_ids', []);
@@ -92,51 +156,43 @@ class EsertifikatController extends Controller
 
         foreach ($dataNilai as $nilai) {
 
-            $lengkap = !(
-                $nilai->nilai_disiplin_kerja === null ||
-                $nilai->nilai_kemajuan_kerja === null ||
-                $nilai->nilai_kualitas_kerja === null ||
-                $nilai->nilai_inisiatif_kreatifitas === null ||
-                $nilai->nilai_perilaku === null ||
-                $nilai->nilai_sidang_pkl === null
-            );
-
-            if (!$lengkap) {
+            if (!$this->isLengkap($nilai)) {
                 $gagal++;
                 $listGagal[] = $nilai->peserta_pkl->peserta->user->nama . " (nilai belum lengkap)";
                 continue;
             }
 
-            $sudahAda = Esertifikat::where('peserta_pkl_id', $nilai->peserta_pkl_id)->exists();
-            if ($sudahAda) {
-                $gagal++;
-                $listGagal[] = $nilai->peserta_pkl->peserta->user->nama . " (sertifikat sudah ada)";
-                continue;
-            }
-
             try {
-                Esertifikat::create([
-                    'peserta_pkl_id' => $nilai->peserta_pkl_id,
-                    'nomor_sertifikat' => $this->generateNomor(),
-                    'kepala_sekolah'       => Pengaturan::value('kepala_sekolah') ?? '',
-                    'tanggal_mulai_pkl'    => Pengaturan::value('tanggal_mulai_pkl') ?? null,
-                    'tanggal_selesai_pkl'  => Pengaturan::value('tanggal_selesai_pkl') ?? null,
-                    'tanggal_diterbitkan' => now(),
-                ]);
+                DB::transaction(function () use ($nilai, &$result) {
+                    $result = $this->prosesGenerate($nilai);
+                });
 
-                $berhasil++;
-            } catch (\Throwable $e) {
+                if ($result === 'berhasil') {
+                    $berhasil++;
+                } else {
+                    $gagal++;
+
+                    if ($result === 'sudah') {
+                        $listGagal[] = $nilai->peserta_pkl->peserta->user->nama . " (sudah ada)";
+                    } else {
+                        $listGagal[] = $nilai->peserta_pkl->peserta->user->nama . " (error sistem)";
+                    }
+                }
+            } catch (\Exception $e) {
                 $gagal++;
                 $listGagal[] = $nilai->peserta_pkl->peserta->user->nama . " (error sistem)";
             }
         }
 
         $pesanGagal = "";
-        if (count($listGagal) > 0) {
-            $pesanGagal = "<br><br><strong>Daftar peserta gagal:</strong><br>- " . implode("<br>- ", $listGagal);
+        if (!empty($listGagal)) {
+            $pesanGagal = "<br><br><strong>Daftar gagal:</strong><br>- " . implode("<br>- ", $listGagal);
         }
 
-        return back()->with('success', "E-sertifikat berhasil dibuat: {$berhasil}, gagal: {$gagal} {$pesanGagal}");
+        return back()->with(
+            'success',
+            "Berhasil: {$berhasil}, Gagal: {$gagal} {$pesanGagal}"
+        );
     }
 
     public function index(Request $request)
