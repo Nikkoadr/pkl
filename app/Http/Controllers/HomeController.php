@@ -37,40 +37,52 @@ class HomeController extends Controller
 
     public function index()
     {
-        if (Gate::allows('admin')) {
+        // 1. Ambil ID Tahun Ajaran yang aktif terlebih dahulu
+        $tahunAktif = \App\Models\Tahun_ajaran::where('status', 'aktif')->first();
+        $tahunAktifId = $tahunAktif ? $tahunAktif->id : null;
 
+        if (Gate::allows('admin')) {
             $jumlahDudi = Dudi::count();
-            $jumlahPeserta = User::where('role_id', 4)->count();
+
+            // Filter jumlah peserta hanya yang terdaftar di tahun ajaran aktif
+            $jumlahPeserta = Peserta::where('tahun_ajaran_id', $tahunAktifId)->count();
 
             $kompetensiStats = Kompetensi_keahlian::withCount([
-                'peserta as sudah_terserap' => function ($q) {
-                    $q->whereHas('peserta_pkl');
+                'peserta as sudah_terserap' => function ($q) use ($tahunAktifId) {
+                    $q->where('tahun_ajaran_id', $tahunAktifId)
+                        ->whereHas('peserta_pkl');
                 },
-                'peserta as belum_terserap' => function ($q) {
-                    $q->whereDoesntHave('peserta_pkl');
+                'peserta as belum_terserap' => function ($q) use ($tahunAktifId) {
+                    $q->where('tahun_ajaran_id', $tahunAktifId)
+                        ->whereDoesntHave('peserta_pkl');
                 }
             ])->get();
 
-            return view('home.dashboard.admin.index', compact('jumlahDudi', 'jumlahPeserta', 'kompetensiStats'));
+            return view('home.dashboard.admin.index', compact('jumlahDudi', 'jumlahPeserta', 'kompetensiStats', 'tahunAktif'));
         } elseif (Gate::allows('guru')) {
-
             $user = Auth::user();
             $guru = $user->guru;
 
             if ($guru && $guru->kaprodi) {
                 $kaprodi = $guru->kaprodi;
 
-                $totalPeserta = Peserta::whereHas('kelas', function ($q) use ($kaprodi) {
-                    $q->where('kompetensi_keahlian_id', $kaprodi->kompetensi_keahlian_id);
-                })->count();
+                // Filter total peserta berdasarkan kompetensi DAN tahun ajaran aktif
+                $totalPeserta = Peserta::where('tahun_ajaran_id', $tahunAktifId)
+                    ->whereHas('kelas', function ($q) use ($kaprodi) {
+                        $q->where('kompetensi_keahlian_id', $kaprodi->kompetensi_keahlian_id);
+                    })->count();
 
-                $tersarap = Peserta_pkl::whereHas('peserta.kelas', function ($q) use ($kaprodi) {
-                    $q->where('kompetensi_keahlian_id', $kaprodi->kompetensi_keahlian_id);
+                // Filter peserta terserap di tahun ajaran aktif
+                $tersarap = Peserta_pkl::whereHas('peserta', function ($q) use ($kaprodi, $tahunAktifId) {
+                    $q->where('tahun_ajaran_id', $tahunAktifId)
+                        ->whereHas('kelas', function ($k) use ($kaprodi) {
+                            $k->where('kompetensi_keahlian_id', $kaprodi->kompetensi_keahlian_id);
+                        });
                 })->count();
 
                 $belum = $totalPeserta - $tersarap;
 
-                return view('home.dashboard.prodi.index', compact('totalPeserta', 'tersarap', 'belum'));
+                return view('home.dashboard.prodi.index', compact('totalPeserta', 'tersarap', 'belum', 'tahunAktif'));
             }
 
             if ($guru) {
@@ -83,8 +95,8 @@ class HomeController extends Controller
 
             return view('home.dashboard.guru.index');
         } elseif (Gate::allows('peserta')) {
-
             $user = Auth::user();
+            // Peserta biasanya hanya terikat ke satu tahun ajaran, jadi ini otomatis menyesuaikan data loginnya
             $namaDudi = $user->peserta?->peserta_pkl?->dudi?->nama_dudi;
 
             return view('home.dashboard.peserta.index', compact('namaDudi'));

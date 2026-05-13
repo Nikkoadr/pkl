@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Kaprodi;
-use App\Jobs\ImportPesertaJob;
+use \App\Imports\PesertaImport;
 use App\Models\Dudi;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\PesertaExport;
@@ -143,14 +143,19 @@ class PesertaController extends Controller
 
     public function import(Request $request)
     {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls,csv'
+        ]);
+
         $file = $request->file('file');
-
         $filename = 'peserta_' . time() . '.' . $file->getClientOriginalExtension();
+
         $path = $file->storeAs('imports', $filename, 'public');
+        $fullPath = storage_path('app/public/' . $path);
 
-        ImportPesertaJob::dispatch($path);
+        Excel::queueImport(new PesertaImport, $fullPath);
 
-        return back()->with('success', 'Proses import sedang dijalankan di background.');
+        return back()->with('success', 'File berhasil diunggah. Proses import sedang berjalan di background.');
     }
 
     public function uploadFotoMassal(Request $request)
