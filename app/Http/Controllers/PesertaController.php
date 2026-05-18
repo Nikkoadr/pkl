@@ -264,17 +264,34 @@ class PesertaController extends Controller
             return redirect()->back()->with('error', 'Anda belum terdaftar sebagai peserta.');
         }
 
-        $sudahTerdaftar = Peserta_pkl::where('peserta_id', $user->peserta->id)->exists();
+        // Ambil tahun ajaran aktif peserta
+        $tahunAjaranId = $user->peserta->tahun_ajaran_id;
+
+        // Cek apakah peserta sudah memilih DU/DI di tahun ajaran yang sama
+        $sudahTerdaftar = Peserta_pkl::where('peserta_id', $user->peserta->id)
+            ->whereHas('peserta', function ($q) use ($tahunAjaranId) {
+                $q->where('tahun_ajaran_id', $tahunAjaranId);
+            })
+            ->exists();
+
         if ($sudahTerdaftar) {
             return redirect()->back()->with('error', 'Anda sudah memilih DU/DI sebelumnya.');
         }
 
         $dudi = Dudi::findOrFail($request->dudi_id);
 
-        $jumlahPeserta = Peserta_pkl::where('dudi_id', $dudi->id)->count();
+        // Hitung kuota hanya untuk tahun ajaran yang sama
+        $jumlahPeserta = Peserta_pkl::where('dudi_id', $dudi->id)
+            ->whereHas('peserta', function ($q) use ($tahunAjaranId) {
+                $q->where('tahun_ajaran_id', $tahunAjaranId);
+            })
+            ->count();
 
         if (!is_null($dudi->kuota) && $jumlahPeserta >= $dudi->kuota) {
-            return redirect()->back()->with('error', 'Kuota DU/DI ' . $dudi->nama_dudi . ' sudah penuh.');
+            return redirect()->back()->with(
+                'error',
+                'Kuota DU/DI ' . $dudi->nama_dudi . ' sudah penuh untuk tahun ajaran ini.'
+            );
         }
 
         Peserta_pkl::create([
@@ -282,7 +299,10 @@ class PesertaController extends Controller
             'dudi_id'    => $dudi->id,
         ]);
 
-        return redirect()->route('home.dashboard')->with('success', 'Anda berhasil ditempatkan di DU/DI ' . $dudi->nama_dudi . '.');
+        return redirect()->route('home.dashboard')->with(
+            'success',
+            'Anda berhasil ditempatkan di DU/DI ' . $dudi->nama_dudi . '.'
+        );
     }
 
     public function destroy($id)

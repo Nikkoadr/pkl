@@ -50,7 +50,8 @@
                     </div>
                 </div>
                 <div class="card-body">
-                <form method="GET" action="{{ route('logbook.index') }}">
+                    @canany(['admin','prodi','guru_pembimbing'])
+                    <form method="GET" action="{{ route('logbook.index') }}">
                     <div class="row mb-3">
                         <div class="col-md-4">
                             <label>Konsentrasi Keahlian</label>
@@ -93,6 +94,7 @@
                         </div>
                     </div>
                 </form>
+                    @endcanany
                     <table id="tabelLogbook" class="table table-bordered table-striped">
                         <thead>
                             <tr>

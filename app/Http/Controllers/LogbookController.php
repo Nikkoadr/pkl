@@ -77,7 +77,9 @@ class LogbookController extends Controller
             $pesertaPkl = Peserta_pkl::where('peserta_id', $peserta->id)->first();
 
             if (!$pesertaPkl) {
-                abort(403, 'Anda belum PKL');
+                return redirect()
+                    ->route('home.dashboard')
+                    ->with('error', 'Anda belum mengikuti PKL.');
             }
 
             $query->where('peserta_pkl_id', $pesertaPkl->id);
