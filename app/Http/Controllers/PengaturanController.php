@@ -31,7 +31,7 @@ class PengaturanController extends Controller
 
     public function update(Request $request, $id)
     {
-        $this->authorize('isAdmin');
+        $this->authorize('admin');
 
         $validated = $request->validate([
             'nama_sekolah'        => 'nullable|string|max:150',

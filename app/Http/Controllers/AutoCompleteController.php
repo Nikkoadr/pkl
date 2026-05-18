@@ -117,7 +117,10 @@ class AutoCompleteController extends Controller
         $term = $request->get('term');
         $tahunAktif = tahunAktif();
 
-        $pesertaPKL = Peserta_pkl::with(['peserta.user'])
+        $pesertaPKL = Peserta_pkl::with([
+            'peserta.user',
+            'peserta.kelas'
+        ])
             ->whereHas('peserta', function ($q) use ($term, $tahunAktif) {
                 $q->where('tahun_ajaran_id', $tahunAktif->id)
                     ->whereHas('user', function ($query) use ($term) {
@@ -127,9 +130,13 @@ class AutoCompleteController extends Controller
             ->get();
 
         $results = $pesertaPKL->map(function ($item) {
+
+            $nama  = $item->peserta->user->nama ?? '-';
+            $kelas = $item->peserta->kelas->nama_kelas ?? '-';
+
             return [
-                'label' => $item->peserta->user->nama ?? '-',
-                'value' => $item->peserta->user->nama ?? '',
+                'label' => $nama . ' (' . $kelas . ')',
+                'value' => $nama . ' (' . $kelas . ')',
                 'peserta_pkl_id' => $item->id,
             ];
         });
