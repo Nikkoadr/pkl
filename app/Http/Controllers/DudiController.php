@@ -13,6 +13,7 @@ use App\Models\Kompetensi_keahlian;
 use App\Models\Guru_pembimbing;
 use App\Exports\DudiExport;
 use Illuminate\Support\Carbon;
+use App\Models\Peserta_pkl;
 
 class DudiController extends Controller
 {
@@ -72,13 +73,13 @@ class DudiController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nama_dudi' => 'required|string|max:255',
+            'nama_dudi' => 'required|string|max:100',
             'alamat_dudi' => 'nullable|string|max:255',
             'no_telp_dudi' => 'nullable|string|max:20',
             'jabatan_pimpinan' => 'nullable|string|max:50',
             'nomor_kepegawaian' => 'nullable|string|max:50',
-            'nama_pimpinan_dudi' => 'nullable|string|max:255',
-            'kuota' => 'required|string|max:255',
+            'nama_pimpinan_dudi' => 'nullable|string|max:50',
+            'kuota' => 'required|string|max:100',
             'kompetensi_keahlian_id' => 'required|exists:kompetensi_keahlian,id',
         ]);
         Dudi::create(
@@ -139,13 +140,13 @@ class DudiController extends Controller
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
-            'nama_dudi' => 'required|string|max:255',
+            'nama_dudi' => 'required|string|max:100',
             'alamat_dudi' => 'nullable|string|max:255',
             'no_telp_dudi' => 'nullable|string|max:20',
             'jabatan_pimpinan' => 'nullable|string|max:50',
             'nomor_kepegawaian' => 'nullable|string|max:50',
-            'nama_pimpinan_dudi' => 'nullable|string|max:255',
-            'kuota' => 'nullable|string|max:255',
+            'nama_pimpinan_dudi' => 'nullable|string|max:50',
+            'kuota' => 'nullable|string|max:100',
             'kompetensi_keahlian_id' => 'required|exists:kompetensi_keahlian,id',
         ]);
         Dudi::where('id', $id)->update($validated);
@@ -154,7 +155,20 @@ class DudiController extends Controller
 
     public function destroy($id)
     {
-        Dudi::destroy($id);
-        return redirect()->route('dudi.index')->with('success', 'Data berhasil dihapus');
+        $dudi = Dudi::findOrFail($id);
+
+        $masihDipakai = Peserta_pkl::where('dudi_id', $id)->exists();
+
+        if ($masihDipakai) {
+            return redirect()
+                ->route('dudi.index')
+                ->with('error', 'DUDI tidak bisa dihapus karena masih digunakan peserta PKL.');
+        }
+
+        $dudi->delete();
+
+        return redirect()
+            ->route('dudi.index')
+            ->with('success', 'Data berhasil dihapus');
     }
 }

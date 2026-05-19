@@ -200,6 +200,20 @@ $(function () {
 </script>
 @endif
 
+@if (session('error'))
+<script>
+    Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: 'error',
+        title: '{{ session('error') }}',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true
+    });
+</script>
+@endif
+
 @if ($errors->any())
 <script>
     Swal.fire({
