@@ -35,7 +35,7 @@
       <p>Dengan hormat,</p>
 
       <p class="indent">
-        Dalam rangka persiapan kegiatan Praktik Kerja Lapangan (PKL) Tahun Ajaran 2025/2026 bagi siswa kelas XI Konsentrasi Keahlian {{ $kompetensi }}, 
+        Dalam rangka persiapan kegiatan Praktik Kerja Lapangan (PKL) Tahun Ajaran 2026/2027 bagi siswa kelas XI Konsentrasi Keahlian {{ $kompetensi }}, 
         kami bermaksud mengajukan permohonan booking tempat PKL untuk pelaksanaan yang direncanakan mulai:
       </p>
 

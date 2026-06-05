@@ -38,7 +38,7 @@
         Sesuai dengan Undang-undang Peraturan Menteri Pendidikan dan Kebudayaan
         Republik Indonesia Nomor 50 Tahun 2020 Tentang Praktik Kerja Lapangan
         Bagi Peserta Didik, maka Program Kerja SMK Muhammadiyah Kandanghaur
-        Tahun Ajaran 2025/2026 khususnya mengenai pelaksanaan kegiatan
+        Tahun Ajaran 2026/2027 khususnya mengenai pelaksanaan kegiatan
         <strong>Praktik Kerja Lapangan (PKL)</strong> untuk siswa Tingkat XI
         <strong>Konsentrasi Keahlian: {{ $kompetensi }}</strong> yang
         Insya Allah akan dilaksanakan pada:
