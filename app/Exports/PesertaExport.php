@@ -43,10 +43,7 @@ class PesertaExport implements FromCollection, WithHeadings
             }
 
             $query->whereHas('kelas', function ($q) use ($kaprodi) {
-                $q->where(
-                    'kompetensi_keahlian_id',
-                    $kaprodi->kompetensi_keahlian_id
-                );
+                $q->where('kompetensi_keahlian_id', $kaprodi->kompetensi_keahlian_id);
             });
         }
 
@@ -68,6 +65,17 @@ class PesertaExport implements FromCollection, WithHeadings
         return $query->get()->map(function ($peserta) {
             $dudi = optional($peserta->peserta_pkl)->dudi;
 
+            $guruPembimbing = '-';
+
+            if ($dudi && $peserta->kelas) {
+                $pembimbing = Guru_pembimbing::with('guru.user')
+                    ->where('dudi_id', $dudi->id)
+                    ->where('kompetensi_keahlian_id', $peserta->kelas->kompetensi_keahlian_id)
+                    ->first();
+
+                $guruPembimbing = $pembimbing?->guru?->user?->nama ?? '-';
+            }
+
             return [
                 'nis'                 => "'" . ($peserta->nis ?? '-'),
                 'nisn'                => "'" . ($peserta->nisn ?? '-'),
@@ -86,6 +94,8 @@ class PesertaExport implements FromCollection, WithHeadings
                 'jabatan_pimpinan'    => $dudi->jabatan_pimpinan ?? '-',
                 'nomor_kepegawaian'   => "'" . ($dudi->nomor_kepegawaian ?? '-'),
                 'nama_pimpinan_dudi'  => $dudi->nama_pimpinan_dudi ?? '-',
+
+                'guru_pembimbing'     => $guruPembimbing,
             ];
         });
     }
@@ -113,6 +123,8 @@ class PesertaExport implements FromCollection, WithHeadings
             'Jabatan Pimpinan',
             'Nomor Kepegawaian',
             'Nama Pimpinan DUDI',
+
+            'Guru Pembimbing',
         ];
     }
 }
