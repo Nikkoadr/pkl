@@ -98,7 +98,7 @@
       <div class="form-subtitle">
         PESERTA PRAKTIK KERJA LAPANGAN (PKL)<br />
         SMK MUHAMMADIYAH KANDANGHAUR<br />
-        TAHUN AJARAN 2025 / 2026
+        TAHUN AJARAN 2026 / 2027
       </div>
 
       <table class="form-table">
