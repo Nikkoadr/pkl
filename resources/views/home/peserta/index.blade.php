@@ -79,7 +79,16 @@
 
                                 <td>{{ $item->user->nama ?? '-' }}</td>
                                 <td>{{ $item->kelas->nama_kelas ?? '-' }}</td>
-                                <td>{{ $item->peserta_pkl->dudi->nama_dudi ?? '-' }}</td>
+                                <td>
+                                    @if($item->peserta_pkl && $item->peserta_pkl->dudi)
+                                        <span class="badge badge-secondary">
+                                            ID: {{ $item->peserta_pkl->dudi->id }}
+                                        </span>
+                                        {{ $item->peserta_pkl->dudi->nama_dudi }}
+                                    @else
+                                        -
+                                    @endif
+                                </td>
                                 <td class="text-center">
                                     <a href="{{ route('peserta.edit', $item->id) }}" class="btn btn-primary btn-sm">
                                         <i class="fas fa-edit"></i>
