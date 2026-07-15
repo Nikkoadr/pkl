@@ -69,6 +69,7 @@
                                 <td>{{ $loop->iteration }}</td>
 
                                 <td>
+                                    <span class="badge badge-secondary">ID: {{ $item->id }}</span>
                                     <strong>{{ $item->nama_dudi }}</strong>
                                 </td>
 
